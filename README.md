@@ -1,5 +1,5 @@
 # Bomby
-Développer en C avec SDL2
+Develop in C with SDL2.
 
 # Build & Lunch
 Command compilation :
