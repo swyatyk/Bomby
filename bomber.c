@@ -1,4 +1,4 @@
-#include "../headers/bomberman.h"
+#include "bomberman.h"
 
 bomber* game_init()
 {
@@ -40,7 +40,7 @@ bomber* game_init()
 
 
 
-    SDL_Surface* surfaceBomby = IMG_Load("./images/bombe.png");
+    SDL_Surface* surfaceBomby = IMG_Load("bombe.png");
     if (!surfaceBomby) {
         fprintf(stderr, "Impossible de charger l'image bombe.png : %s\n", IMG_GetError());
         game_destroy(game);
@@ -58,8 +58,8 @@ bomber* game_init()
 
 
     //Chargement texture map + perso 
-    game->img_texture[1] = IMG_Load("./images/tileset_bomberman.bmp");
-    game->img_texture[2] = IMG_Load("./images/perso.bmp");
+    game->img_texture[1] = IMG_Load("tileset_bomberman.bmp");
+    game->img_texture[2] = IMG_Load("perso.bmp");
     if (!game->img_texture[1]) {
         fprintf(stderr, "Impossible de charger l'image 10 : %s\n", IMG_GetError());
         game_destroy(game);
@@ -139,6 +139,7 @@ int game_event(bomber* game)
         fprintf(stderr, " ");
     int result = 0;
     SDL_Event e;
+    SDL_Delay(200);
     game_show(game, "null");
     if (SDL_PollEvent(&e)) {
         if (e.type == SDL_QUIT) {

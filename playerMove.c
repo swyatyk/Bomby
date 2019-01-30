@@ -1,4 +1,4 @@
-#include "../headers/bomberman.h"
+#include "bomberman.h"
 
 void game_movePlayer(bomber* game, SDL_Keycode direction)
 {

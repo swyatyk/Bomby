@@ -1,4 +1,4 @@
-#include "../headers/bomberman.h"
+#include "bomberman.h"
 
 SDL_Rect get_src_animationPlayer1(char* direction)
 {

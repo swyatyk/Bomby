@@ -1,4 +1,4 @@
-#include "../headers/bomberman.h"
+#include "bomberman.h"
 
 int main()
 {
