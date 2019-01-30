@@ -1,19 +1,13 @@
-
-
-
-
-
-
 CC = gcc
-NAME = bomberman
+NAME = Bomberman
 RM = rm -f
 CFLAGS = -Wall -Wextra -Werror -std=c99
 SDLFLAGS = -lSDL2 -lSDL2main -lSDL2_image -lSDL2_ttf -lfreetype
-SRC =	main.c \
-		map.c \
-		playerMove.c \
-		animationPlayer.c \
-		bomber.c
+SRC =	./src/main.c \
+		./src/map.c \
+		./src/playerMove.c \
+		./src/animationPlayer.c \
+		./src/bomber.c
 
 
 OBJ = $(SRC:.c=.o)
