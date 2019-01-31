@@ -7,7 +7,7 @@ Command compilation :
 make
 ./bomberman
 ```
-ReCompilation command : ``` make re ```
+ReCompilation command : ` make re `
 
 # How to play
 [arrows] mouvements ;
