@@ -73,8 +73,14 @@ int   main()
       while ( (n = recv(client_sock, buff, 10, 0)) > 0 )
         {
           printf("received %s", buff);
-          write(client_sock, "ok\n", 3);
+          // write(client_sock, "ok\n", 3);
           memset(buff, '\0', 10);
+
+          if (send(client_sock, "ok", 2, 0) < 0) {
+            puts("send failed");
+            close(client_sock);
+            return 1;
+          }
         }
     }
   close(sock);

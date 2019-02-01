@@ -26,10 +26,9 @@ int main()
   char ip[15];
   int port;
   int mysocket;
-  int client;
-  socklen_t client_addr_len;
   struct sockaddr_in server;
   char message[128] ;
+  char server_reply[128];
   int firstMessage = 0;
 
   printf("[CLIENT] choose an ip : ");
@@ -54,19 +53,24 @@ int main()
   }
 
   while (1) {
-      memset(message, '\0', 128);
-      fgets(message, 128, stdin);
-    if (firstMessage == 0) {
+    memset(message, '\0', 128);
+    fgets(message, 128, stdin);
+
+    if (firstMessage == 0) { // Empeche l'envoi dû au scanf
         firstMessage = 1;  
     } else {
-      /* code */
-      if (send(mysocket, message, strlen(message), 0) < 0) {
-          puts("send failed");
-          close(mysocket);
-          return 1;
+        if (send(mysocket, message, strlen(message), 0) < 0) {
+            puts("send failed");
+            close(mysocket);
+            return 1;
         }
-    
         printf("sended %s\n", message);
+        
+        if ( recv(mysocket, server_reply, 2000, 0) < 0 )  {
+            puts("recv failed");
+            break;
+        }
+        printf("server reply : %s \n", server_reply);
     }
   }
 
