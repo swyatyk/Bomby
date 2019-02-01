@@ -66,8 +66,8 @@ int main()
         }
         printf("sended %s\n", message);
         
-        if ( recv(mysocket, server_reply, 2000, 0) < 0 )  {
-            puts("recv failed");
+        if (recv(mysocket, server_reply, 2000, 0) <= 0 )  {
+            puts("server down");
             break;
         }
         printf("server reply : %s \n", server_reply);
