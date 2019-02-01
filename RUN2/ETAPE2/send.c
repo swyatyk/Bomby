@@ -20,6 +20,7 @@
  *
  * \return int
  */
+
 int main()
 {
   char ip[15];
@@ -29,20 +30,20 @@ int main()
   socklen_t client_addr_len;
   struct sockaddr_in server;
   char message[128] ;
+  int firstMessage = 0;
 
   printf("[CLIENT] choose an ip : ");
   scanf("%s", ip); // Saisie de l'ip
 
   printf("[CLIENT] choose a port : ");
   scanf("%d", &port); // Saisie du port
-  printf("[CLIENT] ok \n");
-
+  
   mysocket = socket(AF_INET, SOCK_STREAM, 0);
   if (mysocket < 0) {
       perror("socket()");
       return -1;
   }
-
+  
   server.sin_addr.s_addr = inet_addr(ip);
   server.sin_port = htons(port);
   server.sin_family = AF_INET;
@@ -53,12 +54,12 @@ int main()
   }
 
   while (1) {
-    if (strcmp(message, "") == 0) {
-        printf("strcmp\n ");
-        memset(message, '\0', 128);
+      memset(message, '\0', 128);
+      fgets(message, 128, stdin);
+    if (firstMessage == 0) {
+        firstMessage = 1;  
     } else {
       /* code */
-      fgets(message, 128, stdin);
       if (send(mysocket, message, strlen(message), 0) < 0) {
           puts("send failed");
           close(mysocket);
@@ -67,8 +68,6 @@ int main()
     
         printf("sended %s\n", message);
     }
-    
-    printf("while\n");
   }
 
   close(mysocket);
