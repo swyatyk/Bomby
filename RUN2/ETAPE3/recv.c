@@ -2,7 +2,7 @@
 ** ETNA PROJECT, 31/01/2019 groupe de prylut_s
 ** BombermanRun2
 ** File description:
-**      etape 2 , 
+**      etape 3 , 
 */
 
 
@@ -14,6 +14,7 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/socket.h>
+#include <netinet/in.h>
 #include <arpa/inet.h>
 
 
@@ -28,11 +29,14 @@ int   main()
   int port;
   int n;
   int sock;
+  struct sockaddr_in server;
+
   int client_sock;
   socklen_t client_addr_len;
-  struct sockaddr_in server;
   struct sockaddr_in client_addr;
-  char buff[10];
+
+  char buff[16];
+  pid_t childpid;
 
 
   printf("[SERVEUR] choose a port : ");
@@ -55,32 +59,42 @@ int   main()
       return 1;
     }
 
-  listen(sock, 5);
-  memset(buff, '\0', 10);
+  if (listen(sock, 4) == 0) {
+    puts("waiting clients...");
+  }
 
-  puts("waiting clients...");
+  memset(buff, '\0', 16);
+
   while (1)
     {
-      puts("waiting for accept");
       client_sock = accept(sock, (struct sockaddr *)&client_addr, &client_addr_len);
       if (client_sock < 0) {
-          perror("accept()");
-          return 1;
+          // perror("accept()");
+          exit(1);
         }
-      puts("new client");
+      printf("new client from %s:%d\n", inet_ntoa(client_addr.sin_addr), ntohs(client_addr.sin_port));
 
-      while ( (n = recv(client_sock, buff, 10, 0)) > 0 )
-        {
-          printf("received %s", buff);
-          memset(buff, '\0', 10);
+      if ((childpid = fork()) == 0) {
+        close(sock);
 
-          if (send(client_sock, "ok", 2, 0) < 0) {
-            puts("send failed");
-            close(client_sock);
-            return 1;
+        while ( (n = recv(client_sock, buff, 16, 0)) > 0 )
+          {
+            printf("received %s", buff);
+            if (strcmp(buff, "exit\n") == 0) {
+                printf("disconnected from %s:%d\n", inet_ntoa(client_addr.sin_addr), ntohs(client_addr.sin_port));
+                break;
+            }
+            memset(buff, '\0', 16);
+
+            if (send(client_sock, "ok", 2, 0) < 0) {
+              puts("send failed");
+              close(client_sock);
+              return 1;
+            }
           }
-        }
+      }
     }
+    
   close(sock);
   return 0;
 }

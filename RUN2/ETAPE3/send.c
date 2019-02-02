@@ -2,7 +2,7 @@
 ** ETNA PROJECT, 31/01/2019 groupe de prylut_s
 ** BombermanRun2
 ** File description:
-**      etape 2 , client->server->client
+**      etape 2 , 
 */
 
 #include <string.h>
@@ -43,6 +43,7 @@ int main()
       return -1;
   }
   
+
   server.sin_addr.s_addr = inet_addr(ip);
   server.sin_port = htons(port);
   server.sin_family = AF_INET;
@@ -51,6 +52,7 @@ int main()
       perror("connect()");
       return 1;
   }
+  printf("[+] connected to server  \n");
 
   while (1) {
     memset(message, '\0', 128);
@@ -60,12 +62,17 @@ int main()
         firstMessage = 1;  
     } else {
         if (send(mysocket, message, strlen(message), 0) < 0) {
-            puts("send failed");
+            puts("[-] send failed");
             close(mysocket);
             return 1;
         }
         printf("sended %s\n", message);
         
+        if (strcmp(message, "exit\n") == 0) {
+            close(mysocket);
+            printf("[-] disconnected");
+            exit(1);
+        }
         if (recv(mysocket, server_reply, 2000, 0) <= 0 )  {
             puts("server down...");
             break;
