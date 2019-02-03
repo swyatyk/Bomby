@@ -3,5 +3,11 @@ project(Bomberman C)
 set(CMAKE_C_STANDARD 11)
 find_package(SDL2 REQUIRED)
 include_directories(Bomberman ${SDL2_INCLUDE_DIRS})
-add_executable(Bomberman ./src/main.c ./src/map.c ./src/playerMove.c ./src/animationPlayer.c ./src/bomber.c )
+add_executable(Bomberman
+        ./src/main.c
+        ./src/map.c
+        ./src/playerMove.c
+        ./src/animationPlayer.c
+        ./src/bomber.c
+        ./src/server.c)
 target_link_libraries(Bomberman ${SDL2_LIBRARIES} ${SDL2IMAGE_LIBRARIES} -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf -lfreetype)

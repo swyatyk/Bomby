@@ -9,6 +9,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
+#include "server.h"
 
 #define LARGEUR_TILE 900
 #define HAUTEUR_TILE 900
@@ -16,6 +17,7 @@
 
 #define NOMBRE_BLOCS_LARGEUR 10
 #define NOMBRE_BLOCS_HAUTEUR 10
+#define GAME_RUN = 1;
 
 typedef struct {
     // SDL_Texture* pTextureBombe;
