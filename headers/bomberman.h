@@ -17,7 +17,6 @@
 
 #define NOMBRE_BLOCS_LARGEUR 10
 #define NOMBRE_BLOCS_HAUTEUR 10
-#define GAME_RUN = 1;
 
 typedef struct {
     // SDL_Texture* pTextureBombe;

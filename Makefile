@@ -1,7 +1,7 @@
 CC = gcc
 NAME = Bomberman
 RM = rm -f
-CFLAGS = -Wall -Wextra
+CFLAGS = -Wall -Wextra -Werror -std=c99
 SDLFLAGS = -lSDL2 -lSDL2main -lSDL2_image -lSDL2_ttf -lfreetype
 SRC =	./src/main.c \
 		./src/map.c \

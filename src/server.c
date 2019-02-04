@@ -3,16 +3,17 @@
 //
 
 #include "../headers/server.h"
-char connectedClients[2][16];
-int allowedClientsCount = 2;
+struct sockaddr_in connectedClients[2];
+int allowedClientsCount = 2 , clientCnt;
 
 struct {
     char name[16];
     int level , posX, posY;
 } player;
 
-int allowClientAction(char name[16]);
-int isClientRegistred(char *name);
+int allowClientAction(struct sockaddr_in client);
+int isClientRegistred(struct sockaddr_in client);
+int GAME_RUN = 1;
 
 void startServer() {
 
@@ -43,57 +44,58 @@ void startServer() {
     printf("Whaiting for client \n");
     client_adress_size = sizeof(client_addr);
 
-
-    while(1)
+    memset(buf,'\0', 128);
+    while(GAME_RUN)
     {
-        memset(buf,'\0', 128);
+
         if(recvfrom(server_socket,&player, sizeof(player),0,(struct sockaddr *) &client_addr, &client_adress_size)<0){
             perror("recvfrom()");
         }
         else{
+            if(allowClientAction(client_addr) == 1){
 
-            if(allowClientAction(player.name) == 0){
-                printf("dont allow to connect %s", player.name);
-                return;
+
+
+                printf("\n Received client from domain %s port %d internet\
+     address %s\n",
+
+                       (client_addr.sin_family == AF_INET?"AF_INET":"UNKNOWN"),
+                       ntohs(client_addr.sin_port),
+                       inet_ntoa(client_addr.sin_addr));
+                printf("\n Received player info name = %s , PosX =  %d , PosY = %d \n",player.name , player.posX , player.posY);
             }
-
-
-            printf("\n Received message %s from domain %s port %d internet\
- address %s\n",
-                   &client_addr,
-                   (client_addr.sin_family == AF_INET?"AF_INET":"UNKNOWN"),
-                   ntohs(client_addr.sin_port),
-                   inet_ntoa(client_addr.sin_addr));
-            printf("\n Received player info name = %s , PosX =  %d , PosY = %d \n",player.name , player.posX , player.posY);
         }
         memset(buf,'\0', 128);
     }
 }
 
-int allowClientAction(char *name) {
+int allowClientAction(struct sockaddr_in client) {
 
-    int length = sizeof(connectedClients)/sizeof(int);
-    if(isClientRegistred(*name)==1){
+    if(isClientRegistred(client) == 1){
+        printf("isClientRegistred 1 \n");
         return 1;
     }
+    printf("clientCnt =  %d \n", clientCnt);
+    if(clientCnt < allowedClientsCount){
 
-    if(length < allowedClientsCount){
-        *connectedClients[length+1] = *name;
-        printf("\n");
+        connectedClients[clientCnt] = client;
+        clientCnt++;
+        printf("registred new client \n");
     } else{
+        printf("don't allow new clients \n");
         return 0;
     }
 
 }
 
 
-int isClientRegistred(char *name){
-    int length = sizeof(connectedClients)/sizeof(int);
-    for(int i=0; i<length; i++)
+int isClientRegistred(struct sockaddr_in client){
+    for(int i=0; i<clientCnt; i++)
     {
-        if(strcmp(name , connectedClients[i]) == 0)
+
+        if(connectedClients[i].sin_addr.s_addr == client.sin_addr.s_addr && connectedClients[i].sin_port == client.sin_port)
         {
-            printf("%s  exist", connectedClients[i]);
+            printf("already  exist \n");
             return 1;
         }
 
