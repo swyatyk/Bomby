@@ -4,7 +4,6 @@
 
 #ifndef BOMBERMAN_SERVER_H
 #define BOMBERMAN_SERVER_H
-#include "bomberman.h"
 #include <sys/socket.h>
 #include <sys/un.h>
 #include <stdlib.h>

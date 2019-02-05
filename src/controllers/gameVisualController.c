@@ -1,9 +1,20 @@
+/*
+ *This file* control the aparance of instances in the the game via SDL
+ *
+ */
+
 #include "../headers/bomberman.h"
 
-bomber* game_init()
+void showMapContent()
 {
-    bomber * game = NULL;
-    game = malloc(sizeof(bomber));
+
+}
+
+
+Player* game_init()
+{
+    Player * game = NULL;
+    game = malloc(sizeof(Player));
     game->screenSize.x = 640;
     game->screenSize.y = 480;
     game->pWindow = NULL;
@@ -13,7 +24,7 @@ bomber* game_init()
     game->player1Position.w = 40;
     game->player1Position.h = 40;
     game->ifBombe = 0;
-    game->bombe = NULL;
+    game->Player = NULL;
 
 
     //Init SDL
@@ -73,7 +84,7 @@ bomber* game_init()
     return (game);
 }
 
-void game_destroy(bomber* game)
+void game_destroy(Player *game)
 {
 
     int x;
@@ -101,7 +112,7 @@ void game_destroy(bomber* game)
     }
 }
 
-void game_show(bomber* game, char* direction)
+void game_show(Player* game, char* direction)
 {
     int y;
     int x;
@@ -126,14 +137,14 @@ void game_show(bomber* game, char* direction)
     //afficher la bombe
     if(game->ifBombe == 1) {
         //printf( "%d\n", game->bombe->position.x);
-        SDL_RenderCopy(game->pRenderer, game->pTexturePlayer, NULL, &game->bombe->position);
+        SDL_RenderCopy(game->pRenderer, game->pTexturePlayer, NULL, &game->Player->position);
     }
 
     //Afficher rendu
     SDL_RenderPresent(game->pRenderer);
 }
 
-int game_event(bomber* game)
+int game_event(Player* game)
 {
     if (game)
         fprintf(stderr, " ");

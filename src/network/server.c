@@ -2,7 +2,7 @@
 // Created by Sviatoslav Prylutsky on 2/3/19.
 //
 
-#include "../headers/server.h"
+#include "headers/server.h"
 struct sockaddr_in connectedClients[2];
 int allowedClientsCount = 2 , clientCnt;
 
@@ -12,7 +12,7 @@ struct {
 } player;
 
 int allowClientAction(struct sockaddr_in client);
-int isClientRegistred(struct sockaddr_in client);
+int checkClientRegistration(struct sockaddr_in client);
 int GAME_RUN = 1;
 
 void startServer() {
@@ -28,7 +28,6 @@ void startServer() {
         perror("socket()");
         exit(1);
     }
-    listen(server_socket , 2);
 
     server_addr.sin_addr.s_addr = INADDR_ANY;
     server_addr.sin_family = AF_INET;
@@ -52,17 +51,20 @@ void startServer() {
             perror("recvfrom()");
         }
         else{
-            if(allowClientAction(client_addr) == 1){
+            if(allowClientAction(client_addr) == 1)
+            {
 
-
-
-                printf("\n Received client from domain %s port %d internet\
-     address %s\n",
-
-                       (client_addr.sin_family == AF_INET?"AF_INET":"UNKNOWN"),
-                       ntohs(client_addr.sin_port),
-                       inet_ntoa(client_addr.sin_addr));
-                printf("\n Received player info name = %s , PosX =  %d , PosY = %d \n",player.name , player.posX , player.posY);
+            printf("\n Received player info name = %s , PosX =  %d , PosY = %d \n",player.name , player.posX , player.posY);
+            
+            memset(buf,'\0', 128);
+            strcpy(buf,"Hello client");
+           
+            int z = sendto(server_socket,buf, 128, 0,(struct sockaddr *) &client_addr,client_adress_size);
+            
+            //client send Map to draw
+            //z = sendto(server_socket,map, sizeof(map), 0,(struct sockaddr *) &client_addr,client_adress_size);
+            
+            if (z < 0){perror("ERROR in sendto");
             }
         }
         memset(buf,'\0', 128);
@@ -71,7 +73,7 @@ void startServer() {
 
 int allowClientAction(struct sockaddr_in client) {
 
-    if(isClientRegistred(client) == 1){
+    if(checkClientRegistration(client) == 1){
         printf("isClientRegistred 1 \n");
         return 1;
     }
@@ -81,6 +83,7 @@ int allowClientAction(struct sockaddr_in client) {
         connectedClients[clientCnt] = client;
         clientCnt++;
         printf("registred new client \n");
+        return 1;
     } else{
         printf("don't allow new clients \n");
         return 0;
@@ -89,7 +92,7 @@ int allowClientAction(struct sockaddr_in client) {
 }
 
 
-int isClientRegistred(struct sockaddr_in client){
+int checkClientRegistration(struct sockaddr_in client){
     for(int i=0; i<clientCnt; i++)
     {
 
