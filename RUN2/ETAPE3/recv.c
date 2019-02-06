@@ -29,6 +29,7 @@ int   main()
   int port;
   int n;
   int sock;
+  int nb_client = 0;
   struct sockaddr_in server;
 
   int client_sock;
@@ -67,13 +68,22 @@ int   main()
 
   while (1)
     {
+      printf("nb clients : %d\n", nb_client);
       client_sock = accept(sock, (struct sockaddr *)&client_addr, &client_addr_len);
       if (client_sock < 0) {
-          // perror("accept()");
           exit(1);
-        }
-      printf("new client from %s:%d\n", inet_ntoa(client_addr.sin_addr), ntohs(client_addr.sin_port));
+      }
 
+      if (nb_client < 2) {
+          printf("new client from %s:%d\n", inet_ntoa(client_addr.sin_addr), ntohs(client_addr.sin_port));
+
+      } else {
+          write(client_sock, "[!] full server\n", 15);
+          printf("[] full server\n");
+          close(client_sock);
+      }
+
+      nb_client++;
       if ((childpid = fork()) == 0) {
         close(sock);
 
@@ -82,6 +92,7 @@ int   main()
             printf("received %s", buff);
             if (strcmp(buff, "exit\n") == 0) {
                 printf("disconnected from %s:%d\n", inet_ntoa(client_addr.sin_addr), ntohs(client_addr.sin_port));
+                nb_client--;
                 break;
             }
             memset(buff, '\0', 16);
