@@ -8,15 +8,23 @@
 
 
 
-void generateNewInstanceInCell(void **array , void *inst)
+void generateNewBlockInCell(Block **blocks , Block *block)
 {
-    array[0] = inst;
+    blocks[sizeof(blocks)/ sizeof(block)+1] = (Block *) malloc(sizeof(block));
 }
 
-void generateNewBlockInCell(void **array , void *inst)
-{
-    array[0] = malloc(sizeof(inst));
+int getArraySize(void **arr){
+    void *i;
+    int size =0 ;
+    while(i!=nul)
+    {
+        i = arr[i];
+        size++;
+    }
+    return size;
 }
+
+
 
 int putInstanceToCell(Cell cell, int instance){
     Block block;
@@ -25,11 +33,11 @@ int putInstanceToCell(Cell cell, int instance){
     switch (instance)
     {
         case 1:
-            generateNewInstanceInCell(cell.blocks,malloc(sizeof(Block)));
+            generateNewBlockInCell(cell.blocks,malloc(sizeof(Block)));
             break;
 
         case 2:
-            generateNewInstanceInCell(cell.walls,malloc(sizeof(Wall)));
+            generateNewWallInCell(cell.walls,malloc(sizeof(Wall)));
             break;
 
         case 3:

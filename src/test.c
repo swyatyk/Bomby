@@ -11,6 +11,7 @@
 #include <sys/select.h>
 #include <sys/time.h>
 
+#define ARRSIZE(x)  (sizeof(x) / sizeof((x)[0]))
 
 typedef struct {
     int b;
@@ -18,39 +19,33 @@ typedef struct {
 
 typedef struct {
     int b;
+    char *c;
 }beta;
 
 
-typedef struct {
-    double d;
-}gamma;
 
- struct {
-    char a;
-    Alfa *alphas;
-    beta *betas;
-    gamma *gammas;
-} cell;
-
- void putArr(void **arr , void *d)
- {
-
-     printf("arr[0] = %p",arr[0]);
-     arr[0] = d;
- }
+void add(beta **arr,int i)
+{
+    beta *b = (beta*)malloc(sizeof(beta));
+    b->b=5;
+    b->c="hello";
+    arr[i] = b;
+}
 
 int main(){
 
-    char chars[5];
-    int *ints;
+    beta **betas = (beta **)malloc(sizeof(beta));
+    add(betas,0);
+    add(betas,1);
+    add(betas,2);
+    add(betas,3);
 
-    char x = 'x';
-    putArr((void *)&chars,(void*) 'c');
-   // putArr(ints,8);
-  // chars[0]='X';
+    betas[0]->b=10;
+    betas[0]->c= "welcome";
 
-    printf("chars[0] = %c",chars[0]);
-   // printf("ints[0] = %d",ints[0]);
+    printf("b1c = %s , b1i = %d \n",betas[0]->c,betas[0]->b);
+    printf("b2c = %s , b2i = %d \n",betas[1]->c,betas[1]->b);
+    printf("size = %ld \n",  sizeof(**betas)/ sizeof(*betas[0]));
 
 
     return 1;

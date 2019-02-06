@@ -2,6 +2,7 @@
 // Created by Sviatoslav Prylutsky on 2/5/19.
 //
 
+#include <stdlib.h>
 #include "headers/map.h"
 
 
@@ -25,18 +26,18 @@ void initMap(){
      {
           for(int x = 0; x < 10; x++)
           {
-               Cell tmpCell;
-               tmpCell.showedId = 0;
-               tmpCell.viewId = 0;
-               putInstanceToCell(tmpCell,text_map[y][x]);
-               Map.cells[y][x] = tmpCell;
+               Cell *tmpCell = (Cell*) malloc(sizeof(Cell));
+               tmpCell->showedId = 0;
+               tmpCell->viewId = 0;
+               putInstanceToCell(*tmpCell,text_map[y][x]);
+               Map.cells[y][x] = *tmpCell;
           }
      }
 }
 
 
 Player newPlayerInstance(){
-     Player player;
+     Player player = (Player);
      player.viewId = 10;
      return player;
 }
