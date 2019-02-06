@@ -7,5 +7,8 @@
 
 #include "../../config.h"
 #include "../../instances/headers/cell.h"
+#include "../../instances/headers/wall.h"
+#include "../../instances/headers/bomb.h"
+#include "../../instances/headers/block.h"
 
 #endif //BOMBERMAN_GAMECONTROLLER_H

@@ -11,29 +11,50 @@
 #include <sys/select.h>
 #include <sys/time.h>
 
+
 typedef struct {
-    int priority;
+    int b;
+}Alfa;
+
+typedef struct {
+    int b;
+}beta;
+
+
+typedef struct {
+    double d;
+}gamma;
+
+ struct {
     char a;
-}cell;
+    Alfa *alphas;
+    beta *betas;
+    gamma *gammas;
+} cell;
+
+ void putArr(void **arr , void *d)
+ {
+
+     printf("arr[0] = %p",arr[0]);
+     arr[0] = d;
+ }
 
 int main(){
 
-    cell cells[6];
+    char chars[5];
+    int *ints;
 
-    cells[0].a = 'a';
-    cells[1].a = 'b';
-    cells[2].a = 'c';
-    cells[3].a = 'd';
-    cells[4].a = 'e';
-    cells[5].a = 'f';
+    char x = 'x';
+    putArr((void *)&chars,(void*) 'c');
+   // putArr(ints,8);
+  // chars[0]='X';
 
-    for(int i =0 ; i < 6 ; i++)
-    {
-        printf("a = %c \n ", cells[i].a);
-    }
+    printf("chars[0] = %c",chars[0]);
+   // printf("ints[0] = %d",ints[0]);
+
+
     return 1;
 }
-
 
 
 

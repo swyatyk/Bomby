@@ -5,10 +5,16 @@
 #ifndef BOMBERMAN_CELL_H
 #define BOMBERMAN_CELL_H
 #include "../../controllers/headers/gameController.h"
+#include "player.h"
 
 typedef struct{
-    char instancesViews[16];
+    int showedId;
+    int viewId;
+    Player **players; //instance[instanceId][viewId]
+    Bomb **bombs;
+    Wall **walls;
+    Block **blocks;
+}Cell;
 
-
-}cell;
+int putInstanceToCell(Cell c, Int i);
 #endif //BOMBERMAN_CELL_H

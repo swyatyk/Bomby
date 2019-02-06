@@ -4,5 +4,7 @@
 
 #ifndef BOMBERMAN_BLOCK_H
 #define BOMBERMAN_BLOCK_H
-
+typedef struct {
+    int viewId;
+}Block;
 #endif //BOMBERMAN_BLOCK_H

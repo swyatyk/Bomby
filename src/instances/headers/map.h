@@ -11,6 +11,7 @@ struct {
     int maxClients;
     int mapSizeY;
     int mapSizeX;
+    Cell **cells;
 }Map;
 #endif //BOMBERMAN_MAP_H
 
