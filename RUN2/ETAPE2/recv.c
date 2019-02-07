@@ -70,11 +70,11 @@ int   main()
         }
       puts("new client");
 
-      while ( (n = recv(client_sock, buff, 10, 0)) > 0 )
+      while ( (n = recv(client_sock, buff, 128, 0)) > 0 )
         {
           printf("received %s", buff);
           write(client_sock, "ok\n", 3);
-          memset(buff, '\0', 10);
+          memset(buff, '\0', 128);
         }
     }
   close(sock);
