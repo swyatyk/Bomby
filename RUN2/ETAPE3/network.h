@@ -9,4 +9,10 @@
     int allowedClientsCount;
 }serverConfig;
 
+typedef struct {
+    int connected;
+    int socket;
+    struct sockaddr_in connectedClient;
+}Client;
+
 #endif //BOMBERMAN_NETWORK_H
