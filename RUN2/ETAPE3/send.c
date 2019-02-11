@@ -1,8 +1,8 @@
 /*
-** ETNA PROJECT, 31/01/2019 groupe de prylut_s
+** ETNA PROJECT, 10/02/2019 groupe de prylut_s
 ** BombermanRun2
 ** File description:
-**      etape 2 , 
+**      etape 3 , multiclient
 */
 
 #include <string.h>
@@ -20,22 +20,26 @@
  *
  * \return int
  */
-int main()
+int main(int argc, char **argv)
 {
-  char ip[15]= "127.0.0.1";
-  int port = 1234;
+  char *ip = NULL;
+  int port = 0;
   int mysocket;
   int client;
   socklen_t client_addr_len;
   struct sockaddr_in server;
-  char message[128] ;
+  char message[128];
 
-  printf("[CLIENT] choose an ip : ");
-  //scanf("%s", ip); // Saisie de l'ip
+  if (argc != 3) {
+		printf("usage : %s IP PORT\n", argv[0]);
+		return -1;
+	}
 
-  printf("[CLIENT] choose a port : ");
-  //scanf("%d", &port); // Saisie du port
-  printf("[CLIENT] ok \n");
+  ip = argv[1];
+  port = atoi(argv[2]);
+
+	// printf("IP : %s\tPORT : %d\n", ip, port);
+
 
   mysocket = socket(AF_INET, SOCK_STREAM, 0);
   if (mysocket < 0) {
@@ -53,12 +57,9 @@ int main()
   }
 
   while (1) {
-    if (strcmp(message, "") == 0) {
-        printf("strcmp\n ");
-        memset(message, '\0', 128);
-    } else {
-      /* code */
+      memset(message, '\0', 128);
       fgets(message, 128, stdin);
+      
       if (send(mysocket, message, strlen(message), 0) < 0) {
           puts("send failed");
           close(mysocket);
@@ -66,9 +67,6 @@ int main()
         }
     
         printf("sended %s\n", message);
-    }
-    
-    printf("while\n");
   }
 
   close(mysocket);
