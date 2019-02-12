@@ -1,114 +1,176 @@
-#include <stdio.h>
-#include <stdlib.h>
+//мой рабочий вариант
+
 #include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <errno.h>
 #include <unistd.h>
-#include <sys/socket.h>
 #include <sys/types.h>
-#include <netinet/in.h>
+#include <sys/socket.h>
 #include <arpa/inet.h>
-#include "network.h"
+#include <sys/select.h>
+#include <sys/time.h>
+#include <fcntl.h>
 
-#define PORT 1234
+/**
+ * \fn read_client
+ * \brief read and print recv data from the client file descriptor until he is connected
+ *
+ * \param client file descriptor of the client to use
+ * \return int
+ */
 
+typedef struct {
+    int socket;
+    struct sockaddr_in address;
 
-void initConfigs()
+}Client;
+int  read_client(int client)
 {
-    serverConfig.allowedClientsCount = 4;
-}
+    int  n;
+    char buff[128];
 
-int connected_clients_cnt = 0;
-
-int main(){
-    initConfigs();
-    int server_socket, ret;
-    struct sockaddr_in serverAddr;
-
-    int new_client;
-    struct sockaddr_in newAddr;
-
-    socklen_t addr_size;
-
-    char buffer[128];
-    pid_t new_thread;
-
-    Client connected_clients[serverConfig.allowedClientsCount];
-
-    server_socket = socket(AF_INET, SOCK_STREAM, 0);
-    if(server_socket < 0){
-        perror("socket()");
-        exit(1);
+    if (client == -1)
+    {
+        return 1;
     }
 
-    memset(&serverAddr, '\0', sizeof(serverAddr));
-    serverAddr.sin_family = AF_INET;
-    serverAddr.sin_port = htons(PORT);
-    serverAddr.sin_addr.s_addr = inet_addr("127.0.0.1");
-
-    if(bind(server_socket, (struct sockaddr*)&serverAddr, sizeof(serverAddr)) < 0){
-      perror("bind()");
-        exit(1);
-    }
-
-    if(listen(server_socket, serverConfig.allowedClientsCount) == 0){
-        printf("J'attends les clients....\n");
-    }else{
-        perror("listen()");
-    }
-
-
-    while(1){
-        new_client = accept(server_socket, (struct sockaddr*)&newAddr, &addr_size);
-        if(new_client < 0){
-            exit(1);
-        }
-
-        printf("Tentative de connection de %s:%d\n", inet_ntoa(newAddr.sin_addr), ntohs(newAddr.sin_port));
-
-        if(connected_clients_cnt<serverConfig.allowedClientsCount)
+    n = 0;
+    memset(buff, '\0', 128);
+    while ( (n = recv(client, buff, 128, 0)) >= 0)
+    {
+        if (n == 0)
         {
-            printf("Nouvelle connection est accepteé %s:%d\n", inet_ntoa(newAddr.sin_addr), ntohs(newAddr.sin_port));
-            connected_clients[connected_clients_cnt].socket = new_client;
-            connected_clients[connected_clients_cnt].connected = 1;
-            connected_clients[connected_clients_cnt].connectedClient = newAddr;
-            connected_clients_cnt++;
-            printf("%d Client conectee \n",connected_clients_cnt);
-
-            if((new_thread = fork()) == 0)
-            {
-                close(server_socket);
-
-                while(1){
-                    recv(new_client, buffer, 128, 0);
-                    //printf("pid new thread = %d\n",getpid());
-                    printf("Client: %s\n", buffer);
-                    //send(new_client, buffer, strlen(buffer), 0);
-                    if(sendto(new_client, buffer, strlen(buffer),0, (struct sockaddr *) &newAddr , sizeof(newAddr))<0)
-                    {
-                        bzero(buffer, sizeof(buffer));
-                        printf("Deconnection de %s:%d\n", inet_ntoa(newAddr.sin_addr), ntohs(newAddr.sin_port));
-                        break;
-                    }
-                   // sendto(server_socket, buffer, strlen(buffer),0, (struct sockaddr *) &serverAddr , sizeof(serverAddr));
-                    bzero(buffer, sizeof(buffer));
-                }
-                connected_clients_cnt--;
-            }
-
-
-        }
-        else
-            {
-                printf("Connection de %s:%d est refusee! Serveur est plain \n", inet_ntoa(newAddr.sin_addr), ntohs(newAddr.sin_port));
-                close(new_client);
+            return -1;
         }
 
+        printf("received %s", buff);
 
+        if (buff[n - 1] == '\n')
+        {
+            memset(buff, '\0', 128);
+            break;
+        }
     }
-
-    close(new_client);
-
-
     return 0;
 }
 
+int checkNew(int connected_cnt, Client clients[] , int sock)
+{
+    for(int i=0;i<connected_cnt;i++)
+    {
+        if(clients[i].socket == sock)
+            return 0;
+    }
+    return 1;
+}
 
+
+/**
+ * \fn main
+ * \brief main function of our receiver
+ *
+ * \return int
+ */
+int   main()
+{
+    int sock;
+    int client1;
+    int client2;
+    socklen_t client_addr_len;
+    struct sockaddr_in server;
+    struct sockaddr_in client_addr;
+
+    fd_set readfs;
+    struct timeval timeout;
+
+    sock = socket(AF_INET, SOCK_STREAM, 0);
+    fcntl(sock, F_SETFL, O_NONBLOCK);
+    if (sock == -1)
+    {
+        perror("socket()");
+        return 1;
+    }
+
+    server.sin_addr.s_addr = INADDR_ANY;
+    server.sin_family = AF_INET;
+    server.sin_port = htons(1234);
+
+    if (bind(sock, (struct sockaddr *)&server, sizeof(server)) < 0)
+    {
+        perror("bind()");
+        return 1;
+    }
+
+    listen(sock, 5);
+
+    puts("waiting clients...");
+    puts("waiting for accept");
+    client1 = accept(sock, (struct sockaddr *)&client_addr, &client_addr_len);
+
+    /*if (client1 < 0 || client2 < 0)
+    {
+        perror("accept()");
+        return 1;
+    }*/
+    puts("new clients");
+
+    Client clients[4];
+    int connected_cnt = 0;
+    int sockSum = 0;
+    while (1)
+    {
+        timeout.tv_sec = 1;
+        timeout.tv_usec = 0;
+        FD_ZERO(&readfs);
+        clients[connected_cnt].socket = accept(sock, (struct sockaddr *)&client_addr, &client_addr_len);
+
+        if(clients[connected_cnt].socket > 0 && checkNew(connected_cnt,clients,clients[connected_cnt].socket)==1  )
+        {
+
+            clients[connected_cnt].address = client_addr;
+            puts(" new client");
+            printf("connected_cnt %d \n",connected_cnt);
+            printf("clients[connected_cnt].socket %d \n",clients[connected_cnt].socket);
+            connected_cnt++;
+        }
+        for(int i=0;i<connected_cnt;i++)
+        {
+            FD_SET(clients[i].socket,&readfs);
+            sockSum+=clients[i].socket;
+        }
+
+        select(sockSum + 1, &readfs, NULL, NULL, &timeout);
+
+        for(int i=0;i<connected_cnt;i++)
+        {
+
+            if (FD_ISSET(clients[i].socket, &readfs))
+            {
+                printf("check id_isset");
+                printf("client %d talks \n",clients[i].socket);
+                if (read_client(clients[i].socket) == -1)
+                {
+                    puts("client 1 disconnected");
+                    close(clients[i].socket);
+                    clients[i].socket = -1;
+                    connected_cnt--;
+                }
+            }
+        }
+
+        //clients[clients[i].socket] = -1;
+
+
+
+
+        /*if (client1 == -1 && client2 == -1)
+        {
+            break;
+        }*/
+
+        //printf("looping");
+    }
+    close(sock);
+    return 0;
+}

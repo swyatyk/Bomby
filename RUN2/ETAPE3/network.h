@@ -9,10 +9,17 @@
     int allowedClientsCount;
 }serverConfig;
 
+enum NETWORK_STATUS{
+    CONNECTED,
+    DISCONNECTED
+
+}network_status;
+
 typedef struct {
+    int id;
     int connected;
     int socket;
-    struct sockaddr_in connectedClient;
+    struct sockaddr_in client_address;
 }Client;
 
 #endif //BOMBERMAN_NETWORK_H
