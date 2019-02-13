@@ -15,7 +15,7 @@ enum NETWORK_STATUS{
 
 }network_status;
 
-typedef struct {
+typedef struct client_s {
     int id;
     int connected;
     int socket;
