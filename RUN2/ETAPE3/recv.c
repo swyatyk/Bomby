@@ -3,6 +3,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/socket.h>
+#include <sys/select.h>
 #include <sys/types.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
@@ -188,7 +189,7 @@ int main(){
         if (connected_client > 0)
         {
             printf("Tentative de connection de %s:%d\n", inet_ntoa(newAddr.sin_addr), ntohs(newAddr.sin_port));
-            if(itsNewClient(connected_clients,connected_client) && acceptNewClient(&connected_clients,connected_client, newAddr , &connected_clients_cnt))
+            if(itsNewClient(connected_clients,connected_client) && acceptNewClient(connected_clients,connected_client, newAddr , &connected_clients_cnt))
             {
                 printf("Nouvelle connection est accepteé %s:%d\n", inet_ntoa(newAddr.sin_addr), ntohs(newAddr.sin_port));
                 printf("%d Client conectee \n", connected_clients_cnt);
@@ -210,8 +211,8 @@ int main(){
 
         }
 
-        initListeners(&connected_clients,&file_discriptor , waiting_time);
-        checkMessages(&connected_clients,&file_discriptor , &connected_clients_cnt);
+        initListeners(connected_clients,&file_discriptor , waiting_time);
+        checkMessages(connected_clients,&file_discriptor , &connected_clients_cnt);
 
     }
 
