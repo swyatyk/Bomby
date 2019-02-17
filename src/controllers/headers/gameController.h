@@ -4,11 +4,12 @@
 
 #ifndef BOMBERMAN_GAMECONTROLLER_H
 #define BOMBERMAN_GAMECONTROLLER_H
+#include <stdlib.h>
+#include <stdio.h>
 
 #include "../../config.h"
 #include "../../instances/headers/cell.h"
-#include "../../instances/headers/wall.h"
-#include "../../instances/headers/bomb.h"
-#include "../../instances/headers/block.h"
+#include "../../instances/headers/object.h"
+
 
 #endif //BOMBERMAN_GAMECONTROLLER_H

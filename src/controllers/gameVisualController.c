@@ -3,7 +3,6 @@
  *
  */
 
-#include "../headers/bomberman.h"
 
 void showMapContent()
 {

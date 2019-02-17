@@ -1,81 +1,86 @@
-//
-// Created by Sviatoslav Prylutsky on 2/4/19.
-//
+/*
+** ETNA PROJECT, 31/01/2019 groupe de prylut_s
+** BombermanRun2
+** File description:
+**      etape 2 ,
+*/
 
-
-#include <sys/socket.h>
-#include <netdb.h>
-#include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
-#include <sys/socket.h>
-#include <sys/un.h>
+#include <stdlib.h>
 #include <unistd.h>
+#include <stdio.h>
+#include <errno.h>
+#include <sys/types.h>
+#include <sys/socket.h>
 #include <arpa/inet.h>
 
-struct PLAYER {
-    char name[32];
-    int posX;
-    int posY;
+/**
+ * \fn main CLIENT
+ * \brief main function of our program
+ *
+ * \return int
+ */
 
-} player;
-
-int main( int argc, char **argv)
-
+int startClien(int argc, char* argv[])
 {
-
-
-    int s;
-    unsigned short port;
+    char *ip = NULL;
+    int port = 0;
+    int mysocket;
     struct sockaddr_in server;
-    char buf[128];
-    memset(buf,'\0',128);
+    char message[128] ;
+    char server_reply[128];
+    int firstMessage = 0;
 
-
-/* argv[1] is internet address of server argv[2] is port of server.
- * Convert the port from ascii to integer and then from host byte
- * order to network byte order.
- */
-    if(argc != 3)
-    {
-        printf("Usage: %s <host address> <port> \n",argv[0]);
-        exit(1);
+    if (argc != 3) {
+        printf("usage : %s IP PORT\n", argv[0]);
+        return -1;
     }
-//port = htons(atoi(argv[2]));
-    port = htons(1234);
+    ip = argv[1];
+    port = atoi(argv[2]);
 
-    memset(player.name,'\0',32);
-//strcpy(player.name,"boby");
-    player.posY = 10;
-    player.posX = 30;
-
-/* Create a datagram socket in the internet domain and use the
- * default protocol (UDP).
- */
-    if ((s = socket(AF_INET, SOCK_DGRAM, 0)) < 0)
-    {
+    mysocket = socket(AF_INET, SOCK_STREAM, 0);
+    if (mysocket < 0) {
         perror("socket()");
-        exit(1);
+        return -1;
     }
 
-/* Set up the server name */
-    server.sin_family      = AF_INET;            /* Internet Domain    */
-    server.sin_port        = port;               /* Server Port        */
-    server.sin_addr.s_addr = inet_addr(argv[1]); /* Server's Address   */
-//while(1)
-    {
-        /* Send the message in buf to the server */
-        // memset(buf,'\0',128);
-        fgets(player.name,32,stdin);
 
-        //if (sendto(s, buf, (strlen(buf)+1), 0,(struct sockaddr *)&server, sizeof(server)) < 0)
-        if (sendto(s, &player, sizeof(player), 0,(struct sockaddr *)&server, sizeof(server)) < 0)
-        {
-            perror("sendto()");
-            exit(2);
+    server.sin_addr.s_addr = inet_addr(ip);
+    server.sin_port = htons(port);
+    server.sin_family = AF_INET;
+
+    if (connect(mysocket, (struct sockaddr *)&server, sizeof(server)) < 0) {
+        perror("connect()");
+        return 1;
+    }
+    printf("[+] connected to server  \n");
+
+    while (1) {
+        memset(message, '\0', 128);
+        fgets(message, 128, stdin);
+        if (send(mysocket, message, strlen(message), 0) < 0) {
+            puts("[-] send failed\n");
+            close(mysocket);
+            return 1;
+        }
+        printf("sended %s\n", message);
+
+        if (strcmp(message, "exit\n") == 0) {
+            close(mysocket);
+            printf("[-] disconnected\n");
+            exit(1);
+        }
+        if (recv(mysocket, server_reply, 2000, 0) <= 0 )  {
+            puts("server down...\n");
+            break;
+        }
+        printf("server reply : %s \n", server_reply);
+        if (strcmp(server_reply, "[!] full server") == 0) {
+            printf("[-] disconnected\n");
+            break;
         }
     }
-/* Deallocate the socket */
-    close(s);
-    return 1;
+
+    close(mysocket);
+    return 0;
 }

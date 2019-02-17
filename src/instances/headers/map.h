@@ -7,11 +7,14 @@
 
 #include "../../controllers/headers/gameController.h"
 
-struct {
-    int maxClients;
+typedef struct  {
     int mapSizeY;
     int mapSizeX;
     Cell **cells;
 }Map;
+
+void initMap();
+void printMap();
+Cell *getCell(int y, int x);
 #endif //BOMBERMAN_MAP_H
 
