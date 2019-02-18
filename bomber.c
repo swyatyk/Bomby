@@ -7,6 +7,8 @@ bomber* game_init()
     game->screenSize.x = 640;
     game->screenSize.y = 480;
     game->pWindow = NULL;
+    game->pWindowMenu = NULL;
+    game->pRendererMenu = NULL;
     game->pRenderer = NULL;
     // game->player1Position.x = 200;
     // game->player1Position.y = 150;
@@ -22,55 +24,55 @@ bomber* game_init()
         game_destroy(game);
         return (NULL);
     }
-    //Creation fenêtre
-    game->pWindow = SDL_CreateWindow("Bomberman", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, game->screenSize.x, game->screenSize.y, SDL_WINDOW_SHOWN);
-    if (game->pWindow) {
-        //Crea renderer
-        game->pRenderer = SDL_CreateRenderer(game->pWindow, -1, SDL_RENDERER_ACCELERATED);
-        if (!game->pRenderer) {
-            fprintf(stderr, "Impossible de créer le renderer SDL : %s\n", SDL_GetError());
+    return(game);
+}
+void create_game(bomber* game)
+{
+    //Creation jeu si menu okey
+        game->pWindow = SDL_CreateWindow("Bomberman", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, game->screenSize.x, game->screenSize.y, SDL_WINDOW_SHOWN);
+        if (game->pWindow) {
+            //Crea renderer
+            game->pRenderer = SDL_CreateRenderer(game->pWindow, -1, SDL_RENDERER_ACCELERATED);
+            if (!game->pRenderer) {
+                fprintf(stderr, "Impossible de créer le renderer SDL : %s\n", SDL_GetError());
+                game_destroy(game);
+                exit(1);
+            }
+        } else {
+            fprintf(stderr, "Impossible de créer le fenetre SDL : %s\n", SDL_GetError());
             game_destroy(game);
-            return (NULL);
+           exit(1);
         }
-    } else {
-        fprintf(stderr, "Impossible de créer le fenetre SDL : %s\n", SDL_GetError());
-        game_destroy(game);
-        return (NULL);
-    }
 
-
-
-    SDL_Surface* surfaceBomby = IMG_Load("bombe.png");
-    if (!surfaceBomby) {
-        fprintf(stderr, "Impossible de charger l'image bombe.png : %s\n", IMG_GetError());
-        game_destroy(game);
-        return (NULL);
-    } else { 
-        game->pTexturePlayer = SDL_CreateTextureFromSurface(game->pRenderer, surfaceBomby);
-        if (!game->pTexturePlayer) {
-            fprintf(stderr, "Impossible de charger  la texture : %s\n", SDL_GetError());
+        SDL_Surface* surfaceBomby = IMG_Load("bombe.png");
+        if (!surfaceBomby) {
+            fprintf(stderr, "Impossible de charger l'image bombe.png : %s\n", IMG_GetError());
             game_destroy(game);
-            return (NULL);
+            exit(1);
+        } else { 
+            game->pTexturePlayer = SDL_CreateTextureFromSurface(game->pRenderer, surfaceBomby);
+            if (!game->pTexturePlayer) {
+                fprintf(stderr, "Impossible de charger  la texture : %s\n", SDL_GetError());
+                game_destroy(game);
+                exit(1);
+            }
+            SDL_FreeSurface(surfaceBomby);
         }
-        SDL_FreeSurface(surfaceBomby);
-    }
 
 
 
-    //Chargement texture map + perso 
-    game->img_texture[1] = IMG_Load("tileset_bomberman.bmp");
-    game->img_texture[2] = IMG_Load("perso.bmp");
-    if (!game->img_texture[1]) {
-        fprintf(stderr, "Impossible de charger l'image 10 : %s\n", IMG_GetError());
-        game_destroy(game);
-        return (NULL);
-    } else if (!game->img_texture[2]) {
-        fprintf(stderr, "Impossible de charger l'image 11 : %s\n", IMG_GetError());
-        game_destroy(game);
-        return (NULL);
-    }
-    
-    return (game);
+        //Chargement texture map + perso 
+        game->img_texture[1] = IMG_Load("tileset_bomberman.bmp");
+        game->img_texture[2] = IMG_Load("perso.bmp");
+        if (!game->img_texture[1]) {
+            fprintf(stderr, "Impossible de charger l'image 10 : %s\n", IMG_GetError());
+            game_destroy(game);
+            exit(1);
+        } else if (!game->img_texture[2]) {
+            fprintf(stderr, "Impossible de charger l'image 11 : %s\n", IMG_GetError());
+            game_destroy(game);
+            exit(1);
+        }
 }
 
 void game_destroy(bomber* game)
@@ -78,7 +80,19 @@ void game_destroy(bomber* game)
 
     int x;
     int y;
+
     if (game) {
+        if(game->ClientJoinGame){
+            SDL_DestroyTexture(game->ClientJoinGame);
+        }
+        if(game->texture_text){
+            SDL_DestroyTexture(game->texture_text);
+        }
+
+        if(game->pTextureMenu) {
+            SDL_DestroyTexture(game->pTextureMenu);
+        }
+
         if (game->pTexturePlayer) {
             SDL_DestroyTexture(game->pTexturePlayer);
         }
@@ -89,10 +103,16 @@ void game_destroy(bomber* game)
                     SDL_DestroyTexture(game->textures[y][x]);
                 }
             }
-        }        
+        }
+        if (game->pRendererMenu) {
+            SDL_DestroyRenderer(game->pRendererMenu);
+        }
         if (game->pRenderer) {
             SDL_DestroyRenderer(game->pRenderer);
-        }        
+        }
+        if (game->pWindowMenu) {
+            SDL_DestroyWindow(game->pWindowMenu);
+        }
         if (game->pWindow) {
             SDL_DestroyWindow(game->pWindow);
         }
@@ -110,34 +130,42 @@ void game_show(bomber* game, char* direction)
     SDL_Rect Src_dest;
     //clean l'ecran
     SDL_SetRenderDrawColor(game->pRenderer, 0, 0, 0, 255);
+    SDL_RenderClear(game->pRendererMenu);
     SDL_RenderClear(game->pRenderer);
-
-    //Afficher la map + joueur 
-    for(y=0; y < NOMBRE_BLOCS_LARGEUR; y++) {
-        for(x=0; x < NOMBRE_BLOCS_HAUTEUR; x++) {
-            Src_dest = get_src_dest(game->map[y][x], direction); // cas qui gère l'image à afficher
-            Rect_dest.x = x * 50;
-            Rect_dest.y = y * 50;
-            Rect_dest.w = 50;
-            Rect_dest.h = 50;
-            SDL_RenderCopy(game->pRenderer, game->textures[y][x], &Src_dest, &Rect_dest);
+    //menu 
+    if(game->menuOn == 0) {
+        SDL_RenderCopy(game->pRendererMenu, game->pTextureMenu, NULL, &game->Menu);
+        SDL_RenderCopy(game->pRendererMenu, game->texture_text, NULL, &game->startTxt);
+        SDL_RenderCopy(game->pRendererMenu, game->ClientJoinGame, NULL, &game->joingame);
+        SDL_RenderCopy(game->pRendererMenu, game->ClientHostGame, NULL, &game->hostGame);
+        SDL_RenderCopy(game->pRendererMenu, game->cursor, NULL, &game->cursorBomb);
+        SDL_RenderPresent(game->pRendererMenu); 
+    } else if (game->menuOn == 1) {
+        //Afficher la map + joueur 
+        for(y=0; y < NOMBRE_BLOCS_LARGEUR; y++) {
+            for(x=0; x < NOMBRE_BLOCS_HAUTEUR; x++) {
+                Src_dest = get_src_dest(game->map[y][x], direction); // cas qui gère l'image à afficher
+                Rect_dest.x = x * 50;
+                Rect_dest.y = y * 50;
+                Rect_dest.w = 50;
+                Rect_dest.h = 50;
+                SDL_RenderCopy(game->pRenderer, game->textures[y][x], &Src_dest, &Rect_dest);
+            }
         }
-    }
 
-    //afficher la bombe
-    if(game->ifBombe == 1) {
-        //printf( "%d\n", game->bombe->position.x);
-        SDL_RenderCopy(game->pRenderer, game->pTexturePlayer, NULL, &game->bombe->position);
-    }
+        //afficher la bombe
+        if(game->ifBombe == 1) {
+            //printf( "%d\n", game->bombe->position.x);
+            SDL_RenderCopy(game->pRenderer, game->pTexturePlayer, NULL, &game->bombe->position);
+        }   
 
-    //Afficher rendu
-    SDL_RenderPresent(game->pRenderer);
+        //Afficher rendu
+        SDL_RenderPresent(game->pRenderer);
+    }
 }
 
 int game_event(bomber* game)
 {
-    if (game)
-        fprintf(stderr, " ");
     int result = 0;
     SDL_Event e;
     SDL_Delay(200);
@@ -171,6 +199,13 @@ int game_event(bomber* game)
             case SDLK_d:
                 game_dropBombe(game);
                 game_show(game, "null");
+                break;
+            case SDLK_RETURN:
+                SDL_HideWindow(game->pWindowMenu);
+                create_game(game);
+                init_map(game);
+                SDL_ShowWindow(game->pWindow);
+                game->menuOn = 1;
                 break;
             default:
                 fprintf(stderr, "touche inconnue %d\n", e.key.keysym.sym);
