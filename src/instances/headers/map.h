@@ -15,6 +15,7 @@ typedef struct  {
 
 void initMap();
 void printMap();
+Map *getMap();
 Cell *getCell(int y, int x);
 #endif //BOMBERMAN_MAP_H
 

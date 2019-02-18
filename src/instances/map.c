@@ -37,8 +37,7 @@ Map *getMap(){
         gameMap = malloc(sizeof(Map));
         gameMap -> mapSizeY = 10;
         gameMap -> mapSizeX = 10;
-        gameMap -> cells = calloc(sizeof(Cell),10); // 10 == X dimension * Y dimension
-        int *rows = calloc(10, sizeof(Cell));
+        gameMap -> cells = calloc(10, sizeof(Cell**)); // 10 == X dimension
 
         for(int y = 0; y<10; y++)
         {
@@ -54,34 +53,54 @@ void initMap(){
     {
         for(int x = 0; x < 10;x++)
         {
-            //printf("%d ",configMap[y][x]);
             newCell(configMap[y][x],y,x);
 
-            /*if(configMap[y][x]>0)
+            if(configMap[y][x]>0)
             {
-               Object *tmp =  generateNewObject(configMap[y][x], x, y);
+
+               Object *tmp =  generateNewObject(configMap[y][x], y,x);
                addObjToCell(tmp,y,x);
-            }*/
+            }
         }
-        printf("\n");
     }
 }
 void addObjToCell(Object *obj,int y, int x) {
     Cell *currentCell = getCell(y, x);
-
     if (currentCell->innerObjectsCnt < currentCell->innerObjectsSize)
     {
+        currentCell->innerObjects[currentCell->innerObjectsCnt] = obj;
         currentCell->innerObjectsCnt += 1;
-        //removeMe(*obj);
-        currentCell->innerObjects[currentCell->innerObjectsCnt] = *obj;
     }
 
 }
 
+/*
+ * This function return the higest @textureId
+ * value of innerObjects elements
+ *
+ */
+
+int sortCellShowPriority(Cell *cell)
+{
+    int viewId = 0;
+    for(int i = 0 ; i < cell->innerObjectsCnt;i++)
+    {
+        int currCellViewId = cell->innerObjects[i]->textureId;
+        if(viewId<currCellViewId)
+        {
+
+            viewId = currCellViewId;
+        }
+    }
+    return viewId;
+}
+
 
 Cell *getCell(int y, int x){
-    Map *map =  getMap();
-    return &map->cells[y][x];
+    Map *map = getMap();
+    Cell *cell = &map->cells[y][x];;
+    cell->textureId = sortCellShowPriority(cell);
+    return cell;
 }
 /*
  * This funtion , init the obj in the game
@@ -89,62 +108,69 @@ Cell *getCell(int y, int x){
  */
 void newCell(int mapParam, int pY, int pX)
 {
+
     Map *map = getMap();
-    Cell *cell = (Cell*) malloc(sizeof(Cell)*1);
-    cell->textureId = mapParam; //  TEMPORARY DEBUG
-    cell->posX = pX;
+    Cell *cell = malloc(sizeof(Cell));
+    cell->textureId = 0; //  TEMPORARY DEBUG
     cell->posY = pY;
+    cell->posX = pX;
     cell->innerObjectsCnt = 0;
     cell->innerObjectsSize = 5;
-    cell->innerObjects = (Object*) calloc(cell->innerObjectsSize, sizeof(Object)); // init 5 Objets, it must to be ok for start
-    map->cells[pX][pY] = *cell;
+    cell->innerObjects = (Object**) calloc(cell->innerObjectsSize, sizeof(Object*)); // init 5 Objets, it must to be ok for start
+    map->cells[pY][pX] = *cell;
+
 
 
 }
 
+void getView()
+{
+    /*for(){
 
+    }*/
+}
 
 Object *generateNewObject(int typeId, int x, int y){
 
-    Object *obj = malloc(sizeof(Object));
+    Object *obj = (Object*)malloc(sizeof(Object));
+    obj->textureId = typeId;
+    obj->posX = x;
+    obj->posY = y;
+
     switch (typeId)
     {
-        case 1:
+        case 0:
+            obj->type = CELL;
+
+            case 1:
             obj->type = BLOCK;
-            obj->textureId = typeId;
             break;
 
         case 2:
             obj->type = WALL;
-            obj->textureId = typeId;
             break;
 
         case 3:
             obj->type = BOMB;
-            obj->textureId = typeId;
             break;
 
         case 11:
             obj->type = PLAYER;
-            obj->textureId = typeId;
             obj->id = 1;
             break;
 
         case 12:
             obj->type = PLAYER;
-            obj->textureId = typeId;
             obj->id = 2;
             break;
 
         case 13:
             obj->type = PLAYER;
-            obj->textureId = typeId;
             obj->id = 3;
             break;
 
         case 14:
             obj->type = PLAYER;
-            obj->textureId = typeId;
             obj->id = 4;
             break;
 

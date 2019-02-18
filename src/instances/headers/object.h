@@ -6,7 +6,7 @@
 #define BOMBERMAN_OBJECT_H
 
 typedef enum{
-    //CELL,   // 0
+    CELL,   // 0
     BLOCK,  // 1
     WALL,   // 2
     BOMB,   // 3

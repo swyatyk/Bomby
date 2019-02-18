@@ -22,7 +22,7 @@ typedef struct {
 
     int innerObjectsCnt;
     int innerObjectsSize; //Size by default in malloc
-    Object *innerObjects;
+    Object **innerObjects;
 
 }Cell;
 
