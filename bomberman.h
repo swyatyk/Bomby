@@ -29,7 +29,9 @@ typedef struct {
     //Variable SDL
     SDL_Point screenSize;
     SDL_Window* pWindow;
+    SDL_Window* pWindowMenu;
     SDL_Renderer* pRenderer;
+    SDL_Renderer* pRendererMenu;
     int map[10][10];
     //Texture du jeu
     SDL_Texture* textures[10][10];
@@ -53,6 +55,7 @@ bomber* game_init();
 void game_destroy(bomber* game);
 void game_show(bomber* game, char* direction);
 int game_event(bomber* game);
+SDL_Renderer* Create_menu_render(SDL_Window * window, bomber* game);
 
 // partie map/player 
 void init_map(bomber* game);

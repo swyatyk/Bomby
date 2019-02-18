@@ -96,6 +96,7 @@ void game_destroy(bomber* game)
         if (game->pWindow) {
             SDL_DestroyWindow(game->pWindow);
         }
+        TTF_Quit();
         SDL_Quit();
         free(game);
     }
