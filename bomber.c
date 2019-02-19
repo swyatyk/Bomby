@@ -198,7 +198,7 @@ int game_event(bomber* game)
                 result = -1;
                 break;               
             case SDLK_UP:
-                if(game->start == 0) {
+                if(game->start == 1) {
                     game_movePlayer(game, e.key.keysym.sym);
                     game_show(game, "up");
                 } else {
@@ -206,7 +206,7 @@ int game_event(bomber* game)
                 }
                 break;
             case SDLK_DOWN:
-                if(game->start == 0) {
+                if(game->start == 1) {
                     game_movePlayer(game, e.key.keysym.sym);
                     game_show(game, "down");
                 } else{
@@ -215,7 +215,7 @@ int game_event(bomber* game)
                 
                 break;
             case SDLK_LEFT:
-                if(game->start == 0) {
+                if(game->start == 1) {
                     game_movePlayer(game, e.key.keysym.sym);
                     game_show(game, "left");
                 }
@@ -227,7 +227,7 @@ int game_event(bomber* game)
                 }
                 break;
             case SDLK_d:
-            if (game->start == 0) {
+            if (game->start == 1) {
                 game_dropBombe(game);
                 game_show(game, "null");
             }
