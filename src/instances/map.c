@@ -8,17 +8,8 @@
 void newCell(int mapParam,  int pY ,int pX);
 
 
-int mapGridTrue[10][10] = {
-        {7, 7, 7, 7, 7, 7, 7, 7, 7, 7},
-        {7, 1, 0, 0, 0, 0, 0, 0, 0, 7},
-        {7, 0, 7, 0, 0, 7, 0, 7, 0, 7},
-        {7, 0, 0, 0, 7, 0, 0, 0, 0, 7},
-        {7, 0, 7, 0, 0, 0, 0, 7, 0, 7},
-        {7, 0, 0, 0, 0, 7, 0, 0, 0, 7},
-        {7, 0, 0, 7, 0, 0, 0, 7, 0, 7},
-        {7, 0, 7, 0, 0, 7, 7, 0, 0, 7},
-        {7, 0, 0, 0, 0, 0, 0, 0, 0, 7},
-        {7, 7, 7, 7, 7, 7, 7, 7, 7, 7}};
+
+
 int configMap[10][10] = {
         {1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
         {1, 11, 0, 0, 0, 0, 0, 0, 0, 1},
@@ -37,11 +28,11 @@ Map *getMap(){
         gameMap = malloc(sizeof(Map));
         gameMap -> mapSizeY = 10;
         gameMap -> mapSizeX = 10;
-        gameMap -> cells = calloc(10, sizeof(Object**)); // 10 == X dimension
+        gameMap -> cells = calloc(gameMap -> mapSizeY, sizeof(Object**)); // 10 == X dimension
 
         for(int y = 0; y<10; y++)
         {
-            gameMap -> cells[y] = calloc(10,sizeof(Object*));
+            gameMap -> cells[y] = calloc(gameMap -> mapSizeX,sizeof(Object));
         }
     }
 
@@ -55,12 +46,12 @@ void initMap(){
         {
             newCell(configMap[y][x],y,x);
 
-           /* if(configMap[y][x]>0)
+            if(configMap[y][x]>0)
             {
 
-               Object *tmp =  generateNewObject(configMap[y][x], y,x);
-               addObjToCell(tmp,y,x);
-            }*/
+                Object *tmp =  generateNewObject(configMap[y][x], y,x);
+                addObjToCell(tmp,y,x);
+            }
         }
     }
 }
@@ -105,7 +96,7 @@ Object *getCell(int y, int x){
 void newCell(int mapParam, int pY, int pX)
 {
 
-    printf("newCell");
+    //printf("newCell");
     Map *map = getMap();
     Object *cell = malloc(sizeof(Object));
     cell->type=CELL;
@@ -116,7 +107,7 @@ void newCell(int mapParam, int pY, int pX)
     cell->prev = NULL;
     cell->last=cell;
     map->cells[pY][pX] = *cell;
-   // printf("%d ", map->cells[pY][pX].textureId);
+    // printf("%d ", map->cells[pY][pX].textureId);
 
 
 
@@ -142,7 +133,7 @@ Object *generateNewObject(int typeId, int x, int y){
         case 0:
             obj->type = CELL;
 
-            case 1:
+        case 1:
             obj->type = BLOCK;
             break;
 
@@ -190,7 +181,7 @@ void printMap(){
     {
         for (int x = 0; x < map->mapSizeX; ++x)
         {
-          printf(" %d",getCell(y,x)->textureId);
+            printf(" %d",getCell(y,x)->last->textureId);
         }
         printf("\n");
     }
