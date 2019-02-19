@@ -37,11 +37,11 @@ Map *getMap(){
         gameMap = malloc(sizeof(Map));
         gameMap -> mapSizeY = 10;
         gameMap -> mapSizeX = 10;
-        gameMap -> cells = calloc(10, sizeof(Cell**)); // 10 == X dimension
+        gameMap -> cells = calloc(10, sizeof(Object**)); // 10 == X dimension
 
         for(int y = 0; y<10; y++)
         {
-            gameMap -> cells[y] = calloc(10,sizeof(Cell));
+            gameMap -> cells[y] = calloc(10,sizeof(Object*));
         }
     }
 
@@ -55,23 +55,19 @@ void initMap(){
         {
             newCell(configMap[y][x],y,x);
 
-            if(configMap[y][x]>0)
+           /* if(configMap[y][x]>0)
             {
 
                Object *tmp =  generateNewObject(configMap[y][x], y,x);
                addObjToCell(tmp,y,x);
-            }
+            }*/
         }
     }
 }
 void addObjToCell(Object *obj,int y, int x) {
-    Cell *currentCell = getCell(y, x);
-    if (currentCell->innerObjectsCnt < currentCell->innerObjectsSize)
-    {
-        currentCell->innerObjects[currentCell->innerObjectsCnt] = obj;
-        currentCell->innerObjectsCnt += 1;
-    }
-
+    Object *currentCell = getCell(y, x);
+    currentCell->last=obj;
+    currentCell->next=obj;
 }
 
 /*
@@ -80,7 +76,7 @@ void addObjToCell(Object *obj,int y, int x) {
  *
  */
 
-int sortCellShowPriority(Cell *cell)
+/*int sortCellShowPriority(Object *cell)
 {
     int viewId = 0;
     for(int i = 0 ; i < cell->innerObjectsCnt;i++)
@@ -93,13 +89,13 @@ int sortCellShowPriority(Cell *cell)
         }
     }
     return viewId;
-}
+}*/
 
 
-Cell *getCell(int y, int x){
+Object *getCell(int y, int x){
     Map *map = getMap();
-    Cell *cell = &map->cells[y][x];;
-    cell->textureId = sortCellShowPriority(cell);
+    Object *cell = &map->cells[y][x];
+    //cell->textureId = sortCellShowPriority(cell);
     return cell;
 }
 /*
@@ -109,15 +105,19 @@ Cell *getCell(int y, int x){
 void newCell(int mapParam, int pY, int pX)
 {
 
+    printf("newCell");
     Map *map = getMap();
-    Cell *cell = malloc(sizeof(Cell));
+    Object *cell = malloc(sizeof(Object));
+    cell->type=CELL;
     cell->textureId = 0; //  TEMPORARY DEBUG
     cell->posY = pY;
     cell->posX = pX;
-    cell->innerObjectsCnt = 0;
-    cell->innerObjectsSize = 5;
-    cell->innerObjects = (Object**) calloc(cell->innerObjectsSize, sizeof(Object*)); // init 5 Objets, it must to be ok for start
+    cell->next = NULL;
+    cell->prev = NULL;
+    cell->last=cell;
     map->cells[pY][pX] = *cell;
+   // printf("%d ", map->cells[pY][pX].textureId);
+
 
 
 
@@ -190,7 +190,7 @@ void printMap(){
     {
         for (int x = 0; x < map->mapSizeX; ++x)
         {
-          printf(" %d",getCell(x,y)->textureId);
+          printf(" %d",getCell(y,x)->textureId);
         }
         printf("\n");
     }

@@ -10,12 +10,12 @@
 typedef struct  {
     int mapSizeY;
     int mapSizeX;
-    Cell **cells;
+    Object **cells;
 }Map;
 
 void initMap();
 void printMap();
 Map *getMap();
-Cell *getCell(int y, int x);
+Object *getCell(int y, int x);
 #endif //BOMBERMAN_MAP_H
 

@@ -11,7 +11,7 @@
 
 
 
-typedef struct {
+/*typedef struct {
     //global object params what will be extended by childs
     int textureId;
     //
@@ -24,7 +24,7 @@ typedef struct {
     int innerObjectsSize; //Size by default in malloc
     Object **innerObjects;
 
-}Cell;
+}Cell;*/
 
 void addObjToCell(Object *obj, int x, int y);
 #endif //BOMBERMAN_CELL_H
