@@ -26,22 +26,29 @@ typedef struct {
 
 typedef struct {
 
-    int menuOn;   
+    int menuOn;
+    char *choiceGame;
+    int start;   
     //Variable SDL
     SDL_Point screenSize;
     SDL_Window* pWindow;
     SDL_Window* pWindowMenu;
+    SDL_Window* pWindowMenuJoin;
     SDL_Renderer* pRenderer;
     SDL_Renderer* pRendererMenu;
+    SDL_Renderer* pRendererMenuJoin;
     int map[10][10];
     //Texture du jeu
     SDL_Texture* textures[10][10];
     SDL_Texture* pTexturePlayer;
     SDL_Texture* pTextureMenu;
+    SDL_Texture* pTextureMenuJoin;
     SDL_Texture* ClientJoinGame;
     SDL_Texture* ClientHostGame;
     SDL_Texture* texture_text;
     SDL_Texture* cursor;
+    SDL_Texture* txtJoin;
+    SDL_Texture* textIp;
     // images du jeu (bmp)
     SDL_Surface* img_texture[20];
 
@@ -60,13 +67,15 @@ typedef struct {
 void game_dropBombe(bomber* game);
 void init_menu(bomber* game);
 void menuScroll(char* scroll, bomber* game);
+void init_menuJoin(bomber* game);
 // init game
 bomber* game_init();
 void create_game(bomber* game);
 void game_destroy(bomber* game);
 void game_show(bomber* game, char* direction);
 int game_event(bomber* game);
-//SDL_Renderer* Create_menu_render(SDL_Window * window, bomber* game);
+
+void create_menu_join(bomber* game);
 void Create_menu_render(bomber* game);
 // partie map/player 
 void init_map(bomber* game);

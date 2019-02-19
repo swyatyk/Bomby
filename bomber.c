@@ -4,10 +4,13 @@ bomber* game_init()
 {
     bomber * game = NULL;
     game = malloc(sizeof(bomber));
+    game->choiceGame = NULL;
     game->screenSize.x = 640;
     game->screenSize.y = 480;
     game->pWindow = NULL;
     game->pWindowMenu = NULL;
+    game->pWindowMenuJoin = NULL;
+    game->pRendererMenuJoin = NULL;
     game->pRendererMenu = NULL;
     game->pRenderer = NULL;
     // game->player1Position.x = 200;
@@ -15,6 +18,7 @@ bomber* game_init()
     game->player1Position.w = 40;
     game->player1Position.h = 40;
     game->ifBombe = 0;
+    game->start = 0;
     game->bombe = NULL;
 
 
@@ -104,11 +108,17 @@ void game_destroy(bomber* game)
                 }
             }
         }
+        if (game->pRendererMenuJoin) {
+            SDL_DestroyRenderer(game->pRendererMenuJoin);
+        }
         if (game->pRendererMenu) {
             SDL_DestroyRenderer(game->pRendererMenu);
         }
         if (game->pRenderer) {
             SDL_DestroyRenderer(game->pRenderer);
+        }
+        if (game->pWindowMenuJoin) {
+            SDL_DestroyWindow(game->pWindowMenuJoin);
         }
         if (game->pWindowMenu) {
             SDL_DestroyWindow(game->pWindowMenu);
@@ -130,6 +140,7 @@ void game_show(bomber* game, char* direction)
     SDL_Rect Src_dest;
     //clean l'ecran
     SDL_SetRenderDrawColor(game->pRenderer, 0, 0, 0, 255);
+    SDL_RenderClear(game->pRendererMenuJoin);
     SDL_RenderClear(game->pRendererMenu);
     SDL_RenderClear(game->pRenderer);
     //menu 
@@ -141,26 +152,32 @@ void game_show(bomber* game, char* direction)
         SDL_RenderCopy(game->pRendererMenu, game->cursor, NULL, &game->cursorBomb);
         SDL_RenderPresent(game->pRendererMenu); 
     } else if (game->menuOn == 0) {
-        //Afficher la map + joueur 
-        for(y=0; y < NOMBRE_BLOCS_LARGEUR; y++) {
-            for(x=0; x < NOMBRE_BLOCS_HAUTEUR; x++) {
-                Src_dest = get_src_dest(game->map[y][x], direction); // cas qui gère l'image à afficher
-                Rect_dest.x = x * 50;
-                Rect_dest.y = y * 50;
-                Rect_dest.w = 50;
-                Rect_dest.h = 50;
-                SDL_RenderCopy(game->pRenderer, game->textures[y][x], &Src_dest, &Rect_dest);
+        SDL_RenderCopy(game->pRendererMenuJoin, game->pTextureMenuJoin, NULL, &game->Menu);
+        SDL_RenderCopy(game->pRendererMenuJoin, game->txtJoin, NULL, &game->startTxt);
+        SDL_RenderCopy(game->pRendererMenuJoin, game->textIp, NULL, &game->joingame);
+        SDL_RenderPresent(game->pRendererMenuJoin);
+        if(game->start == 1){
+            //Afficher la map + joueur
+            for(y=0; y < NOMBRE_BLOCS_LARGEUR; y++) {
+                for(x=0; x < NOMBRE_BLOCS_HAUTEUR; x++) {
+                    Src_dest = get_src_dest(game->map[y][x], direction); // cas qui gère l'image à afficher
+                    Rect_dest.x = x * 50;
+                    Rect_dest.y = y * 50;
+                    Rect_dest.w = 50;
+                    Rect_dest.h = 50;
+                    SDL_RenderCopy(game->pRenderer, game->textures[y][x], &Src_dest, &Rect_dest);
+                }
             }
+
+            //afficher la bombe
+            if(game->ifBombe == 1) {
+                //printf( "%d\n", game->bombe->position.x);
+                SDL_RenderCopy(game->pRenderer, game->pTexturePlayer, NULL, &game->bombe->position);
+            }   
+
+            //Afficher rendu
+            SDL_RenderPresent(game->pRenderer);
         }
-
-        //afficher la bombe
-        if(game->ifBombe == 1) {
-            //printf( "%d\n", game->bombe->position.x);
-            SDL_RenderCopy(game->pRenderer, game->pTexturePlayer, NULL, &game->bombe->position);
-        }   
-
-        //Afficher rendu
-        SDL_RenderPresent(game->pRenderer);
     }
 }
 
@@ -181,7 +198,7 @@ int game_event(bomber* game)
                 result = -1;
                 break;               
             case SDLK_UP:
-                if(game->menuOn == 0) {
+                if(game->start == 0) {
                     game_movePlayer(game, e.key.keysym.sym);
                     game_show(game, "up");
                 } else {
@@ -189,7 +206,7 @@ int game_event(bomber* game)
                 }
                 break;
             case SDLK_DOWN:
-                if(game->menuOn == 0) {
+                if(game->start == 0) {
                     game_movePlayer(game, e.key.keysym.sym);
                     game_show(game, "down");
                 } else{
@@ -198,29 +215,35 @@ int game_event(bomber* game)
                 
                 break;
             case SDLK_LEFT:
-                if(game->menuOn == 0) {
+                if(game->start == 0) {
                     game_movePlayer(game, e.key.keysym.sym);
                     game_show(game, "left");
                 }
                 break;
             case SDLK_RIGHT:
-                if(game->menuOn == 0) {
+                if(game->start == 0) {
                     game_movePlayer(game, e.key.keysym.sym);
                     game_show(game, "right");
                 }
                 break;
             case SDLK_d:
-            if (game->menuOn == 0) {
+            if (game->start == 0) {
                 game_dropBombe(game);
                 game_show(game, "null");
             }
                 break;
             case SDLK_RETURN:
                 SDL_HideWindow(game->pWindowMenu);
-                create_game(game);
-                init_map(game);
-                SDL_ShowWindow(game->pWindow);
-                game->menuOn = 0;
+                if(game->cursorBomb.y == game->joingame.y) {
+                    init_menuJoin(game);
+                    game->choiceGame = "join";
+                    SDL_ShowWindow(game->pWindowMenuJoin);
+                    game->menuOn = 0;
+                }
+               // create_game(game);
+                //init_map(game);
+               // SDL_ShowWindow(game->pWindow);
+                //game->menuOn = 0;
                 break;
             default:
                 fprintf(stderr, "touche inconnue %d\n", e.key.keysym.sym);
