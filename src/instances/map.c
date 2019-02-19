@@ -55,37 +55,95 @@ void initMap(){
         }
     }
 }
-void addObjToCell(Object *obj,int y, int x) {
-    Object *targetCell = getCell(y, x);
-    targetCell->last->next=obj;
-    targetCell->last=obj;
+Object * getProritaryAppairance(Object *cell){
+    Object *highter = cell;
+    Object *current = cell->next;
+    while(current)
+    {
+        if(current->textureId > highter->textureId)
+        {
+            highter = current;
+        }
+
+        Object *tmp = current->next;
+        current = tmp;
+    }
+    return highter;
 }
 
-/*
- * This function return the higest @textureId
- * value of innerObjects elements
- *
- */
+void addObjToCell(Object *obj,int y, int x) {
 
-/*int sortCellShowPriority(Object *cell)
-{
-    int viewId = 0;
-    for(int i = 0 ; i < cell->innerObjectsCnt;i++)
+    Object *targetCell = getCell(y, x);
+    Object *current = targetCell->next;
+
+    if(current!=NULL)
     {
-        int currCellViewId = cell->innerObjects[i]->textureId;
-        if(viewId<currCellViewId)
+        while(current->next!=NULL)
         {
+            Object *tmp = current->next;
+            if(tmp->textureId < obj ->textureId)
+            {
+                break;
+            }
+            current = tmp;
+        }
+        if(current!=NULL)
+        {
+            Object *tmp = current->next;
+            current->next = obj;
+            obj->next = tmp;
 
-            viewId = currCellViewId;
         }
     }
-    return viewId;
-}*/
+    else
+    {
+        targetCell->next = obj;
+    }
+
+    targetCell->last=getProritaryAppairance(targetCell);
+    targetCell->size +=1;
+    printf("cell size = %d \n", targetCell->size);
+}
+
+
+
+void removeObjFromCell(Object *obj,int y, int x)
+{
+    Object *targetCell = getCell(y, x);
+    Object *current = targetCell;
+    if(current->next)
+    {
+        while (current->next != NULL) {
+            Object *tmp = current->next;
+            if (tmp == obj)
+            {
+                if (tmp->next != NULL)
+                {
+                    *current->next = *obj->next;
+                }
+                else
+                {
+                    current->next = NULL;
+                }
+                obj->next = NULL;
+            }
+            current = tmp;
+        }
+    }
+
+    targetCell->last=getProritaryAppairance(targetCell);
+    targetCell->size -=1;
+    printf("cell size = %d \n", targetCell->size);
+
+}
+
+void moveToCell(Object *obj,int y, int x){
+
+}
 
 Object *getCell(int y, int x){
     Map *map = getMap();
     Object *cell = &map->cells[y][x];
-    //cell->textureId = sortCellShowPriority(cell);
     return cell;
 }
 /*
@@ -110,6 +168,7 @@ Object *generateNewObject(int typeId, int y, int x){
     {
         case 0:
             obj->type = CELL;
+            obj->size = 0;
 
         case 1:
             obj->type = BLOCK;
@@ -163,5 +222,4 @@ void printMap(){
         }
         printf("\n");
     }
-    //showMapContent();
 }

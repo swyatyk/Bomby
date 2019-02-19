@@ -17,5 +17,6 @@ void initMap();
 void printMap();
 Map *getMap();
 Object *getCell(int y, int x);
+void removeObjFromCell(Object *obj,int y, int x);
 #endif //BOMBERMAN_MAP_H
 

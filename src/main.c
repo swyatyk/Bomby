@@ -10,11 +10,16 @@ int main()
     initMap();
     printMap();
 
+    Object *tres = generateNewObject(13,1,2);
+    addObjToCell(tres,1,2);
+    printf("\n");
+    printMap();
+
     addObjToCell(generateNewObject(12,1,2),1,2);
     printf("\n");
     printMap();
 
-    addObjToCell(generateNewObject(13,1,2),1,2);
+    removeObjFromCell(tres,tres->posY,tres->posX);
     printf("\n");
     printMap();
 
