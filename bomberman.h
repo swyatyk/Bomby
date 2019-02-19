@@ -59,6 +59,7 @@ typedef struct {
 
 void game_dropBombe(bomber* game);
 void init_menu(bomber* game);
+void menuScroll(char* scroll, bomber* game);
 // init game
 bomber* game_init();
 void create_game(bomber* game);

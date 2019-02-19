@@ -18,10 +18,20 @@ void init_menu(bomber* game)
         exit(1);
     }
 }
+
+void menuScroll(char* scroll, bomber* game)
+{
+    if(strcmp(scroll, "up") == 0) {
+        game->cursorBomb.y = game->joingame.y;
+    } else if (strcmp(scroll, "down") == 0) {
+        game->cursorBomb.y = game->hostGame.y;
+    } else 
+        printf("choix inconnue");
+}
 void Create_menu_render(bomber* game)
 {
     
-    game->menuOn = 0;
+    game->menuOn = 1;
     TTF_Init();
     //game->pRendererMenu = NULL;
     game->pTextureMenu = NULL;

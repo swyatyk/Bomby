@@ -133,14 +133,14 @@ void game_show(bomber* game, char* direction)
     SDL_RenderClear(game->pRendererMenu);
     SDL_RenderClear(game->pRenderer);
     //menu 
-    if(game->menuOn == 0) {
+    if(game->menuOn == 1) {
         SDL_RenderCopy(game->pRendererMenu, game->pTextureMenu, NULL, &game->Menu);
         SDL_RenderCopy(game->pRendererMenu, game->texture_text, NULL, &game->startTxt);
         SDL_RenderCopy(game->pRendererMenu, game->ClientJoinGame, NULL, &game->joingame);
         SDL_RenderCopy(game->pRendererMenu, game->ClientHostGame, NULL, &game->hostGame);
         SDL_RenderCopy(game->pRendererMenu, game->cursor, NULL, &game->cursorBomb);
         SDL_RenderPresent(game->pRendererMenu); 
-    } else if (game->menuOn == 1) {
+    } else if (game->menuOn == 0) {
         //Afficher la map + joueur 
         for(y=0; y < NOMBRE_BLOCS_LARGEUR; y++) {
             for(x=0; x < NOMBRE_BLOCS_HAUTEUR; x++) {
@@ -181,31 +181,46 @@ int game_event(bomber* game)
                 result = -1;
                 break;               
             case SDLK_UP:
-                game_movePlayer(game, e.key.keysym.sym);
-                game_show(game, "up");
+                if(game->menuOn == 0) {
+                    game_movePlayer(game, e.key.keysym.sym);
+                    game_show(game, "up");
+                } else {
+                    menuScroll("up", game);
+                }
                 break;
             case SDLK_DOWN:
-                game_movePlayer(game, e.key.keysym.sym);
-                game_show(game, "down");
+                if(game->menuOn == 0) {
+                    game_movePlayer(game, e.key.keysym.sym);
+                    game_show(game, "down");
+                } else{
+                    menuScroll("down", game);
+                }
+                
                 break;
             case SDLK_LEFT:
-                game_movePlayer(game, e.key.keysym.sym);
-                game_show(game, "left");
+                if(game->menuOn == 0) {
+                    game_movePlayer(game, e.key.keysym.sym);
+                    game_show(game, "left");
+                }
                 break;
             case SDLK_RIGHT:
-                game_movePlayer(game, e.key.keysym.sym);
-                game_show(game, "right");
+                if(game->menuOn == 0) {
+                    game_movePlayer(game, e.key.keysym.sym);
+                    game_show(game, "right");
+                }
                 break;
             case SDLK_d:
+            if (game->menuOn == 0) {
                 game_dropBombe(game);
                 game_show(game, "null");
+            }
                 break;
             case SDLK_RETURN:
                 SDL_HideWindow(game->pWindowMenu);
                 create_game(game);
                 init_map(game);
                 SDL_ShowWindow(game->pWindow);
-                game->menuOn = 1;
+                game->menuOn = 0;
                 break;
             default:
                 fprintf(stderr, "touche inconnue %d\n", e.key.keysym.sym);
