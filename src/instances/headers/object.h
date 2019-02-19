@@ -20,17 +20,16 @@ typedef struct str_obj {
     Type type;
 
     struct str_obj* next;
-    struct str_obj* prev;
     struct str_obj* last;
     //global object params what will be extended by childs
     int id;
     int textureId;
+    int size;
     //
     int posY;
     int posX;
     int posW;
     int posH;
-
 }Object;
 
 

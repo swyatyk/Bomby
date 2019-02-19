@@ -9,7 +9,15 @@ int main()
 {
     initMap();
     printMap();
-    Map *map = getMap();
+
+    addObjToCell(generateNewObject(12,1,2),1,2);
+    printf("\n");
+    printMap();
+
+    addObjToCell(generateNewObject(13,1,2),1,2);
+    printf("\n");
+    printMap();
+
    // int response = showMenu(); //return 1 if wanna to make server or return 2 if wanna to join the server else return 0 if somthing wrong
    /*if(response == 1 ){
        startServer();

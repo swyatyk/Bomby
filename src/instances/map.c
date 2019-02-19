@@ -56,9 +56,9 @@ void initMap(){
     }
 }
 void addObjToCell(Object *obj,int y, int x) {
-    Object *currentCell = getCell(y, x);
-    currentCell->last=obj;
-    currentCell->next=obj;
+    Object *targetCell = getCell(y, x);
+    targetCell->last->next=obj;
+    targetCell->last=obj;
 }
 
 /*
@@ -82,7 +82,6 @@ void addObjToCell(Object *obj,int y, int x) {
     return viewId;
 }*/
 
-
 Object *getCell(int y, int x){
     Map *map = getMap();
     Object *cell = &map->cells[y][x];
@@ -93,41 +92,20 @@ Object *getCell(int y, int x){
  * This funtion , init the obj in the game
  * and reference them to SDL
  */
+
 void newCell(int mapParam, int pY, int pX)
 {
-
-    //printf("newCell");
-    Map *map = getMap();
-    Object *cell = malloc(sizeof(Object));
-    cell->type=CELL;
-    cell->textureId = 0; //  TEMPORARY DEBUG
-    cell->posY = pY;
-    cell->posX = pX;
-    cell->next = NULL;
-    cell->prev = NULL;
-    cell->last=cell;
-    map->cells[pY][pX] = *cell;
-    // printf("%d ", map->cells[pY][pX].textureId);
-
-
-
-
+    getMap()->cells[pY][pX] = *generateNewObject( mapParam,  pY,  pX);
 }
 
-void getView()
-{
-    /*for(){
-
-    }*/
-}
-
-Object *generateNewObject(int typeId, int x, int y){
+Object *generateNewObject(int typeId, int y, int x){
 
     Object *obj = (Object*)malloc(sizeof(Object));
     obj->textureId = typeId;
     obj->posX = x;
     obj->posY = y;
-
+    obj->last = obj;
+    obj->size = 0;
     switch (typeId)
     {
         case 0:
