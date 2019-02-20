@@ -51,7 +51,7 @@ void create_game(bomber* game)
            exit(1);
         }
 
-        SDL_Surface* surfaceBomby = IMG_Load("bombe.png");
+        SDL_Surface* surfaceBomby = IMG_Load("./assets/bombe.png");
         if (!surfaceBomby) {
             fprintf(stderr, "Impossible de charger l'image bombe.png : %s\n", IMG_GetError());
             game_destroy(game);
@@ -69,8 +69,8 @@ void create_game(bomber* game)
 
 
         //Chargement texture map + perso 
-        game->img_texture[1] = IMG_Load("tileset_bomberman.bmp");
-        game->img_texture[2] = IMG_Load("perso.bmp");
+        game->img_texture[1] = IMG_Load("./assets/tileset_bomberman.bmp");
+        game->img_texture[2] = IMG_Load("./assets/perso.bmp");
         if (!game->img_texture[1]) {
             fprintf(stderr, "Impossible de charger l'image 10 : %s\n", IMG_GetError());
             game_destroy(game);
