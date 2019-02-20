@@ -268,6 +268,7 @@ int game_event(bomber* game)
                     init_menuJoin(game);
                     game->choiceGame = "join";
                     SDL_ShowWindow(game->pWindowMenuJoin);
+                   // game->userWrite.str = writeIp(game);
                     game->menuOn = 0;
                 }
                // create_game(game);
@@ -280,6 +281,10 @@ int game_event(bomber* game)
                 break;
             }
         } 
+        /*if (strcmp(game->choiceGame, "join") == 0) {
+            char* str = writeIp(game);
+            printf("%s", str);
+        }*/
         // else if (e.type == SDL_TEXTINPUT) {
         //     if (game->userWrite.str) {
         //         if (game->userWrite.str_size < 32) {

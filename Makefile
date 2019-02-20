@@ -10,6 +10,7 @@ SRC =	main.c \
 		main_menu.c \
 		menuJoinGame.c \
 		map.c \
+		userWrite.c \
 		playerMove.c \
 		animationPlayer.c \
 		bomber.c 

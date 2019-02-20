@@ -86,6 +86,7 @@ void game_show(bomber* game, char* direction);
 int game_event(bomber* game);
 
 void create_menu_join(bomber* game);
+char* writeIp(bomber* game);
 void Create_menu_render(bomber* game);
 // partie map/player 
 void init_map(bomber* game);
