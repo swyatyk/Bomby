@@ -279,16 +279,17 @@ int game_event(bomber* game)
                 fprintf(stderr, "touche inconnue %d\n", e.key.keysym.sym);
                 break;
             }
-        } else if (e.type == SDL_TEXTINPUT) {
-            if (game->userWrite.str) {
-                if (game->userWrite.str_size < 32) {
-                    strcat(game->userWrite.str, e.text.text);
-                    game->userWrite.str_size += 1;
+        } 
+        // else if (e.type == SDL_TEXTINPUT) {
+        //     if (game->userWrite.str) {
+        //         if (game->userWrite.str_size < 32) {
+        //             strcat(game->userWrite.str, e.text.text);
+        //             game->userWrite.str_size += 1;
                     
-                }printf("%s\n", game->userWrite.str);
-            }
-            draw_text(game->userWrite.str, game);
-        }
+        //         }printf("%s\n", game->userWrite.str);
+        //     }
+        //     draw_text(game->userWrite.str, game);
+        // }
     }
     return (result);
 }

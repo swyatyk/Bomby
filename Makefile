@@ -12,7 +12,7 @@ SRC =	main.c \
 		map.c \
 		playerMove.c \
 		animationPlayer.c \
-		bomber.c
+		bomber.c 
 
 
 OBJ = $(SRC:.c=.o)

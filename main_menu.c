@@ -35,7 +35,7 @@ void Create_menu_render(bomber* game)
     TTF_Init();
     //game->pRendererMenu = NULL;
     game->pTextureMenu = NULL;
-    game-> texture_text = NULL;
+    game->texture_text = NULL;
     int font_size = 24;
     char * text = "Welcome to the Bomberman";
     char * txtjoin = "join a game";
@@ -54,12 +54,12 @@ void Create_menu_render(bomber* game)
     game->Menu.w = 500;
     game->Menu.h = 500;
     
-    TTF_Font* police = TTF_OpenFont("./arial.ttf", font_size);
+    TTF_Font* police = TTF_OpenFont("./assets/arial.ttf", font_size);
     
     
     //SDL_RenderClear(game->pRendererMenu);
     //Ecriture des surfaces surfaces
-    surface_background = SDL_LoadBMP("main_menu.bmp");
+    surface_background = SDL_LoadBMP("assets/img/main_menu.bmp");
     if ( !surface_background ){
         fprintf(stdout,"Échec de chargement du background (%s)\n",SDL_GetError());
         game_destroy(game);
@@ -67,22 +67,22 @@ void Create_menu_render(bomber* game)
 
     surface_text = TTF_RenderText_Solid(police, text, normalColor);
     if ( !surface_text ) {
-        fprintf(stdout,"Échec de chargement du texte (%s)\n",SDL_GetError());
+        fprintf(stdout,"Échec de chargement du texte surface_text (%s)\n",SDL_GetError());
         game_destroy(game);
     }
 
     surface_join = TTF_RenderText_Solid(police, txtjoin, normalColor);
     if ( !surface_join ) {
-        fprintf(stdout,"Échec de chargement du texte (%s)\n",SDL_GetError());
+        fprintf(stdout,"Échec de chargement du texte surface_join (%s)\n",SDL_GetError());
         game_destroy(game);
     }
 
     surface_host = TTF_RenderText_Solid(police, txthost, normalColor);
     if ( !surface_host ) {
-        fprintf(stdout,"Échec de chargement du texte (%s)\n",SDL_GetError());
+        fprintf(stdout,"Échec de chargement du texte surface_host(%s)\n",SDL_GetError());
         game_destroy(game);
     }
-    cursorGame = IMG_Load("bombe.png");
+    cursorGame = IMG_Load("assets/img/bombe.png");
         if (!cursorGame) {
             fprintf(stderr, "Impossible de charger l'image bombe.png : %s\n", IMG_GetError());
             game_destroy(game);

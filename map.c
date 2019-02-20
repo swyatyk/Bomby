@@ -67,8 +67,8 @@ SDL_Texture* get_texture(int val, bomber *game)
     SDL_Texture* Shape = NULL;
     SDL_Surface *tileset;
 
-    game->img_texture[1] = IMG_Load("tileset_bomberman.bmp"); //fichier avec toutes les images de la map
-    game->img_texture[2] = IMG_Load("perso.bmp"); // fichier avec les images des perso
+    game->img_texture[1] = IMG_Load("assets/img/tileset_bomberman.bmp"); //fichier avec toutes les images de la map
+    game->img_texture[2] = IMG_Load("assets/img/perso.bmp"); // fichier avec les images des perso
      
     if (val >= 1 && val <= 4) {     
         tileset = game->img_texture[2]; // cas des joueurs ( 1 à 4)
