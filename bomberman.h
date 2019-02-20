@@ -84,6 +84,7 @@ void create_game(bomber* game);
 void game_destroy(bomber* game);
 void game_show(bomber* game, char* direction);
 int game_event(bomber* game);
+void sendMess(char *ip, int port);
 
 void create_menu_join(bomber* game);
 char* writeIp(bomber* game);

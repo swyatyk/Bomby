@@ -271,6 +271,7 @@ int game_event(bomber* game)
                     game->menuOn = 0;
                     game_show(game, "null");
                     game->userWrite.str = writeIp(game);
+                    sendMess(game->userWrite.str, 1234);
                 }
                 break;
             default:
