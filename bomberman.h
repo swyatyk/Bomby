@@ -4,6 +4,13 @@
 #ifndef _BOMBERMAN_H_
 #define _BOMBERMAN_H_
 
+#include <string.h>
+#include <unistd.h>
+#include <errno.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <arpa/inet.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -35,7 +42,9 @@ typedef struct {
 
     input_t userWrite;
     int menuOn;
+    int sock;
     char *ipIsOk;
+    char *portIsOk;
     int start;   
     //Variable SDL
     SDL_Point screenSize;
@@ -59,8 +68,8 @@ typedef struct {
     SDL_Texture* txtJoin;
     SDL_Texture* textIp;
     SDL_Texture* textPort;
-    SDL_Texture* userIp;
-    SDL_Texture* userPort;
+    SDL_Texture* userText;
+    SDL_Texture* userTextPort;
     
     // images du jeu (bmp)
     SDL_Surface* img_texture[20];
@@ -78,6 +87,8 @@ typedef struct {
     int ifBombe;
     bombe* bombe;
 
+    struct sockaddr_in server;
+
 } bomber;
 
 void error(bomber* game, char* message);
@@ -92,7 +103,8 @@ void create_game(bomber* game);
 void game_destroy(bomber* game);
 void game_show(bomber* game, char* direction);
 int game_event(bomber* game);
-void sendMess(char *ip, char* port);
+void playerConnect(bomber* game, char *ip, char* port);
+int sendMess(bomber* game, char* message);
 
 void create_menu_join(bomber* game);
 char* userWrite(bomber* game);

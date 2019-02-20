@@ -5,14 +5,6 @@
 **      etape 2 , 
 */
 
-#include <string.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <stdio.h>
-#include <errno.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <arpa/inet.h>
 #include "bomberman.h"
 
 /**
@@ -22,39 +14,32 @@
  * 
  */
 
-void sendMess(char *ip, char* port)
+void playerConnect(bomber* game, char *ip, char* port)
 {
   int portServer = 0;
-  int mysocket;
-  struct sockaddr_in server;
-  char message[128] ;
-  char server_reply[128];
-  
-  /*if (argc != 3) {
-      printf("usage : %s IP PORT\n", argv[0]);
-      return -1;
-  }
-  ip = argv[1];*/
+  game->sock = 0;
+  //struct sockaddr_in server;
+
   portServer = atoi(port);
   
-  mysocket = socket(AF_INET, SOCK_STREAM, 0);
-  if (mysocket < 0) {
+   game->sock = socket(AF_INET, SOCK_STREAM, 0);
+  if (game->sock < 0) {
       perror("socket()");
       exit(1);
   }
   
 
-  server.sin_addr.s_addr = inet_addr(ip);
-  server.sin_port = htons(portServer);
-  server.sin_family = AF_INET;
+  game->server.sin_addr.s_addr = inet_addr(ip);
+  game->server.sin_port = htons(portServer);
+  game->server.sin_family = AF_INET;
 
-  if (connect(mysocket, (struct sockaddr *)&server, sizeof(server)) < 0) {
+  if (connect( game->sock, (struct sockaddr *)&game->server, sizeof(game->server)) < 0) {
       perror("connect()");
       exit(1);
   }
   printf("[+] connected to server  \n");
-
-  while (1) {
+    //game->start = 1;
+ /* while (1) {
     memset(message, '\0', 128);
     fgets(message, 128, stdin);
     if (send(mysocket, message, strlen(message), 0) < 0) {
@@ -80,5 +65,17 @@ void sendMess(char *ip, char* port)
     }
   }
 
-  close(mysocket);
+  close(mysocket);*/
+}
+
+int sendMess(bomber* game, char* message)
+{
+    //char server_reply[128];
+    //memset(message, '\0', 128);
+    if (send(game->sock, message, strlen(message), 0) < 0) {
+        puts("[-] send failed\n");
+        close(game->sock);
+        exit(1);
+    }
+    return (1);
 }

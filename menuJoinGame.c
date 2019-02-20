@@ -25,8 +25,8 @@ void create_menu_join(bomber* game)
     game->textIp = NULL;
     game->textPort = NULL;
     game->txtJoin = NULL;
-    game->userIp = NULL;
-    game->userPort = NULL;
+    //game->userIp = NULL;
+    //game->userPort = NULL;
     int font_size = 24;
     char * text = "Join a game";
     char * textIP = "Ip address : ";

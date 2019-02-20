@@ -21,6 +21,7 @@ bomber* game_init()
     game->bombe = NULL;
 
     game->ipIsOk = "";
+    game->portIsOk = "";
     game->userWrite.str = "";
     game->userWrite.port = "";
     game->userWrite.str_size = 0;
@@ -90,8 +91,8 @@ void game_destroy(bomber* game)
     int y;
 
     if (game) {
-        if(game->userIp){
-            SDL_DestroyTexture(game->userIp);
+        if(game->userText){
+            SDL_DestroyTexture(game->userText);
         }
         if(game->textIp){
             SDL_DestroyTexture(game->textIp);
@@ -181,9 +182,15 @@ void game_show(bomber* game, char* direction)
         SDL_RenderCopy(game->pRendererMenuJoin, game->txtJoin, NULL, &game->startTxt);
         SDL_RenderCopy(game->pRendererMenuJoin, game->textIp, NULL, &game->joingame);
         SDL_RenderCopy(game->pRendererMenuJoin, game->textPort, NULL, &game->hostGame);
-        SDL_RenderCopy(game->pRendererMenuJoin, game->userIp, NULL, &game->userTextIpJoin);
         if(strcmp(game->ipIsOk, "no")== 0)
             SDL_RenderCopy(game->pRendererMenuJoin, game->error, NULL, &game->errorSize);
+        else {
+            SDL_RenderCopy(game->pRendererMenuJoin, game->userText, NULL, &game->userTextIpJoin);
+            if(strcmp(game->portIsOk, "no")== 0)
+                SDL_RenderCopy(game->pRendererMenuJoin, game->error, NULL, &game->errorSize);
+            else
+                SDL_RenderCopy(game->pRendererMenuJoin, game->userTextPort, NULL, &game->userTextPortJoin);
+        }
         SDL_RenderPresent(game->pRendererMenuJoin);
         if(game->start == 1){
             //Afficher la map + joueur
@@ -238,6 +245,7 @@ int game_event(bomber* game)
                 } else {
                     menuScroll("up", game);
                 }
+                sendMess(game, "up");
                 break;
             case SDLK_DOWN:
                 if(game->start == 1) {
@@ -277,8 +285,13 @@ int game_event(bomber* game)
                     if(strcmp(game->userWrite.str, "127.0.0.1") == 0) {
                         game->ipIsOk = "ok";
                         game->userWrite.port = userWrite(game);
-                        if(strcmp(game->userWrite.port, "1234") == 0)
-                            sendMess(game->userWrite.str, game->userWrite.port);
+                        if(strcmp(game->userWrite.port, "1234") == 0) {
+                            playerConnect(game, game->userWrite.str, game->userWrite.port);
+                            game->portIsOk = "ok";
+                        } else {
+                            game->portIsOk = "no";
+                            error(game, "mauvais port");
+                        }
                     } else {
                         game->ipIsOk = "no";
                         error(game, "mauvaise ip");
