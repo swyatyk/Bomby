@@ -97,8 +97,9 @@ void checkMessages(Client *connected_clients,fd_set *file_discriptor, int *conne
                     connected_clients[i].connected = DISCONNECTED;
                     close(connected_clients[i].socket);
                     connected_clients[i].socket = -1;
-                } else
-                    write(connected_clients[i].socket, "ok\n", 2);
+                } 
+                // else
+                //     write(connected_clients[i].socket, "ok\n", 2);
             }
         }
     }
