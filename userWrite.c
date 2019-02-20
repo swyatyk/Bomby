@@ -11,7 +11,6 @@ char* writeIp(bomber* game)
     bool init = false;
     SDL_Event e;
     bool boucle = true;
-    game_show(game, "null");
     while(boucle)
     {
         if (init)
@@ -60,8 +59,6 @@ char* writeIp(bomber* game)
             draw_text(str, game);
 
         // draw_text((WINDOW_WIDTH / 2), (WINDOW_HEIGHT - 50), "Echap pour quitter", TEXT_CENTER, get_default_font(), COLOR_WHITE, get_game_renderer());
-
-        //SDL_RenderPresent(game->pRendererMenuJoin);
 
         init = true;
     }

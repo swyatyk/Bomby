@@ -46,9 +46,6 @@ void Create_menu_render(bomber* game)
     SDL_Surface* surface_join;
     SDL_Surface* surface_host;
     SDL_Surface* cursorGame;
-    //SDL_Texture* texture;
-    //SDL_Texture* texture_text;
-    
     game->Menu.x = 0;
     game->Menu.y = 0;
     game->Menu.w = 500;
@@ -56,8 +53,6 @@ void Create_menu_render(bomber* game)
     
     TTF_Font* police = TTF_OpenFont("./assets/arial.ttf", font_size);
     
-    
-    //SDL_RenderClear(game->pRendererMenu);
     //Ecriture des surfaces surfaces
     surface_background = SDL_LoadBMP("assets/img/main_menu.bmp");
     if ( !surface_background ){
@@ -149,8 +144,4 @@ void Create_menu_render(bomber* game)
     SDL_FreeSurface(surface_join);
     SDL_FreeSurface(surface_text);
     SDL_FreeSurface(cursorGame);
-    //SDL_DestroyTexture(texture);
-    //SDL_DestroyTexture(texture_text);
-   // TTF_Quit();
-
 }

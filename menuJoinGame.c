@@ -28,14 +28,12 @@ void create_menu_join(bomber* game)
     int font_size = 24;
     char * text = "Join a game";
     char * textIP = "Ip address : ";
-    // char *server_ip = NULL;
-    
+
     SDL_Color normalColor = {255, 255, 255, 255};
     SDL_Surface* surface_background;
     SDL_Surface* surface_text;
     SDL_Surface* surface_textIp;
     TTF_Font* police = TTF_OpenFont("./arial.ttf", font_size);
-
 
     surface_background = SDL_LoadBMP("assets/img/main_menu.bmp");
     if ( !surface_background ){

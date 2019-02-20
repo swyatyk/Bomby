@@ -268,33 +268,16 @@ int game_event(bomber* game)
                     init_menuJoin(game);
                     game->choiceGame = "join";
                     SDL_ShowWindow(game->pWindowMenuJoin);
-                   // game->userWrite.str = writeIp(game);
                     game->menuOn = 0;
+                    game_show(game, "null");
+                    game->userWrite.str = writeIp(game);
                 }
-               // create_game(game);
-                //init_map(game);
-               // SDL_ShowWindow(game->pWindow);
-                //game->menuOn = 0;
                 break;
             default:
                 fprintf(stderr, "touche inconnue %d\n", e.key.keysym.sym);
                 break;
             }
         } 
-        /*if (strcmp(game->choiceGame, "join") == 0) {
-            char* str = writeIp(game);
-            printf("%s", str);
-        }*/
-        // else if (e.type == SDL_TEXTINPUT) {
-        //     if (game->userWrite.str) {
-        //         if (game->userWrite.str_size < 32) {
-        //             strcat(game->userWrite.str, e.text.text);
-        //             game->userWrite.str_size += 1;
-                    
-        //         }printf("%s\n", game->userWrite.str);
-        //     }
-        //     draw_text(game->userWrite.str, game);
-        // }
     }
     return (result);
 }
