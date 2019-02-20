@@ -10,18 +10,19 @@ int main()
     initMap();
     printMap();
 
-    Object *tres = generateNewObject(13,1,2);
-    addObjToCell(tres,1,2);
+    Object *player1 = generateNewObject(13,1,2);
+    addObjToCell(player1,1,2);
     printf("\n");
     printMap();
 
-    addObjToCell(generateNewObject(12,1,2),1,2);
+    movePlayerToCell(player1,1,3);
     printf("\n");
     printMap();
 
-    removeObjFromCell(tres,tres->posY,tres->posX);
+    movePlayerToCell(player1,1,4);
     printf("\n");
     printMap();
+
 
    // int response = showMenu(); //return 1 if wanna to make server or return 2 if wanna to join the server else return 0 if somthing wrong
    /*if(response == 1 ){

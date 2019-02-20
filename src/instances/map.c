@@ -75,6 +75,8 @@ void addObjToCell(Object *obj,int y, int x) {
 
     Object *targetCell = getCell(y, x);
     Object *current = targetCell->next;
+    obj->posY = targetCell->posY;
+    obj->posX = targetCell->posX;
 
     if(current!=NULL)
     {
@@ -102,7 +104,6 @@ void addObjToCell(Object *obj,int y, int x) {
 
     targetCell->last=getProritaryAppairance(targetCell);
     targetCell->size +=1;
-    printf("cell size = %d \n", targetCell->size);
 }
 
 
@@ -133,12 +134,11 @@ void removeObjFromCell(Object *obj,int y, int x)
 
     targetCell->last=getProritaryAppairance(targetCell);
     targetCell->size -=1;
-    printf("cell size = %d \n", targetCell->size);
-
 }
 
-void moveToCell(Object *obj,int y, int x){
-
+void movePlayerToCell(Object *obj,int y, int x){
+    removeObjFromCell(obj,obj->posY,obj->posX);
+    addObjToCell(obj,y,x);
 }
 
 Object *getCell(int y, int x){
