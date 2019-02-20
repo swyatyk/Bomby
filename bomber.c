@@ -4,7 +4,6 @@ bomber* game_init()
 {
     bomber * game = NULL;
     game = malloc(sizeof(bomber));
-    game->choiceGame = NULL;
     game->screenSize.x = 640;
     game->screenSize.y = 480;
     game->pWindow = NULL;
@@ -21,7 +20,9 @@ bomber* game_init()
     game->start = 0;
     game->bombe = NULL;
 
+    game->ipIsOk = "";
     game->userWrite.str = "";
+    game->userWrite.port = "";
     game->userWrite.str_size = 0;
 
 
@@ -179,7 +180,10 @@ void game_show(bomber* game, char* direction)
         SDL_RenderCopy(game->pRendererMenuJoin, game->pTextureMenuJoin, NULL, &game->Menu);
         SDL_RenderCopy(game->pRendererMenuJoin, game->txtJoin, NULL, &game->startTxt);
         SDL_RenderCopy(game->pRendererMenuJoin, game->textIp, NULL, &game->joingame);
+        SDL_RenderCopy(game->pRendererMenuJoin, game->textPort, NULL, &game->hostGame);
         SDL_RenderCopy(game->pRendererMenuJoin, game->userIp, NULL, &game->userTextIpJoin);
+        if(strcmp(game->ipIsOk, "no")== 0)
+            SDL_RenderCopy(game->pRendererMenuJoin, game->error, NULL, &game->errorSize);
         SDL_RenderPresent(game->pRendererMenuJoin);
         if(game->start == 1){
             //Afficher la map + joueur
@@ -266,12 +270,19 @@ int game_event(bomber* game)
                 SDL_HideWindow(game->pWindowMenu);
                 if(game->cursorBomb.y == game->joingame.y) {
                     init_menuJoin(game);
-                    game->choiceGame = "join";
                     SDL_ShowWindow(game->pWindowMenuJoin);
                     game->menuOn = 0;
                     game_show(game, "null");
-                    game->userWrite.str = writeIp(game);
-                    sendMess(game->userWrite.str, 1234);
+                    game->userWrite.str = userWrite(game);
+                    if(strcmp(game->userWrite.str, "127.0.0.1") == 0) {
+                        game->ipIsOk = "ok";
+                        game->userWrite.port = userWrite(game);
+                        if(strcmp(game->userWrite.port, "1234") == 0)
+                            sendMess(game->userWrite.str, game->userWrite.port);
+                    } else {
+                        game->ipIsOk = "no";
+                        error(game, "mauvaise ip");
+                    }
                 }
                 break;
             default:

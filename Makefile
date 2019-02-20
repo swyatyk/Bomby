@@ -14,6 +14,7 @@ SRC =	main.c \
 		playerMove.c \
 		animationPlayer.c \
 		bomber.c \
+		error.c \
 		send.c
 
 

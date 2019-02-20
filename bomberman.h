@@ -29,13 +29,13 @@ typedef struct {
 typedef struct {
     char* str;
     int str_size;
-
+    char* port;
 } input_t;
 typedef struct {
 
     input_t userWrite;
     int menuOn;
-    char *choiceGame;
+    char *ipIsOk;
     int start;   
     //Variable SDL
     SDL_Point screenSize;
@@ -47,6 +47,7 @@ typedef struct {
     SDL_Renderer* pRendererMenuJoin;
     int map[10][10];
     //Texture du jeu
+    SDL_Texture* error;
     SDL_Texture* textures[10][10];
     SDL_Texture* pTexturePlayer;
     SDL_Texture* pTextureMenu;
@@ -57,7 +58,10 @@ typedef struct {
     SDL_Texture* cursor;
     SDL_Texture* txtJoin;
     SDL_Texture* textIp;
+    SDL_Texture* textPort;
     SDL_Texture* userIp;
+    SDL_Texture* userPort;
+    
     // images du jeu (bmp)
     SDL_Surface* img_texture[20];
 
@@ -66,13 +70,17 @@ typedef struct {
     SDL_Rect startTxt;
     SDL_Rect joingame;
     SDL_Rect userTextIpJoin;
+    SDL_Rect userTextPortJoin;
     SDL_Rect hostGame;
     SDL_Rect cursorBomb;
+    SDL_Rect errorSize;
+    
     int ifBombe;
     bombe* bombe;
 
 } bomber;
 
+void error(bomber* game, char* message);
 void game_dropBombe(bomber* game);
 void init_menu(bomber* game);
 void menuScroll(char* scroll, bomber* game);
@@ -84,10 +92,10 @@ void create_game(bomber* game);
 void game_destroy(bomber* game);
 void game_show(bomber* game, char* direction);
 int game_event(bomber* game);
-void sendMess(char *ip, int port);
+void sendMess(char *ip, char* port);
 
 void create_menu_join(bomber* game);
-char* writeIp(bomber* game);
+char* userWrite(bomber* game);
 void Create_menu_render(bomber* game);
 // partie map/player 
 void init_map(bomber* game);

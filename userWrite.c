@@ -1,6 +1,6 @@
 #include "bomberman.h"
 
-char* writeIp(bomber* game)
+char* userWrite(bomber* game)
 {
     char    *str;
     if ((str = malloc(32 * sizeof(char))) == NULL)
@@ -55,9 +55,8 @@ char* writeIp(bomber* game)
             }
         }
         // draw_text((WINDOW_WIDTH / 2), (WINDOW_HEIGHT / 2) - 40, "Adresse ip :", TEXT_CENTER, get_default_font(), COLOR_WHITE, get_game_renderer());
-        if (str_size)
+        if (str_size) 
             draw_text(str, game);
-
         // draw_text((WINDOW_WIDTH / 2), (WINDOW_HEIGHT - 50), "Echap pour quitter", TEXT_CENTER, get_default_font(), COLOR_WHITE, get_game_renderer());
 
         init = true;
@@ -101,5 +100,10 @@ void draw_text(char *text, bomber* game)
     game->userTextIpJoin.y = 110;
     game->userTextIpJoin.w = textureWidth;
     game->userTextIpJoin.h = textureHeigth;
+
+    game->userTextPortJoin.x = 200;
+    game->userTextPortJoin.y = 190;
+    game->userTextPortJoin.w = textureWidth;
+    game->userTextPortJoin.h = textureHeigth;
 }
 

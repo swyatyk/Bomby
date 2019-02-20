@@ -23,16 +23,20 @@ void create_menu_join(bomber* game)
 {
     game->pTextureMenuJoin = NULL;
     game->textIp = NULL;
+    game->textPort = NULL;
     game->txtJoin = NULL;
     game->userIp = NULL;
+    game->userPort = NULL;
     int font_size = 24;
     char * text = "Join a game";
     char * textIP = "Ip address : ";
+    char * textPort = "Server port : ";
 
     SDL_Color normalColor = {255, 255, 255, 255};
     SDL_Surface* surface_background;
     SDL_Surface* surface_text;
     SDL_Surface* surface_textIp;
+    SDL_Surface* surface_textPort;
     TTF_Font* police = TTF_OpenFont("./arial.ttf", font_size);
 
     surface_background = SDL_LoadBMP("assets/img/main_menu.bmp");
@@ -52,6 +56,13 @@ void create_menu_join(bomber* game)
         fprintf(stdout,"Échec de chargement du textIP (%s)\n",SDL_GetError());
         game_destroy(game);
     }
+
+    surface_textPort = TTF_RenderText_Solid(police, textPort, normalColor);
+    if ( !surface_textPort ) {
+        fprintf(stdout,"Échec de chargement du textIP (%s)\n",SDL_GetError());
+        game_destroy(game);
+    }
+
     TTF_CloseFont(police);
     
     game->pTextureMenuJoin = SDL_CreateTextureFromSurface(game->pRendererMenuJoin, surface_background);
@@ -74,5 +85,13 @@ void create_menu_join(bomber* game)
         game_destroy(game);
         exit(1);
     }
+    game->textPort = SDL_CreateTextureFromSurface(game->pRendererMenuJoin, surface_textPort);
+    if (!game->textPort) {
+        fprintf(stderr, "Impossible de charger  la texture textIp: %s\n", SDL_GetError());
+        game_destroy(game);
+        exit(1);
+    }
+
     SDL_FreeSurface(surface_textIp);
+    SDL_FreeSurface(surface_textPort);
 }

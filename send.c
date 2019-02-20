@@ -22,8 +22,9 @@
  * 
  */
 
-void sendMess(char *ip, int port)
+void sendMess(char *ip, char* port)
 {
+  int portServer = 0;
   int mysocket;
   struct sockaddr_in server;
   char message[128] ;
@@ -33,8 +34,8 @@ void sendMess(char *ip, int port)
       printf("usage : %s IP PORT\n", argv[0]);
       return -1;
   }
-  ip = argv[1];
-  port = atoi(argv[2]);*/
+  ip = argv[1];*/
+  portServer = atoi(port);
   
   mysocket = socket(AF_INET, SOCK_STREAM, 0);
   if (mysocket < 0) {
@@ -44,7 +45,7 @@ void sendMess(char *ip, int port)
   
 
   server.sin_addr.s_addr = inet_addr(ip);
-  server.sin_port = htons(port);
+  server.sin_port = htons(portServer);
   server.sin_family = AF_INET;
 
   if (connect(mysocket, (struct sockaddr *)&server, sizeof(server)) < 0) {
