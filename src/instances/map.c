@@ -3,12 +3,14 @@
 //
 
 
+#include <slcurses.h>
+#include <stdbool.h>
 #include "headers/map.h"
 
 void newCell(int mapParam,  int pY ,int pX);
 
 
-
+bool canPlayerMoveToCell(Object *pObj, int y, int x);
 
 int configMap[10][10] = {
         {1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
@@ -136,9 +138,28 @@ void removeObjFromCell(Object *obj,int y, int x)
     targetCell->size -=1;
 }
 
-void movePlayerToCell(Object *obj,int y, int x){
-    removeObjFromCell(obj,obj->posY,obj->posX);
-    addObjToCell(obj,y,x);
+void movePlayerToCell(Object *player,int y, int x){
+    if(canPlayerMoveToCell(player,y,x))
+    {
+        removeObjFromCell(player,player->posY,player->posX);
+        addObjToCell(player,y,x);
+        //resloveCollapseConflicts(player);
+    }
+
+}
+
+bool canPlayerMoveToCell(Object *player, int y, int x) {
+    Object *currentCell = getCell(y,x);
+    Object *currentObject = currentCell;
+    while(currentObject->next){
+        Object *tmp = currentObject->next;
+        if(tmp->type == WALL || tmp->type == BLOCK){
+            return false;
+        }
+        currentObject = tmp;
+
+    }
+    return 0;
 }
 
 Object *getCell(int y, int x){
