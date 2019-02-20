@@ -8,20 +8,28 @@
 int main()
 {
     initMap();
-    printMap();
 
     Object *player1 = generateNewObject(13,1,2);
     addObjToCell(player1,1,2);
     printf("\n");
     printMap();
 
-    movePlayerToCell(player1,1,3);
-    printf("\n");
-    printMap();
+    char c;
+    printf("move your player w,s,a,d keys \n");
+    do{
 
-    movePlayerToCell(player1,1,4);
-    printf("\n");
-    printMap();
+        scanf("%c", &c);
+
+
+        if(c!=10)
+        {
+            printf("\n");
+            playerInterfaceController(player1,c);
+            printMap();
+        }
+
+    }
+    while (c!='p');
 
 
    // int response = showMenu(); //return 1 if wanna to make server or return 2 if wanna to join the server else return 0 if somthing wrong

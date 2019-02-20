@@ -13,7 +13,7 @@ typedef struct  {
     Object **cells;
 }Map;
 
-
+void playerInterfaceController(Object *player , char key);
 void movePlayerToCell(Object *obj,int y, int x);
 void initMap();
 void printMap();
