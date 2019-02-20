@@ -24,6 +24,7 @@ void create_menu_join(bomber* game)
     game->pTextureMenuJoin = NULL;
     game->textIp = NULL;
     game->txtJoin = NULL;
+    game->userIp = NULL;
     int font_size = 24;
     char * text = "Join a game";
     char * textIP = "Ip address : ";
@@ -74,4 +75,36 @@ void create_menu_join(bomber* game)
     }
     SDL_FreeSurface(surface_textIp);
 
+}
+
+void draw_text(char *text, bomber* game)
+{
+    int font_size = 24;
+    int textureWidth;
+    int textureHeigth;
+    SDL_Color normalColor = {255, 255, 255, 255};
+    TTF_Font* police = TTF_OpenFont("./arial.ttf", font_size);
+    SDL_Surface* surface = TTF_RenderText_Solid(police, text, normalColor);
+    if (!surface){
+        printf("Une erreur est survenue lors de l'ajout de surface : '%s'\n", SDL_GetError());
+        return ;
+    }
+
+    TTF_CloseFont(police);
+
+    // On transforme la surface en texture pour l'afficher avec le renderer
+    game->userIp = SDL_CreateTextureFromSurface(game->pRendererMenuJoin, surface);
+    if (!game->userIp) {
+        printf("Une erreur est survenue lors du chargement de la texture : '%s'\n", SDL_GetError());
+        return ;
+    }
+    // On free la surface
+    SDL_FreeSurface(surface);
+    // On récupère la longueur et hauteur de la texture
+    SDL_QueryTexture(game->userIp, NULL, NULL, &textureWidth, &textureHeigth);
+    // On crée un rect qui va correspondre à la position du texte
+    game->userTextIpJoin.x = 200;
+    game->userTextIpJoin.y = 110;
+    game->userTextIpJoin.w = textureWidth;
+    game->userTextIpJoin.h = textureHeigth;
 }

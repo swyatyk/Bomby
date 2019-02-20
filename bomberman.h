@@ -25,7 +25,13 @@ typedef struct {
 } bombe;
 
 typedef struct {
+    char* str;
+    int str_size;
 
+} input_t;
+typedef struct {
+
+    input_t userWrite;
     int menuOn;
     char *choiceGame;
     int start;   
@@ -49,6 +55,7 @@ typedef struct {
     SDL_Texture* cursor;
     SDL_Texture* txtJoin;
     SDL_Texture* textIp;
+    SDL_Texture* userIp;
     // images du jeu (bmp)
     SDL_Surface* img_texture[20];
 
@@ -56,6 +63,7 @@ typedef struct {
     SDL_Rect Menu;
     SDL_Rect startTxt;
     SDL_Rect joingame;
+    SDL_Rect userTextIpJoin;
     SDL_Rect hostGame;
     SDL_Rect cursorBomb;
     int ifBombe;
@@ -63,11 +71,11 @@ typedef struct {
 
 } bomber;
 
-
 void game_dropBombe(bomber* game);
 void init_menu(bomber* game);
 void menuScroll(char* scroll, bomber* game);
 void init_menuJoin(bomber* game);
+void draw_text(char *text, bomber* game);
 // init game
 bomber* game_init();
 void create_game(bomber* game);

@@ -21,6 +21,9 @@ bomber* game_init()
     game->start = 0;
     game->bombe = NULL;
 
+    game->userWrite.str = "";
+    game->userWrite.str_size = 0;
+
 
     //Init SDL
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
@@ -86,6 +89,26 @@ void game_destroy(bomber* game)
     int y;
 
     if (game) {
+        if(game->userIp){
+            SDL_DestroyTexture(game->userIp);
+        }
+        if(game->textIp){
+            SDL_DestroyTexture(game->textIp);
+        }
+        if(game->txtJoin){
+            SDL_DestroyTexture(game->txtJoin);
+        }
+        if(game->cursor){
+            SDL_DestroyTexture(game->cursor);
+        }
+        if(game->texture_text){
+            SDL_DestroyTexture(game->texture_text);
+        }
+
+        if(game->ClientHostGame){
+            SDL_DestroyTexture(game->ClientHostGame);
+        }
+
         if(game->ClientJoinGame){
             SDL_DestroyTexture(game->ClientJoinGame);
         }
@@ -126,6 +149,7 @@ void game_destroy(bomber* game)
         if (game->pWindow) {
             SDL_DestroyWindow(game->pWindow);
         }
+        SDL_StopTextInput();
         TTF_Quit();
         SDL_Quit();
         free(game);
@@ -155,6 +179,7 @@ void game_show(bomber* game, char* direction)
         SDL_RenderCopy(game->pRendererMenuJoin, game->pTextureMenuJoin, NULL, &game->Menu);
         SDL_RenderCopy(game->pRendererMenuJoin, game->txtJoin, NULL, &game->startTxt);
         SDL_RenderCopy(game->pRendererMenuJoin, game->textIp, NULL, &game->joingame);
+        SDL_RenderCopy(game->pRendererMenuJoin, game->userIp, NULL, &game->userTextIpJoin);
         SDL_RenderPresent(game->pRendererMenuJoin);
         if(game->start == 1){
             //Afficher la map + joueur
@@ -183,6 +208,11 @@ void game_show(bomber* game, char* direction)
 
 int game_event(bomber* game)
 {
+    if ((game->userWrite.str = malloc(32 * sizeof(char))) == NULL)
+        return (0);
+
+    //strcpy(str, "");
+    SDL_StartTextInput();
     int result = 0;
     SDL_Event e;
     SDL_Delay(200);
@@ -227,10 +257,10 @@ int game_event(bomber* game)
                 }
                 break;
             case SDLK_d:
-            if (game->start == 1) {
-                game_dropBombe(game);
-                game_show(game, "null");
-            }
+                if (game->start == 1) {
+                    game_dropBombe(game);
+                    game_show(game, "null");
+                }
                 break;
             case SDLK_RETURN:
                 SDL_HideWindow(game->pWindowMenu);
@@ -249,6 +279,15 @@ int game_event(bomber* game)
                 fprintf(stderr, "touche inconnue %d\n", e.key.keysym.sym);
                 break;
             }
+        } else if (e.type == SDL_TEXTINPUT) {
+            if (game->userWrite.str) {
+                if (game->userWrite.str_size < 32) {
+                    strcat(game->userWrite.str, e.text.text);
+                    game->userWrite.str_size += 1;
+                    
+                }printf("%s\n", game->userWrite.str);
+            }
+            draw_text(game->userWrite.str, game);
         }
     }
     return (result);
