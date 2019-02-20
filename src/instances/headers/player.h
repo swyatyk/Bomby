@@ -10,5 +10,5 @@
 bool canPlayerMoveToCell(Object *player, int y, int x);
 void movePlayerToCell(Object *player,int y, int x);
 void playerInterfaceController(Object *player , char key);
-void playerPlaintTheBomb(Object *player,int y, int x);
+void * playerPlaintTheBomb(void *args);
 #endif //BOMBERMAN_PLAYER_H

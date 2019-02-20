@@ -8,7 +8,7 @@
 int main()
 {
     initMap();
-
+    initMutex();
     Object *player1 = generateNewObject(13,1,2);
     addObjToCell(player1,1,1);
     printf("\n");
@@ -47,7 +47,7 @@ int main()
        exit(1);
    }*/
 
-
+    destroyMutex();
 
     return 1;
 }

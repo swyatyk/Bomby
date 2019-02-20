@@ -3,6 +3,7 @@
 //
 
 
+
 #include "headers/map.h"
 
 void newCell(int mapParam,  int pY ,int pX);
@@ -56,7 +57,7 @@ void initMap(){
 
 
 void printMap(){
-
+    system("clear");
     Map *map = getMap();
 
     for(int y = 0 ; y < map->mapSizeY;y++)

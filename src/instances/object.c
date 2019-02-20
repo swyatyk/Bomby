@@ -3,9 +3,22 @@
 //
 
 #include <malloc.h>
+#include <zconf.h>
+#include <pthread.h>
 #include "headers/object.h"
 #include "headers/cell.h"
 
+pthread_mutex_t addObjMutex;
+pthread_mutex_t rmvObjMutex;
+
+void initMutex(){
+    pthread_mutex_init(&addObjMutex, NULL);
+    pthread_mutex_init(&rmvObjMutex, NULL);
+    };
+void destroyMutex(){
+    pthread_mutex_destroy(&addObjMutex);
+    pthread_mutex_destroy(&rmvObjMutex);
+};
 
 Object *generateNewObject(int typeId, int y, int x){
 
@@ -64,7 +77,9 @@ Object *generateNewObject(int typeId, int y, int x){
 
 
 void addObjToCell(Object *obj,int y, int x) {
+    if(obj->type==CELL){return;}
 
+    pthread_mutex_lock(&addObjMutex);
     Object *targetCell = getCell(y, x);
     Object *current = targetCell->next;
     obj->posY = targetCell->posY;
@@ -96,6 +111,7 @@ void addObjToCell(Object *obj,int y, int x) {
 
     targetCell->last=getProritaryAppairanceByObject(targetCell);
     targetCell->size +=1;
+    pthread_mutex_unlock(&addObjMutex);
 }
 
 Object * getProritaryAppairanceByObject(Object *cell){
@@ -116,6 +132,7 @@ Object * getProritaryAppairanceByObject(Object *cell){
 
 void removeObjFromCell(Object *obj,int y, int x)
 {
+    pthread_mutex_lock(&rmvObjMutex);
     Object *targetCell = getCell(y, x);
     Object *current = targetCell;
     if(current->next)
@@ -133,6 +150,8 @@ void removeObjFromCell(Object *obj,int y, int x)
                     current->next = NULL;
                 }
                 obj->next = NULL;
+                obj->posY = -1;
+                obj->posX = -1;
             }
             current = tmp;
         }
@@ -140,4 +159,5 @@ void removeObjFromCell(Object *obj,int y, int x)
 
     targetCell->last=getProritaryAppairanceByObject(targetCell);
     targetCell->size -=1;
+    pthread_mutex_unlock(&rmvObjMutex);
 }

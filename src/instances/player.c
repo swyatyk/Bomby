@@ -2,11 +2,13 @@
 // Created by Sviatoslav Prylutsky on 2/5/19.
 //
 
+#include <pthread.h>
 #include "headers/player.h"
 #include "headers/map.h"
 
 void playerInterfaceController(Object *player , char key)
 {
+    pthread_t thread;
     switch(key)
     {
         case 'w':
@@ -22,7 +24,9 @@ void playerInterfaceController(Object *player , char key)
             movePlayerToCell(player,player->posY , player->posX-1);
             break;
         case 'b':
-            playerPlaintTheBomb(player,player->posY , player->posX);
+            if (pthread_create(&thread, NULL, playerPlaintTheBomb, player) != 0) {
+                printf("main error: can't create thread \n");
+            }
             break;
         default:
             printf("\n Wrong key %c \n",key);
@@ -47,8 +51,7 @@ bool canPlayerMoveToCell(Object *player, int y, int x) {
     Object *currentObject = currentCell;
     while(currentObject->next){
         Object *tmp = currentObject->next;
-        if(tmp->type == WALL || tmp->type == BLOCK){
-            printf("player cant move to cell \n");
+        if(tmp->type == WALL || tmp->type == BLOCK){;
             return false;
         }
         currentObject = tmp;

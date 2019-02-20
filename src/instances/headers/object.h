@@ -38,6 +38,8 @@ typedef struct str_obj {
 
 Object * getProritaryAppairanceByObject(Object *cell);
 Object *generateNewObject(int obj, int x, int y);
+void initMutex();
+void destroyMutex();
 
 void setMyPosition();
 void getMyPosition();
