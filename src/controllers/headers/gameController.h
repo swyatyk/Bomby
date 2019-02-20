@@ -8,7 +8,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include <slcurses.h>
 #include <stdbool.h>
 
 #include "../../config.h"

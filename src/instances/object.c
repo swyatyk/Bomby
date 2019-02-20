@@ -126,7 +126,7 @@ void removeObjFromCell(Object *obj,int y, int x)
             {
                 if (tmp->next != NULL)
                 {
-                    *current->next = *obj->next;
+                    current->next = obj->next;
                 }
                 else
                 {

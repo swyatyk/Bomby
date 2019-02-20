@@ -10,7 +10,7 @@ int main()
     initMap();
 
     Object *player1 = generateNewObject(13,1,2);
-    addObjToCell(player1,1,2);
+    addObjToCell(player1,1,1);
     printf("\n");
     printMap();
 
@@ -20,7 +20,11 @@ int main()
 
         scanf("%c", &c);
 
-
+        if(c=='v')
+        {
+            Object *player2 = generateNewObject(12,1,2);
+            addObjToCell(player2,player1->posY,player1->posX);
+        }
         if(c!=10)
         {
             printf("\n");

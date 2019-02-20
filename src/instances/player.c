@@ -3,6 +3,7 @@
 //
 
 #include "headers/player.h"
+#include "headers/map.h"
 
 void playerInterfaceController(Object *player , char key)
 {
@@ -19,6 +20,9 @@ void playerInterfaceController(Object *player , char key)
             break;
         case 'a':
             movePlayerToCell(player,player->posY , player->posX-1);
+            break;
+        case 'b':
+            playerPlaintTheBomb(player,player->posY , player->posX);
             break;
         default:
             printf("\n Wrong key %c \n",key);

@@ -10,10 +10,6 @@ Object *getCell(int y, int x){
     Object *cell = &map->cells[y][x];
     return cell;
 }
-/*
- * This funtion , init the obj in the game
- * and reference them to SDL
- */
 
 void newCell(int mapParam, int pY, int pX)
 {
