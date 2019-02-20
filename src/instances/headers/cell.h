@@ -4,27 +4,11 @@
 
 #ifndef BOMBERMAN_CELL_H
 #define BOMBERMAN_CELL_H
-#include "../../controllers/headers/gameController.h"
-#include "../../instances/headers/object.h"
 
 
-
-
-
-/*typedef struct {
-    //global object params what will be extended by childs
-    int textureId;
-    //
-    int posY;
-    int posX;
-    int posW;
-    int posH;
-
-    int innerObjectsCnt;
-    int innerObjectsSize; //Size by default in malloc
-    Object **innerObjects;
-
-}Cell;*/
+#include "object.h"
 
 void addObjToCell(Object *obj, int x, int y);
+Object *getCell(int y, int x);
+void newCell(int mapParam, int pY, int pX);
 #endif //BOMBERMAN_CELL_H

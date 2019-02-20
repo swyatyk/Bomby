@@ -5,6 +5,7 @@
 #ifndef BOMBERMAN_OBJECT_H
 #define BOMBERMAN_OBJECT_H
 
+
 typedef enum{
     CELL,   // 0
     BLOCK,  // 1
@@ -33,6 +34,9 @@ typedef struct str_obj {
 }Object;
 
 
+
+
+Object * getProritaryAppairanceByObject(Object *cell);
 Object *generateNewObject(int obj, int x, int y);
 
 void setMyPosition();

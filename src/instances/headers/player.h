@@ -5,13 +5,10 @@
 #ifndef BOMBERMAN_PLAYER_H
 #define BOMBERMAN_PLAYER_H
 
-typedef struct {
-    int viewId;
+#include "../../controllers/headers/gameController.h"
 
-    int id;
-    char* name;
-
-
-} Player;
+bool canPlayerMoveToCell(Object *player, int y, int x);
+void movePlayerToCell(Object *player,int y, int x);
+void playerInterfaceController(Object *player , char key);
 
 #endif //BOMBERMAN_PLAYER_H
