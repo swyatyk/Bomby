@@ -13,7 +13,8 @@ SRC =	main.c \
 		userWrite.c \
 		playerMove.c \
 		animationPlayer.c \
-		bomber.c 
+		bomber.c \
+		send.c
 
 
 OBJ = $(SRC:.c=.o)
