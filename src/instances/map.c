@@ -27,11 +27,11 @@ Map *getMap(){
         gameMap = malloc(sizeof(Map));
         gameMap -> mapSizeY = 10;
         gameMap -> mapSizeX = 10;
-        gameMap -> cells = calloc(gameMap -> mapSizeY, sizeof(Object**)); // 10 == X dimension
+        gameMap -> cells = calloc(gameMap -> mapSizeX, sizeof(Object**)); // 10 == X dimension
 
-        for(int y = 0; y<10; y++)
+        for(int y = 0; y<gameMap -> mapSizeX; y++)
         {
-            gameMap -> cells[y] = calloc(gameMap -> mapSizeX,sizeof(Object));
+            gameMap -> cells[y] = calloc(gameMap -> mapSizeY,sizeof(Object));
         }
     }
 
@@ -71,6 +71,14 @@ void printMap(){
                 printf(" %c",'.');
                 break;
 
+                case 3:
+                printf(" %c",'@');
+                break;
+
+                case 4:
+                printf(" %c",'@');
+                break;
+
                 case 11:
                 printf(" %c",'A');
                 break;
@@ -85,6 +93,17 @@ void printMap(){
 
                 case 14:
                 printf(" %c",'D');
+
+                case 20:
+                case 21:
+                case 22:
+                case 23:
+                case 24:
+                printf(" %c",'*');
+                break;
+
+                case 99:
+                printf(" %c",'#');
                 break;
 
                 default:

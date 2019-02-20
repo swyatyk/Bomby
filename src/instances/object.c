@@ -7,6 +7,7 @@
 #include <pthread.h>
 #include "headers/object.h"
 #include "headers/cell.h"
+#include "headers/map.h"
 
 pthread_mutex_t addObjMutex;
 pthread_mutex_t rmvObjMutex;
@@ -21,6 +22,11 @@ void destroyMutex(){
 };
 
 Object *generateNewObject(int typeId, int y, int x){
+
+    if(y < 0 || y > getMap()->mapSizeY || x < 0 || x > getMap()->mapSizeX)
+    {
+        return NULL;
+    }
 
     Object *obj = (Object*)malloc(sizeof(Object));
     obj->textureId = typeId;
@@ -37,6 +43,7 @@ Object *generateNewObject(int typeId, int y, int x){
 
         case 1:
             obj->type = BLOCK;
+            obj->textureId = 99;
             break;
 
         case 2:
@@ -48,23 +55,20 @@ Object *generateNewObject(int typeId, int y, int x){
             break;
 
         case 11:
-            obj->type = PLAYER;
-            obj->id = 1;
-            break;
-
         case 12:
-            obj->type = PLAYER;
-            obj->id = 2;
-            break;
-
         case 13:
-            obj->type = PLAYER;
-            obj->id = 3;
-            break;
-
         case 14:
             obj->type = PLAYER;
+            obj->bombsCnt = 0;
             obj->id = 4;
+            break;
+
+        case 21:
+        case 22:
+        case 23:
+        case 24:
+            obj->type = EXPLOSION;
+            obj->id = typeId;
             break;
 
         default:
@@ -132,6 +136,11 @@ Object * getProritaryAppairanceByObject(Object *cell){
 
 void removeObjFromCell(Object *obj,int y, int x)
 {
+    if(obj==NULL)
+    {
+        return;
+    }
+
     pthread_mutex_lock(&rmvObjMutex);
     Object *targetCell = getCell(y, x);
     Object *current = targetCell;

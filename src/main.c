@@ -7,24 +7,22 @@
 //int main(int argc, char *argv[])
 int main()
 {
+
     initMap();
     initMutex();
-    Object *player1 = generateNewObject(13,1,2);
+    Object *player1 = generateNewObject(11,5,5);
     addObjToCell(player1,1,1);
     printf("\n");
     printMap();
 
     char c;
-    printf("move your player w,s,a,d keys \n");
+    printf("\nHello player your map mark position is (A) \n");
+    printf("You can move your player with w,s,a,d keys \n");
+    printf("plaint the bomb with b key \n");
     do{
 
         scanf("%c", &c);
 
-        if(c=='v')
-        {
-            Object *player2 = generateNewObject(12,1,2);
-            addObjToCell(player2,player1->posY,player1->posX);
-        }
         if(c!=10)
         {
             printf("\n");

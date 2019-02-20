@@ -8,11 +8,12 @@
 
 typedef enum{
     CELL,   // 0
-    BLOCK,  // 1
     WALL,   // 2
     BOMB,   // 3
     OBJECT, // 4
     PLAYER, // 11,12,13,14
+    EXPLOSION, // 21,22,23,24
+    BLOCK,  // 99
 } Type;
 
 
@@ -31,6 +32,7 @@ typedef struct str_obj {
     int posX;
     int posW;
     int posH;
+    int bombsCnt;
 }Object;
 
 
