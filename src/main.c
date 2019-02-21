@@ -22,7 +22,6 @@ int main()
     do{
 
         scanf("%c", &c);
-
         if(c!=10)
         {
             printf("\n");

@@ -5,6 +5,7 @@
 #include <pthread.h>
 #include "headers/player.h"
 #include "headers/map.h"
+#include "headers/bomb.h"
 
 void playerInterfaceController(Object *player , char key)
 {

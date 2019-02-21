@@ -11,9 +11,9 @@ void newCell(int mapParam,  int pY ,int pX);
 
 int configMap[10][10] = {
         {1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-        {1, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-        {1, 0, 1, 0, 0, 1, 0, 1, 0, 1},
-        {1, 0, 0, 0, 1, 0, 0, 0, 0, 1},
+        {1, 0, 0, 0, 2, 0, 0, 0, 0, 1},
+        {1, 0, 1, 2, 0, 1, 0, 1, 0, 1},
+        {1, 2, 0, 0, 1, 0, 0, 0, 0, 1},
         {1, 0, 1, 0, 0, 0, 0, 1, 0, 1},
         {1, 0, 0, 0, 0, 1, 0, 0, 0, 1},
         {1, 0, 0, 1, 0, 0, 0, 1, 0, 1},
@@ -43,11 +43,10 @@ void initMap(){
     {
         for(int x = 0; x < 10;x++)
         {
-            newCell(configMap[y][x],y,x);
+            newCell(0,y,x);
 
             if(configMap[y][x]>0)
             {
-
                 Object *tmp =  generateNewObject(configMap[y][x], y,x);
                 addObjToCell(tmp,y,x);
             }
@@ -69,6 +68,11 @@ void printMap(){
             {
                 case 0:
                 printf(" %c",'.');
+                break;
+
+
+                case 2:
+                printf(" %c",'#');
                 break;
 
                 case 3:
@@ -103,7 +107,7 @@ void printMap(){
                 break;
 
                 case 99:
-                printf(" %c",'#');
+                printf(" %c",'X');
                 break;
 
                 default:

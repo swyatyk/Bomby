@@ -81,10 +81,10 @@ Object *generateNewObject(int typeId, int y, int x){
 
 
 void addObjToCell(Object *obj,int y, int x) {
-    if(obj->type==CELL){return;}
+  //  if(obj->type==CELL){return;}
 
-    pthread_mutex_lock(&addObjMutex);
     Object *targetCell = getCell(y, x);
+    pthread_mutex_lock(&addObjMutex);
     Object *current = targetCell->next;
     obj->posY = targetCell->posY;
     obj->posX = targetCell->posX;
@@ -141,8 +141,8 @@ void removeObjFromCell(Object *obj,int y, int x)
         return;
     }
 
-    pthread_mutex_lock(&rmvObjMutex);
     Object *targetCell = getCell(y, x);
+    pthread_mutex_lock(&rmvObjMutex);
     Object *current = targetCell;
     if(current->next)
     {
