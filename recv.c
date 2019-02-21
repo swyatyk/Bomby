@@ -62,13 +62,13 @@ int read_client(int client)
     if (client == -1)
         return 1;
     n = 0;
-    memset(buff, '\0', 128);
+    //memset(buff, '\0', 128);
     while ( (n = recv(client, buff, 128, 0)) >= 0) {
         if (n == 0)
             return -1;
         printf("received %s", buff);
         if (buff[n - 1] == '\n') {
-            memset(buff, '\0', 128);
+            //memset(buff, '\0', 128);
             break;
         }
     }
@@ -122,7 +122,7 @@ void hostGame(bomber* game, char* portStr)
         perror("socket()");
         exit(1);
     }
-    memset(&serverAddr, '\0', sizeof(serverAddr));
+   // memset(&serverAddr, '\0', sizeof(serverAddr));
     serverAddr.sin_addr.s_addr = INADDR_ANY;
     serverAddr.sin_family = AF_INET;
     serverAddr.sin_port = htons(atoi(portStr));

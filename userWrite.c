@@ -19,16 +19,16 @@ char* userWrite(bomber* game)
             switch(e.type)
             {
                 case SDL_QUIT:
-                    strcpy(str, "exit");
+                   // strcpy(str, "exit");
                     boucle = false;
                     break ;
                 case SDL_KEYDOWN:
                     switch (e.key.keysym.sym)
                     {
-                        case SDLK_ESCAPE:
+                       /* case SDLK_ESCAPE:
                             strcpy(str, "exit");
                             boucle = false;
-                            break ;
+                            break ;*/
                         case SDLK_RETURN:
                             if (str_size > 0)
                                 boucle = false;
@@ -94,8 +94,9 @@ void draw_text(char *text, bomber* game)
     } else {
         if(game->cursorBomb.y == game->joingame.y) 
             game->userTextPort = SDL_CreateTextureFromSurface(game->pRendererMenuJoin, surface);
-        else
+        else {
             game->userTextPort = SDL_CreateTextureFromSurface(game->pRendererMenuHost, surface);
+        }
         if (!game->userTextPort) {
             printf("Une erreur est survenue lors du chargement de la texture user Port : '%s'\n", SDL_GetError());
             return ;
@@ -108,21 +109,26 @@ void draw_text(char *text, bomber* game)
     SDL_QueryTexture(game->userText, NULL, NULL, &textureWidth, &textureHeigth);
     SDL_QueryTexture(game->userTextPort, NULL, NULL, &textureWidthP, &textureHeigthP);
 
-    // On crée un rect qui va correspondre à la position du texte
-    if (strcmp(game->ipIsOk, "") == 0 || strcmp(game->ipIsOk, "no") == 0)
+    // On crée un rect qui va correspondre à la position du texte pour le menu rejoindre
+    if (strcmp(game->ipIsOk, "") == 0 || strcmp(game->ipIsOk, "no") == 0) {
         game->userTextIpJoin.x = 200;
         game->userTextIpJoin.y = 115;
         game->userTextIpJoin.w = textureWidth;
         game->userTextIpJoin.h = textureHeigth;
+    }
     if(strcmp(game->ipIsOk, "ok")== 0) {
         game->userTextPortJoin.x = 200;
         game->userTextPortJoin.y = 185;
         game->userTextPortJoin.w = textureWidthP;
         game->userTextPortJoin.h = textureHeigthP;
     }
+
+    //dans le cas du host (oui j'ai pris le même sdlRect que join)
+    if(game->cursorBomb.y == game->hostGame.y) {
         game->userTextIpJoin.x = 200;
         game->userTextIpJoin.y = 115;
-        game->userTextIpJoin.w = textureWidth;
-        game->userTextIpJoin.h = textureHeigth;
+        game->userTextIpJoin.w = textureWidthP;
+        game->userTextIpJoin.h = textureHeigthP;
+    }
 }
 

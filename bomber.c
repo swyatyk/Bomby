@@ -183,14 +183,13 @@ void game_show(bomber* game, char* direction)
             SDL_RenderCopy(game->pRendererMenuJoin, game->txtJoin, NULL, &game->startTxt);
             SDL_RenderCopy(game->pRendererMenuJoin, game->textIp, NULL, &game->joingame);
             SDL_RenderCopy(game->pRendererMenuJoin, game->textPort, NULL, &game->hostGame);
-            if(strcmp(game->ipIsOk, "no")== 0)
+            SDL_RenderCopy(game->pRendererMenuJoin, game->userText, NULL, &game->userTextIpJoin);
+            if(strcmp(game->ipIsOk, "no")== 0) 
                 SDL_RenderCopy(game->pRendererMenuJoin, game->error, NULL, &game->errorSize);
             else {
-                SDL_RenderCopy(game->pRendererMenuJoin, game->userText, NULL, &game->userTextIpJoin);
+                SDL_RenderCopy(game->pRendererMenuJoin, game->userTextPort, NULL, &game->userTextPortJoin);
                 if(strcmp(game->portIsOk, "no")== 0)
                     SDL_RenderCopy(game->pRendererMenuJoin, game->error, NULL, &game->errorSize);
-                else
-                    SDL_RenderCopy(game->pRendererMenuJoin, game->userTextPort, NULL, &game->userTextPortJoin);
             }
             SDL_RenderPresent(game->pRendererMenuJoin);
         } else {
@@ -198,6 +197,8 @@ void game_show(bomber* game, char* direction)
             SDL_RenderCopy(game->pRendererMenuHost, game->txtHost, NULL, &game->startTxt);
             SDL_RenderCopy(game->pRendererMenuHost, game->textPort, NULL, &game->joingame);
             SDL_RenderCopy(game->pRendererMenuHost, game->userTextPort, NULL, &game->userTextIpJoin);
+            if(strcmp(game->portIsOk, "no")== 0)
+                SDL_RenderCopy(game->pRendererMenuHost, game->error, NULL, &game->errorSize);
             SDL_RenderPresent(game->pRendererMenuHost);
         }
     }
@@ -316,10 +317,11 @@ int game_event(bomber* game)
                     init_menuHost(game);
                     SDL_ShowWindow(game->pWindowMenuHost);
                     game->menuOn = 0;
+                    game_show(game, "null");
                     game->userWrite.port = userWrite(game);
                     if(strcmp(game->userWrite.port, "1234") == 0) {
                         hostGame(game, game->userWrite.port);
-                        playerConnect(game, "127.0.0.1", game->userWrite.port);
+                        //playerConnect(game, "127.0.0.1", game->userWrite.port);
                         game->portIsOk = "ok";
                     } else {
                         game->portIsOk = "no";

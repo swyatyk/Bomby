@@ -7,7 +7,7 @@ void error(bomber* game, char* message)
     SDL_Color normalColor = {255, 255, 255, 255};
     SDL_Surface* surface_messageError;
 
-    TTF_Font* police = TTF_OpenFont("./arial.ttf", font_size);
+    TTF_Font* police = TTF_OpenFont("assets/arial.ttf", font_size);
 
     surface_messageError = TTF_RenderText_Solid(police, message, normalColor);
     if ( !surface_messageError ){
@@ -16,11 +16,14 @@ void error(bomber* game, char* message)
     }
 
     TTF_CloseFont(police);
-    
-    game->error = SDL_CreateTextureFromSurface(game->pRendererMenuJoin, surface_messageError);
-    if ( !game->pTextureMenuJoin ){
-        fprintf(stdout,"Échec de création de la textureMenuJoin - %s\n",SDL_GetError());
+    if(game->cursorBomb.y == game->joingame.y) 
+        game->error = SDL_CreateTextureFromSurface(game->pRendererMenuJoin, surface_messageError);
+    else
+        game->error = SDL_CreateTextureFromSurface(game->pRendererMenuHost, surface_messageError);
+    if (!game->error){
+        fprintf(stdout,"Échec de création de la textureMenu - %s\n",SDL_GetError());
         game_destroy(game);
+        exit(1);
     }
 
     game->errorSize.x = 40;
