@@ -38,6 +38,7 @@ void playerConnect(bomber* game, char *ip, char* port)
       exit(1);
   }
   printf("[+] connected to server  \n");
+  game->ifConnect = 1;
     //game->start = 1;
  /* while (1) {
     memset(message, '\0', 128);

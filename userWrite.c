@@ -86,16 +86,19 @@ void draw_text(char *text, bomber* game)
     TTF_CloseFont(police);
 
     // On transforme la surface en texture pour l'afficher avec le renderer
-    if(strcmp(game->ipIsOk, "") == 0 || strcmp(game->ipIsOk, "no") == 0) {
+    if((strcmp(game->ipIsOk, "") == 0 || strcmp(game->ipIsOk, "no") == 0) && game->cursorBomb.y == game->joingame.y) {
         game->userText = SDL_CreateTextureFromSurface(game->pRendererMenuJoin, surface);
         if (!game->userText) {
             printf("Une erreur est survenue lors du chargement de la texture userIp : '%s'\n", SDL_GetError());
             return ;
         }
     } else {
-       game->userTextPort = SDL_CreateTextureFromSurface(game->pRendererMenuJoin, surface);
+        if(game->cursorBomb.y == game->joingame.y) 
+            game->userTextPort = SDL_CreateTextureFromSurface(game->pRendererMenuJoin, surface);
+        else
+            game->userTextPort = SDL_CreateTextureFromSurface(game->pRendererMenuHost, surface);
         if (!game->userTextPort) {
-            printf("Une erreur est survenue lors du chargement de la texture userIp : '%s'\n", SDL_GetError());
+            printf("Une erreur est survenue lors du chargement de la texture user Port : '%s'\n", SDL_GetError());
             return ;
         } 
     }
@@ -118,5 +121,9 @@ void draw_text(char *text, bomber* game)
         game->userTextPortJoin.w = textureWidthP;
         game->userTextPortJoin.h = textureHeigthP;
     }
+        game->userTextIpJoin.x = 200;
+        game->userTextIpJoin.y = 115;
+        game->userTextIpJoin.w = textureWidth;
+        game->userTextIpJoin.h = textureHeigth;
 }
 

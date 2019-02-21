@@ -1,13 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-#include <sys/socket.h>
-#include <sys/select.h>
-#include <sys/types.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <fcntl.h>
+#include "bomberman.h"
 #include "network.h"
 
 void initConfigs()
@@ -105,23 +96,25 @@ void checkMessages(Client *connected_clients,fd_set *file_discriptor, int *conne
     }
 }
 
-int main(int argc, char* argv[]){
+void hostGame(bomber* game, char* portStr)
+{
+    game->ifConnect = 0;
     initConfigs();
-    int server_socket, ret;
+    int server_socket/*, ret*/;
     struct sockaddr_in serverAddr;  
     struct timeval waiting_time;
     int connected_client;
     struct sockaddr_in newAddr;
     socklen_t addr_size;
     fd_set file_discriptor;
-    char buffer[128];
+    //char buffer[128];
     Client connected_clients[serverConfig.allowedClientsCount];
     int connected_clients_cnt = 0;
 
-    if (argc != 2) {
+    /*if (argc != 2) {
         printf("usage : %s PORT\n", argv[0]);
         return -1;
-    }
+    }*/
     
     server_socket = socket(AF_INET, SOCK_STREAM, 0);
     fcntl(server_socket, F_SETFL, O_NONBLOCK);
@@ -132,7 +125,7 @@ int main(int argc, char* argv[]){
     memset(&serverAddr, '\0', sizeof(serverAddr));
     serverAddr.sin_addr.s_addr = INADDR_ANY;
     serverAddr.sin_family = AF_INET;
-    serverAddr.sin_port = htons(atoi(argv[1]));
+    serverAddr.sin_port = htons(atoi(portStr));
     initClients(connected_clients);
     if(bind(server_socket, (struct sockaddr*)&serverAddr, sizeof(serverAddr)) < 0){
         perror("bind()");
@@ -142,7 +135,8 @@ int main(int argc, char* argv[]){
         printf("waiting clients....\n");
     else
         perror("listen()");
-    while(1) {
+        
+    //while(1) {
         waiting_time.tv_sec = 1;
         waiting_time.tv_usec = 0;
         connected_client = accept(server_socket, (struct sockaddr *) &newAddr, &addr_size);
@@ -166,8 +160,8 @@ int main(int argc, char* argv[]){
         }
         initListeners(connected_clients,&file_discriptor , waiting_time);
         checkMessages(connected_clients,&file_discriptor , &connected_clients_cnt);
-    }
-    return 0;
+    //}
+    return ;
 }
 
 

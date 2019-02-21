@@ -9,12 +9,14 @@ SDLFLAGS = -lSDL2 -lSDL2main -lSDL2_image -lSDL2_ttf -lfreetype
 SRC =	main.c \
 		main_menu.c \
 		menuJoinGame.c \
+		menuHostGame.c \
 		map.c \
 		userWrite.c \
 		playerMove.c \
 		animationPlayer.c \
 		bomber.c \
 		error.c \
+		recv.c \
 		send.c
 
 

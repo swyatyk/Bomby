@@ -10,6 +10,9 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
+#include <sys/select.h>
+#include <netinet/in.h>
+#include <fcntl.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -18,6 +21,8 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
+
+#include "network.h"
 
 #define LARGEUR_TILE 900
 #define HAUTEUR_TILE 900
@@ -45,15 +50,18 @@ typedef struct {
     int sock;
     char *ipIsOk;
     char *portIsOk;
-    int start;   
+    int start;
+    int ifConnect;
     //Variable SDL
     SDL_Point screenSize;
     SDL_Window* pWindow;
     SDL_Window* pWindowMenu;
     SDL_Window* pWindowMenuJoin;
+    SDL_Window* pWindowMenuHost;
     SDL_Renderer* pRenderer;
     SDL_Renderer* pRendererMenu;
     SDL_Renderer* pRendererMenuJoin;
+    SDL_Renderer* pRendererMenuHost;
     int map[10][10];
     //Texture du jeu
     SDL_Texture* error;
@@ -61,11 +69,13 @@ typedef struct {
     SDL_Texture* pTexturePlayer;
     SDL_Texture* pTextureMenu;
     SDL_Texture* pTextureMenuJoin;
+    SDL_Texture* pTextureMenuHost;
     SDL_Texture* ClientJoinGame;
     SDL_Texture* ClientHostGame;
     SDL_Texture* texture_text;
     SDL_Texture* cursor;
     SDL_Texture* txtJoin;
+    SDL_Texture* txtHost;
     SDL_Texture* textIp;
     SDL_Texture* textPort;
     SDL_Texture* userText;
@@ -96,6 +106,7 @@ void game_dropBombe(bomber* game);
 void init_menu(bomber* game);
 void menuScroll(char* scroll, bomber* game);
 void init_menuJoin(bomber* game);
+void init_menuHost(bomber* game);
 void draw_text(char *text, bomber* game);
 // init game
 bomber* game_init();
@@ -104,9 +115,11 @@ void game_destroy(bomber* game);
 void game_show(bomber* game, char* direction);
 int game_event(bomber* game);
 void playerConnect(bomber* game, char *ip, char* port);
+void hostGame(bomber* game, char* portStr);
 int sendMess(bomber* game, char* message);
 
 void create_menu_join(bomber* game);
+void create_menu_host(bomber* game);
 char* userWrite(bomber* game);
 void Create_menu_render(bomber* game);
 // partie map/player 
