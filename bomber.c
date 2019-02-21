@@ -275,6 +275,7 @@ int game_event(bomber* game)
                     game_dropBombe(game);
                     game_show(game, "null");
                 }
+                sendMess(game, "bomb\n");
                 break;
             case SDLK_RETURN:
                 SDL_HideWindow(game->pWindowMenu);
