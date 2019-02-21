@@ -65,7 +65,6 @@ char* userWrite(bomber* game)
     SDL_StopTextInput();
     return(str);
 }
-
 void draw_text(char *text, bomber* game)
 {
     int font_size = 24;
