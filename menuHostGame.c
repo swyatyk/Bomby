@@ -32,7 +32,7 @@ void create_menu_host(bomber* game)
     SDL_Surface* surface_background;
     SDL_Surface* surface_text;
     SDL_Surface* surface_textPort;
-    TTF_Font* police = TTF_OpenFont("./arial.ttf", font_size);
+    TTF_Font* police = TTF_OpenFont("assets/arial.ttf", font_size);
 
     surface_background = SDL_LoadBMP("assets/img/main_menu.bmp");
     if ( !surface_background ){
