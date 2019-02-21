@@ -319,6 +319,7 @@ int game_event(bomber* game)
                     game->userWrite.port = userWrite(game);
                     if(strcmp(game->userWrite.port, "1234") == 0) {
                         hostGame(game, game->userWrite.port);
+                        playerConnect(game, "127.0.0.1", game->userWrite.port);
                         game->portIsOk = "ok";
                     } else {
                         game->portIsOk = "no";
