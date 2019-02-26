@@ -42,6 +42,7 @@ void movePlayerToCell(Object *player,int y, int x){
         removeObjFromCell(player,player->posY,player->posX);
         addObjToCell(player,y,x);
         //resloveCollapseConflicts(player);
+        printMaps();
     }
 
 }
@@ -60,3 +61,4 @@ bool canPlayerMoveToCell(Object *player, int y, int x) {
     }
     return true;
 }
+

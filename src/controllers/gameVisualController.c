@@ -164,3 +164,40 @@ void gameDestroy() {
     SDL_DestroyWindow(getGame()->window);
     SDL_Quit();
 }
+
+int keyreader(Object *player)
+{
+    SDL_Event e;
+    if (SDL_PollEvent(&e) && e.type == SDL_KEYDOWN)
+    {
+
+       // printf("SLD KEY =%d \n", e.key.keysym.sym);
+
+        switch (e.key.keysym.sym)
+        {
+            case 27 :
+                return EXIT_SUCCESS;
+                break;
+
+            case SDLK_w:
+                playerInterfaceController(player, 'w');
+                break;
+            case SDLK_s:
+                playerInterfaceController(player, 's');
+                break;
+            case SDLK_a:
+                playerInterfaceController(player, 'a');
+                break;
+            case SDLK_d:
+                playerInterfaceController(player, 'd');
+                break;
+            case SDLK_b:
+                playerInterfaceController(player, 'b');
+                break;
+            default:
+                fprintf(stderr, "Unkown key %d\n", e.key.keysym.sym);
+                break;
+        }
+    }
+    return 1;
+}

@@ -14,7 +14,7 @@ int main3( int argc,  char *argv[] )
     initMutex();
     Game * game = gameInit();
     printGraphicMap();
-    SDL_Delay(5000);
+    //SDL_Delay(5000);
     gameDestroy();
 
     return EXIT_SUCCESS;
@@ -32,11 +32,11 @@ int main()
     printf("\n");
     printMaps();
 
-    char c;
+    //char c;
     printf("\nHello player your map mark position is (A) \n");
     printf("You can move your player with w,s,a,d keys \n");
     printf("plaint the bomb with b key \n");
-    do{
+/*    do{
 
         scanf("%c", &c);
         if(c!=10)
@@ -46,8 +46,15 @@ int main()
             printMaps();
         }
 
+
     }
-    while (c!='p');
+    while (c!='p')*/;
+
+    int running = 1;
+    while(running != 0){
+        running = keyreader(player1);
+        SDL_Delay(20);
+    }
 
 
    // int response = showMenu(); //return 1 if wanna to make server or return 2 if wanna to join the server else return 0 if somthing wrong

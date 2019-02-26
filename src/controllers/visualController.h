@@ -8,9 +8,11 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <SDL2/SDL.h>
+#include <SDL_keycode.h>
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_image.h>
 #include <time.h>
+#include "../instances/headers/object.h"
 
 typedef struct {
 
@@ -25,6 +27,7 @@ typedef struct {
 void printGraphicMap();
 Game * gameInit();
 void gameDestroy();
+int keyreader(Object *player);
 
 
 #endif //BOOMBERMAN_GAME_H

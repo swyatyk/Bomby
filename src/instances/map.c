@@ -59,7 +59,6 @@ void printMaps()
 {
     printConsoleMap();
     printGraphicMap();
-
 }
 
 void printConsoleMap(){
