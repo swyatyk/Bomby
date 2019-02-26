@@ -1,190 +1,166 @@
-/*
- *This file* control the aparance of instances in the the game via SDL
- *
- */
+//
+// Created by Sviatoslav Prylutsky on 2/5/19.
+//
 
+#include "visualController.h"
+#include "../instances/headers/player.h"
+#include "../instances/headers/map.h"
+#define SCREEN_WIDTH 640
+#define SCREEN_HEIGHT 480
 
-void showMapContent()
+#define WIDHT_TILE 100
+#define HEIGHT_TILE 100
+#define CELL_TILE_SIZE 100
+#define WIDTH_CELL_CNT = 10
+#define HEIGHT_CELL_CNT = 10
+
+void gameDestroy();
+
+SDL_Rect getRectByTextureId(int typeId);
+
+Game * getGame()
 {
-
+    static Game *game = NULL;
+    if(game==NULL){
+        game = malloc(sizeof(Game));
+    }
+    return game;
 }
 
 
-Player* game_init()
+Game * gameInit()
 {
-    Player * game = NULL;
-    game = malloc(sizeof(Player));
-    game->screenSize.x = 640;
-    game->screenSize.y = 480;
-    game->pWindow = NULL;
-    game->pRenderer = NULL;
-    // game->player1Position.x = 200;
-    // game->player1Position.y = 150;
-    game->player1Position.w = 40;
-    game->player1Position.h = 40;
-    game->ifBombe = 0;
-    game->Player = NULL;
 
+    Game *game = getGame();
 
-    //Init SDL
-    if (SDL_Init(SDL_INIT_VIDEO) != 0) {
-        fprintf(stderr, "Impossible d'initialiser la SDL : %s\n", SDL_GetError());
-        game_destroy(game);
-        return (NULL);
-    }
-    //Creation fenêtre
-    game->pWindow = SDL_CreateWindow("Bomberman", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, game->screenSize.x, game->screenSize.y, SDL_WINDOW_SHOWN);
-    if (game->pWindow) {
-        //Crea renderer
-        game->pRenderer = SDL_CreateRenderer(game->pWindow, -1, SDL_RENDERER_ACCELERATED);
-        if (!game->pRenderer) {
-            fprintf(stderr, "Impossible de créer le renderer SDL : %s\n", SDL_GetError());
-            game_destroy(game);
-            return (NULL);
-        }
-    } else {
-        fprintf(stderr, "Impossible de créer le fenetre SDL : %s\n", SDL_GetError());
-        game_destroy(game);
-        return (NULL);
+    if(SDL_Init(SDL_INIT_VIDEO>0)){printf("SDL Start failed;");gameDestroy();}
+
+    game->window = SDL_CreateWindow("Bomberman",SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED,SCREEN_WIDTH,SCREEN_HEIGHT,SDL_WINDOW_SHOWN);
+    if(!game->window){
+        fprintf(stderr, "Init window Fail SDL : %s\n", SDL_GetError());
+        gameDestroy();
     }
 
-
-
-    SDL_Surface* surfaceBomby = IMG_Load("./images/bombe.png");
-    if (!surfaceBomby) {
-        fprintf(stderr, "Impossible de charger l'image bombe.png : %s\n", IMG_GetError());
-        game_destroy(game);
-        return (NULL);
-    } else { 
-        game->pTexturePlayer = SDL_CreateTextureFromSurface(game->pRenderer, surfaceBomby);
-        if (!game->pTexturePlayer) {
-            fprintf(stderr, "Impossible de charger  la texture : %s\n", SDL_GetError());
-            game_destroy(game);
-            return (NULL);
-        }
-        SDL_FreeSurface(surfaceBomby);
+    game->renderer = SDL_CreateRenderer(game->window,-1,SDL_RENDERER_ACCELERATED);
+    if(!game->renderer){
+        fprintf(stderr, "Init render fail SDL : %s\n", SDL_GetError());
+        gameDestroy();
     }
 
+    SDL_Surface *playerImg = IMG_Load("../images/playerTileset.bmp");
+    SDL_Surface *gameImg = IMG_Load("../images/gameTileset.bmp");
 
-
-    //Chargement texture map + perso 
-    game->img_texture[1] = IMG_Load("./images/tileset_bomberman.bmp");
-    game->img_texture[2] = IMG_Load("./images/perso.bmp");
-    if (!game->img_texture[1]) {
-        fprintf(stderr, "Impossible de charger l'image 10 : %s\n", IMG_GetError());
-        game_destroy(game);
-        return (NULL);
-    } else if (!game->img_texture[2]) {
-        fprintf(stderr, "Impossible de charger l'image 11 : %s\n", IMG_GetError());
-        game_destroy(game);
-        return (NULL);
+    if(!playerImg || !gameImg)
+    {
+        fprintf(stderr, "Fail of load *tillset.bmp : %s\n", SDL_GetError());
+        gameDestroy();
     }
-    
-    return (game);
+
+    game->playerTileset = SDL_CreateTextureFromSurface(game->renderer,playerImg);
+    game->gameTileset = SDL_CreateTextureFromSurface(game->renderer,gameImg);
 }
 
-void game_destroy(Player *game)
+void printGraphicMap()
 {
 
-    int x;
-    int y;
-    if (game) {
-        if (game->pTexturePlayer) {
-            SDL_DestroyTexture(game->pTexturePlayer);
-        }
+    Game *game = getGame();
+    SDL_RenderClear(game->renderer);
 
-        for (y = 0; y < NOMBRE_BLOCS_LARGEUR; y++) {
-            for (x = 0; x < NOMBRE_BLOCS_HAUTEUR; x++) {
-                if (game->textures[y][x]) {
-                    SDL_DestroyTexture(game->textures[y][x]);
-                }
+    int lengthX = 10;
+    int lengthY = 10;
+    int cell_tile_height = 48;
+    int cell_tile_width = 64;
+
+    SDL_Rect r_dest,r_src;
+    // int (*map)[10][10] = getMap();
+    for(int x=0;x<lengthX;x++)
+    {
+        for(int y=0;y<lengthY;y++)
+        {
+            r_src = getRectByTextureId(getCell(y,x)->last->textureId);
+            r_dest.x = x*cell_tile_width;
+            r_dest.y = y*cell_tile_height;
+            r_dest.w = cell_tile_width;
+            r_dest.h = cell_tile_height;
+            if(getCell(y,x)->last->textureId>10 && getCell(y,x)->last->textureId<15)
+            {
+                SDL_RenderCopy(game->renderer, game->playerTileset, &r_src, &r_dest);
             }
-        }        
-        if (game->pRenderer) {
-            SDL_DestroyRenderer(game->pRenderer);
-        }        
-        if (game->pWindow) {
-            SDL_DestroyWindow(game->pWindow);
-        }
-        SDL_Quit();
-        free(game);
-    }
-}
-
-void game_show(Player* game, char* direction)
-{
-    int y;
-    int x;
-    SDL_Rect Rect_dest;
-    SDL_Rect Src_dest;
-    //clean l'ecran
-    SDL_SetRenderDrawColor(game->pRenderer, 0, 0, 0, 255);
-    SDL_RenderClear(game->pRenderer);
-
-    //Afficher la map + joueur 
-    for(y=0; y < NOMBRE_BLOCS_LARGEUR; y++) {
-        for(x=0; x < NOMBRE_BLOCS_HAUTEUR; x++) {
-            Src_dest = get_src_dest(game->map[y][x], direction); // cas qui gère l'image à afficher
-            Rect_dest.x = x * 50;
-            Rect_dest.y = y * 50;
-            Rect_dest.w = 50;
-            Rect_dest.h = 50;
-            SDL_RenderCopy(game->pRenderer, game->textures[y][x], &Src_dest, &Rect_dest);
-        }
-    }
-
-    //afficher la bombe
-    if(game->ifBombe == 1) {
-        //printf( "%d\n", game->bombe->position.x);
-        SDL_RenderCopy(game->pRenderer, game->pTexturePlayer, NULL, &game->Player->position);
-    }
-
-    //Afficher rendu
-    SDL_RenderPresent(game->pRenderer);
-}
-
-int game_event(Player* game)
-{
-    if (game)
-        fprintf(stderr, " ");
-    int result = 0;
-    SDL_Event e;
-    game_show(game, "null");
-    if (SDL_PollEvent(&e)) {
-        if (e.type == SDL_QUIT) {
-            //quitte le jeu
-            result = -1;
-        } else if (e.type == SDL_KEYDOWN) {
-            //gerer touche du clavier
-            switch (e.key.keysym.sym) {
-            case SDLK_ESCAPE :
-                result = -1;
-                break;               
-            case SDLK_UP:
-                game_movePlayer(game, e.key.keysym.sym);
-                game_show(game, "up");
-                break;
-            case SDLK_DOWN:
-                game_movePlayer(game, e.key.keysym.sym);
-                game_show(game, "down");
-                break;
-            case SDLK_LEFT:
-                game_movePlayer(game, e.key.keysym.sym);
-                game_show(game, "left");
-                break;
-            case SDLK_RIGHT:
-                game_movePlayer(game, e.key.keysym.sym);
-                game_show(game, "right");
-                break;
-            case SDLK_d:
-                game_dropBombe(game);
-                game_show(game, "null");
-                break;
-            default:
-                fprintf(stderr, "touche inconnue %d\n", e.key.keysym.sym);
-                break;
+            else
+            {
+                SDL_RenderCopy(game->renderer, game->gameTileset, &r_src, &r_dest);
             }
+
         }
+
     }
-    return (result);
+    SDL_RenderPresent(game->renderer);
+  /* SDL_Delay(1000);
+    SDL_DestroyTexture(game->playerTileset);*/
+}
+
+SDL_Rect getRectByTextureId(int typeId) {
+    SDL_Rect result;
+
+    switch (typeId)
+    {
+        case 0://CELL
+            result.x = 3 * CELL_TILE_SIZE;
+            result.y = 0 * CELL_TILE_SIZE;
+
+            break;
+
+        case 99://BLOCK
+            result.x = 1 * CELL_TILE_SIZE;
+            result.y = 0 * CELL_TILE_SIZE;
+            break;
+
+        case 2://WALL
+
+            result.x = 2 * CELL_TILE_SIZE;
+            result.y = 0 * CELL_TILE_SIZE;
+            break;
+
+        case 3: //BOOMB
+
+            result.x = 7 * CELL_TILE_SIZE;
+            result.y = 6 * CELL_TILE_SIZE;
+            break;
+
+        case 11:
+        case 12:
+        case 13:
+        case 14: //PLAYER
+            result.x = 0 * CELL_TILE_SIZE;
+            result.y = 0 * CELL_TILE_SIZE;
+            break;
+
+        case 21:
+        case 22:
+        case 23:
+        case 24:
+            //EXPLOSION
+            result.x = 5 * CELL_TILE_SIZE;
+            result.y = 2 * CELL_TILE_SIZE;
+            break;
+
+        default://OBJECT
+            result.x = 8 * CELL_TILE_SIZE;
+            result.y = 8 * CELL_TILE_SIZE;
+            break;
+    }
+
+    result.w = CELL_TILE_SIZE;
+    result.h = CELL_TILE_SIZE;
+
+    return result;
+}
+
+
+void gameDestroy() {
+
+    SDL_DestroyTexture(getGame()->playerTileset);
+    SDL_DestroyRenderer(getGame()->renderer);
+    SDL_DestroyWindow(getGame()->window);
+    SDL_Quit();
 }

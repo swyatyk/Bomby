@@ -3,6 +3,22 @@
 #include "config.h"
 #include "controllers/headers/gameController.h"
 #include "instances/headers/map.h"
+#include "controllers/visualController.h"
+#include "instances/headers/player.h"
+
+
+int main3( int argc,  char *argv[] )
+{
+
+    initMap();
+    initMutex();
+    Game * game = gameInit();
+    printGraphicMap();
+    SDL_Delay(5000);
+    gameDestroy();
+
+    return EXIT_SUCCESS;
+}
 
 //int main(int argc, char *argv[])
 int main()
@@ -10,10 +26,11 @@ int main()
 
     initMap();
     initMutex();
+    Game * game = gameInit();
     Object *player1 = generateNewObject(11,5,5);
     addObjToCell(player1,1,1);
     printf("\n");
-    printMap();
+    printMaps();
 
     char c;
     printf("\nHello player your map mark position is (A) \n");
@@ -26,7 +43,7 @@ int main()
         {
             printf("\n");
             playerInterfaceController(player1,c);
-            printMap();
+            printMaps();
         }
 
     }

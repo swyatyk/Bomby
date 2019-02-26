@@ -38,7 +38,7 @@ void * playerPlaintTheBomb(void *args){
             addObjToCell(bombs[i],bombs[i]->posY,bombs[i]->posX);
         }
     }
-    printMap();
+    printMaps();
     sleep(2);
     for(int i=0;i<5;i++)
     {
@@ -49,7 +49,7 @@ void * playerPlaintTheBomb(void *args){
         }
     }
     free(bombs);
-    printMap();
+    printMaps();
     player->bombsCnt-=1;
     return 0;
 }
@@ -58,7 +58,7 @@ void explose(Object *explosion)
 {
     Object *targetCell = getCell(explosion->posY,explosion->posX);
 
-    pthread_mutex_lock(&exploseBombMutex);
+   // pthread_mutex_lock(&exploseBombMutex);
     Object *current = targetCell;
     if(current->next)
     {
@@ -74,5 +74,5 @@ void explose(Object *explosion)
     }
 
   //  targetCell->last=getProritaryAppairanceByObject(targetCell);
-    pthread_mutex_unlock(&exploseBombMutex);
+  //  pthread_mutex_unlock(&exploseBombMutex);
 }

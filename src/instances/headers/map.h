@@ -15,10 +15,9 @@ typedef struct  {
     Object **cells;
 }Map;
 
-void playerInterfaceController(Object *player , char key);
-void movePlayerToCell(Object *obj,int y, int x);
+void printMaps();
 void initMap();
-void printMap();
+void printConsoleMap();
 Map *getMap();
 void removeObjFromCell(Object *obj,int y, int x);
 #endif //BOMBERMAN_MAP_H

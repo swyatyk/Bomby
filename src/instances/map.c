@@ -5,6 +5,7 @@
 
 
 #include "headers/map.h"
+#include "../controllers/visualController.h"
 
 void newCell(int mapParam,  int pY ,int pX);
 
@@ -54,14 +55,20 @@ void initMap(){
     }
 }
 
+void printMaps()
+{
+    printConsoleMap();
+    printGraphicMap();
 
-void printMap(){
+}
+
+void printConsoleMap(){
     system("clear");
     Map *map = getMap();
 
     for(int y = 0 ; y < map->mapSizeY;y++)
     {
-        for (int x = 0; x < map->mapSizeX; ++x)
+        for (int x = 0; x < map->mapSizeX; x++)
         {
             //for visual better visual debug
             switch (getCell(y,x)->last->textureId)
@@ -118,4 +125,5 @@ void printMap(){
         }
         printf("\n");
     }
+   // printGraphicMap();
 }
