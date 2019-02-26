@@ -135,13 +135,15 @@ SDL_Rect getRectByTextureId(int typeId) {
             result.y = 0 * CELL_TILE_SIZE;
             break;
 
+
+        case 20:
         case 21:
         case 22:
         case 23:
         case 24:
             //EXPLOSION
-            result.x = 5 * CELL_TILE_SIZE;
-            result.y = 2 * CELL_TILE_SIZE;
+            result.x = 4 * CELL_TILE_SIZE;
+            result.y = 3 * CELL_TILE_SIZE;
             break;
 
         default://OBJECT

@@ -29,7 +29,7 @@ void * playerPlaintTheBomb(void *args){
         bombs[i] = generateNewObject(showParams[i],player->posY+positionYParams[i],player->posX+positionXParams[i]);
     }
     addObjToCell(bombs[0],bombs[0]->posY,bombs[0]->posX);
-    sleep(3);
+    sleep(1);
     bombs[0]->textureId = 20;
     getCell(bombs[0]->posY,bombs[0]->posX)->last = getProritaryAppairanceByObject(getCell(bombs[0]->posY,bombs[0]->posX));
     for(int i=1;i<5;i++)
@@ -39,7 +39,7 @@ void * playerPlaintTheBomb(void *args){
         }
     }
     printMaps();
-    sleep(2);
+    sleep(1);
     for(int i=0;i<5;i++)
     {
         if(bombs[i]!=NULL) {
