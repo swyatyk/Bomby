@@ -15,26 +15,16 @@
 #include "headers/server.h"
 #include "../instances/headers/map.h"
 #include "../instances/headers/cell.h"
+#include "../instances/headers/player.h"
 
-char testMap[10][10] = {
-        {'1', '1', '1', '1', '1', '1', '1', '1', '1', '1'},
-        {'1', '0', '0', '0', '0', '0', '0', '0', '0', '1'},
-        {'1', '0', '1', '0', '0', '1', '0', '1', '0', '1'},
-        {'1', '0', '0', '0', '1', '0', '0', '0', '0', '1'},
-        {'1', '0', '1', '0', '0', '0', '0', '1', '0', '1'},
-        {'1', '0', '0', '0', '0', '1', '0', '0', '0', '1'},
-        {'1', '0', '0', '1', '0', '0', '0', '1', '0', '1'},
-        {'1', '0', '1', '0', '0', '1', '1', '0', '0', '1'},
-        {'1', '0', '0', '0', '0', '0', '0', '0', '0', '1'},
-        {'1', '1', '1', '1', '1', '1', '1', '1', '1', '1'}};
-
-
+char serverMap[10][10];
+Object *player1;
 void remapMap()
 {
     for(int y = 0 ; y < getMapInstance()->mapSizeY;y++) {
         for (int x = 0; x < getMapInstance()->mapSizeX; x++)
         {
-            testMap[x][y] = getCharFromInt(getCell(y, x)->last->textureId);
+            serverMap[x][y] = getCharFromInt(getCell(y, x)->last->textureId);
         }
     }
 }
@@ -92,6 +82,12 @@ void initListeners(Client *connected_clients,fd_set *file_discriptor , struct ti
     select(sockSum + 1, file_discriptor, NULL, NULL, &waiting_time);
 }
 
+void testPlayer()
+{
+
+    player1 = generateNewObject(11,5,5);
+    addObjToCell(player1,1,1);
+}
 int read_client(int client)
 {
     int  n;
@@ -107,7 +103,9 @@ int read_client(int client)
         return -1;
     }
 
-    printf("received %c \n", buff[0]);
+    printf("received %c \n", buff[0]);;
+    playerInterfaceController(player1,buff[0]);
+    remapMap();
     memset(buff, '\n', sizeof(buff));
     return 0;
 }
@@ -127,7 +125,7 @@ void checkMessages(Client *connected_clients,fd_set *file_discriptor, int *conne
                     connected_clients[i].socket = -1;
                 } else
                     //write(connected_clients[i].socket, "ok\n", 2);
-                    write(connected_clients[i].socket,testMap, sizeof(testMap));
+                    write(connected_clients[i].socket,serverMap, sizeof(serverMap));
             }
         }
     }
@@ -135,6 +133,7 @@ void checkMessages(Client *connected_clients,fd_set *file_discriptor, int *conne
 
 int startServer(){
     initServerConfigs();
+    testPlayer();
     int server_socket, ret;
     struct sockaddr_in serverAddr;
     struct timeval waiting_time;
@@ -173,6 +172,7 @@ int startServer(){
     else
         perror("listen()");
     while(1) {
+        remapMap();
         waiting_time.tv_sec = 1;
         waiting_time.tv_usec = 0;
         connected_client = accept(server_socket, (struct sockaddr *) &newAddr, &addr_size);
@@ -183,7 +183,7 @@ int startServer(){
                 printf("New connection %s:%d\n", inet_ntoa(newAddr.sin_addr), ntohs(newAddr.sin_port));
                 printf("%d Client connected\n", connected_clients_cnt);
                 remapMap();
-                write(connected_client,testMap, sizeof(testMap));
+                write(connected_client,serverMap, sizeof(serverMap));
                 if(connected_clients_cnt < serverConfig.allowedClientsCount) {
                     printf("%d Slot still available\n", serverConfig.allowedClientsCount-connected_clients_cnt);
                 }
