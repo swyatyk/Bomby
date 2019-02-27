@@ -13,6 +13,7 @@
 #include <arpa/inet.h>
 #include <fcntl.h>
 #include "headers/server.h"
+#include "../instances/headers/map.h"
 
 char testMap[10][10] = {
         {'1', '1', '1', '1', '1', '1', '1', '1', '1', '1'},
@@ -27,6 +28,16 @@ char testMap[10][10] = {
         {'1', '1', '1', '1', '1', '1', '1', '1', '1', '1'}};
 
 
+void remapMap()
+{
+    char **map =  getCharMap();
+    for(int x=0;x<10;x++){
+        for(int y=0;y<10;y++){
+            testMap[x][y] = map[x][y];
+        }
+    }
+    printf("map %c \n",testMap[0][0]);
+}
 
 void initServerConfigs()
 {
@@ -171,6 +182,7 @@ int startServer(){
             if(itsNewClient(connected_clients,connected_client) && acceptNewClient(connected_clients,connected_client, newAddr , &connected_clients_cnt)) {
                 printf("New connection %s:%d\n", inet_ntoa(newAddr.sin_addr), ntohs(newAddr.sin_port));
                 printf("%d Client connected\n", connected_clients_cnt);
+                remapMap();
                 write(connected_client,testMap, sizeof(testMap));
                 if(connected_clients_cnt < serverConfig.allowedClientsCount) {
                     printf("%d Slot still available\n", serverConfig.allowedClientsCount-connected_clients_cnt);

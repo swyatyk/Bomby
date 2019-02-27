@@ -4,6 +4,7 @@
 
 #include <zconf.h>
 #include <pthread.h>
+#include <stdlib.h>
 #include "headers/bomb.h"
 #include "headers/object.h"
 #include "headers/cell.h"

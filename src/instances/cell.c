@@ -6,14 +6,14 @@
 #include "headers/map.h"
 
 Object *getCell(int y, int x){
-    Map *map = getMap();
+    Map *map = getMapInstance();
     Object *cell = &map->cells[y][x];
     return cell;
 }
 
 void newCell(int mapParam, int pY, int pX)
 {
-    getMap()->cells[pY][pX] = *generateNewObject( mapParam,  pY,  pX);
+    getMapInstance()->cells[pY][pX] = *generateNewObject( mapParam,  pY,  pX);
 }
 
 

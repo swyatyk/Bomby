@@ -23,7 +23,32 @@ int configMap[10][10] = {
         {1, 0, 0, 0, 0, 0, 0, 0, 0, 1},
         {1, 1, 1, 1, 1, 1, 1, 1, 1, 1}};
 
-Map *getMap(){
+
+char **getCharMap(){
+    static char **map = NULL;
+    if(map == NULL)
+
+    {
+        map= calloc(10,sizeof(char*));
+        char *rows = calloc(10, sizeof(char));
+        for (int i = 0; i<10; i++)
+        {
+
+            map[i] = calloc(rows[i], sizeof(char));
+
+            for (int j = 0; j<rows[i]; j++)
+            {
+                map[i][j] = '0';
+            }
+        }
+
+    }
+
+
+    return map;
+}
+
+Map *getMapInstance(){
     static Map *gameMap = NULL;
     if(gameMap == NULL){
         gameMap = malloc(sizeof(Map));
@@ -40,7 +65,8 @@ Map *getMap(){
     return gameMap;
 }
 
-void initMap(){
+void initMapByObjects(){
+    char **map = getCharMap();
     for(int y = 0; y < 10; y++)
     {
         for(int x = 0; x < 10;x++)
@@ -64,7 +90,8 @@ void printMaps()
 
 void printConsoleMap(){
     system("clear");
-    Map *map = getMap();
+    Map *map = getMapInstance();
+    char **mapChar = getCharMap();
 
     for(int y = 0 ; y < map->mapSizeY;y++)
     {
@@ -75,27 +102,33 @@ void printConsoleMap(){
             {
                 case 0:
                 printf(" %c",'.');
+                mapChar[y][x] = '0';
                 break;
 
 
                 case 2:
                 printf(" %c",'#');
+                mapChar[y][x] = '2';
                 break;
 
                 case 3:
                 printf(" %c",'@');
+                mapChar[y][x] = '3';
                 break;
 
                 case 4:
                 printf(" %c",'@');
+                    mapChar[y][x] = '4';
                 break;
 
                 case 11:
                 printf(" %c",'A');
+                    mapChar[y][x] = '5';
                 break;
 
                 case 12:
                 printf(" %c",'B');
+                    mapChar[y][x] = '6';
                 break;
 
                 case 13:
@@ -115,10 +148,12 @@ void printConsoleMap(){
 
                 case 99:
                 printf(" %c",'X');
+                    mapChar[y][x] = '9';
                 break;
 
                 default:
                 printf(" %d",getCell(y,x)->last->textureId);
+                    mapChar[y][x] = '0';
                 break;
             }
 

@@ -18,8 +18,12 @@ int main(int argc, char *argv[]){
     {
         getPressedKey();
     }*/
-    gameInit();
-   startClient("1234","127.0.0.1");
+    //gameInit();
+    //getCharMap();
+    initMapByObjects();
+    printConsoleMap();
+    startServer();
+   //startClient("1234","127.0.0.1");
    //startClient(params.ip,params.port);
 }
 
@@ -27,7 +31,7 @@ int main(int argc, char *argv[]){
 int mainLocalCLient()
 {
 
-    initMap();
+    initMapByObjects();
     initMutex();
     Game * game = gameInit();
     Object *player1 = generateNewObject(11,5,5);

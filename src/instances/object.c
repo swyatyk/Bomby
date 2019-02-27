@@ -23,7 +23,7 @@ void destroyMutex(){
 
 Object *generateNewObject(int typeId, int y, int x){
 
-    if(y < 0 || y > getMap()->mapSizeY || x < 0 || x > getMap()->mapSizeX)
+    if(y < 0 || y > getMapInstance()->mapSizeY || x < 0 || x > getMapInstance()->mapSizeX)
     {
         return NULL;
     }

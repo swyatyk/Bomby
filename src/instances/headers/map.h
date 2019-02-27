@@ -14,10 +14,11 @@ typedef struct  {
     Object **cells;
 }Map;
 
+char **getCharMap();
 void printMaps();
-void initMap();
+void initMapByObjects();
 void printConsoleMap();
-Map *getMap();
+Map *getMapInstance();
 void removeObjFromCell(Object *obj,int y, int x);
 #endif //BOMBERMAN_MAP_H
 

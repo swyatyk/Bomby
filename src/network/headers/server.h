@@ -14,7 +14,6 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <fcntl.h>
-
 struct{
     int allowedClientsCount;
 }serverConfig;
@@ -31,5 +30,6 @@ typedef struct client_s {
     int socket;
     struct sockaddr_in client_address;
 }Client;
+int startServer();
 
 #endif //BOMBERMAN_NETWORK_H

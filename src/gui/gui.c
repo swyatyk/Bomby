@@ -75,7 +75,7 @@ void printGraphicMap()
     int cell_tile_width = 64;
 
     SDL_Rect r_dest,r_src;
-    // int (*map)[10][10] = getMap();
+    // int (*map)[10][10] = getMapInstance();
     for(int x=0;x<lengthX;x++)
     {
         for(int y=0;y<lengthY;y++)
