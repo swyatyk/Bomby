@@ -25,7 +25,7 @@ Game * getGame()
     static Game *game = NULL;
     if(game==NULL){
         game = malloc(sizeof(Game));
-        gameInit();
+
     }
     return game;
 }
@@ -295,6 +295,42 @@ void gameDestroy() {
     SDL_Quit();
 }
 
+char getPressedKey(){
+    SDL_Event e;
+    char key = 10;
+    if (SDL_PollEvent(&e) && e.type == SDL_KEYDOWN)
+    {
+        switch (e.key.keysym.sym)
+        {
+            case 27 :
+                key = 'p';
+                break;
+
+            case SDLK_w:
+                key = 'w';
+                break;
+            case SDLK_s:
+                key =  's';
+                break;
+            case SDLK_a:
+                key =  'a';
+                break;
+            case SDLK_d:
+                key = 'd';
+                break;
+            case SDLK_b:
+                key = 'b';
+                break;
+            default:
+                fprintf(stderr, "Unkown key %d\n", e.key.keysym.sym);
+                break;
+        }
+    }
+    if(key!=10)
+        printf("key %c \n",key);
+
+    return key;
+}
 int keyreader(Object *player)
 {
     SDL_Event e;

@@ -10,7 +10,17 @@
 
 int main(int argc, char *argv[]){
 
-    startClient();
+   // Co_params param =  getMenuResponse();
+   /*if(params.choise==HEBERGER)
+       startServer();*/
+/*    gameInit();
+    while(1)
+    {
+        getPressedKey();
+    }*/
+    gameInit();
+   startClient("1234","127.0.0.1");
+   //startClient(params.ip,params.port);
 }
 
 //int main(int argc, char *argv[])

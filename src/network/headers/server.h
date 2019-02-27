@@ -15,7 +15,6 @@
 #include <arpa/inet.h>
 #include <fcntl.h>
 
-
 struct{
     int allowedClientsCount;
 }serverConfig;

@@ -4,5 +4,5 @@
 
 #ifndef BOMBERMAN_CLIENT_H
 #define BOMBERMAN_CLIENT_H
-void startClient();
+int startClient(char* port,char *ip);
 #endif //BOMBERMAN_CLIENT_H

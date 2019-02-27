@@ -31,6 +31,7 @@ void printGraphicMap();
 Game * gameInit();
 void gameDestroy();
 int keyreader(Object *player);
+char getPressedKey();
 
 
 #endif //BOOMBERMAN_GAME_H

@@ -15,50 +15,17 @@
 #include <arpa/inet.h>
 #include "../gui/headers/gui.h"
 
-/**
- * \fn main CLIENT
- * \brief main function of our program
- *
- * \return int
- */
-void printMap(char *map){
-    system("clear");
 
-    for(int y = 0 ; y < 10;y++)
-    {
-        for (int x = 0; x < 10; x++)
-        {
-            printf("%c",map[y+10*x]);
-
-        }
-        printf("\n");
-    }
-}
-int main3(int argc, char* argv[])
+int startClient(char* port,char *ip)
 {
-    /*  char *p = &configMap[0][0];
-      printMap(p); */
 
-}
-
-int startClient()
-{
-    char *ip = NULL;
-    int port = 0;
     int mysocket;
     struct sockaddr_in server;
     char message[128] ;
+    char action[1] ;
     char server_reply[128] ;
     char mapFromServer[10][10];
-    // char server_reply[10][10];
-    int firstMessage = 0;
 
-  /*  if (argc != 3) {
-        printf("usage : %s IP PORT\n", argv[0]);
-        return -1;
-    }*/
-    //ip = argv[1];
-    port = atoi("1234");
 
     mysocket = socket(AF_INET, SOCK_STREAM, 0);
     if (mysocket < 0) {
@@ -67,8 +34,8 @@ int startClient()
     }
 
 
-    server.sin_addr.s_addr = inet_addr("127.0.0.1");
-    server.sin_port = htons(port);
+    server.sin_addr.s_addr = inet_addr(ip);
+    server.sin_port = htons(atoi(port));
     server.sin_family = AF_INET;
 
     if (connect(mysocket, (struct sockaddr *)&server, sizeof(server)) < 0) {
@@ -77,37 +44,28 @@ int startClient()
     }
     printf("[+] connected to server  \n");
 
-    while (1) {
-        memset(message, '\0', 128);
-        fgets(message, 128, stdin);
-        if (send(mysocket, message, strlen(message), 0) < 0) {
-            puts("[-] send failed\n");
-            close(mysocket);
-            return 1;
-        }
-        printf("sended %s\n", message);
 
-        if (strcmp(message, "exit\n") == 0) {
-            close(mysocket);
-            printf("[-] disconnected\n");
-            exit(1);
+    while (1) {
+        memset(action, '\n', sizeof(action));
+        action[0] = getPressedKey();
+        //fgets(action, 1,action);
+        if(action[0]!=10 && action[0]>0)
+        {
+            if (send(mysocket, action, sizeof(action), 0) < 0) {
+                puts("[-] send failed\n");
+                close(mysocket);
+                return 1;
+            }
+            printf("sended %c\n", action[0]);
+            if (recv(mysocket, mapFromServer, sizeof(mapFromServer), 0) <= 0 )  {
+                puts("server down...\n");
+                break;
+            }
+            printf("server reply : %s \n", server_reply);
+            char *p = &mapFromServer[0][0];
+            printGraphicMapFromSever(p);
         }
-        if (recv(mysocket, mapFromServer, sizeof(mapFromServer), 0) <= 0 )  {
-            puts("server down...\n");
-            break;
-        }
-        /*if (recv(mysocket, server_reply, sizeof(server_reply), 0) <= 0 )  {
-             puts("server down...\n");
-             break;
-         }
-         printf("server reply : %s \n", server_reply);*/
-        char *p = &mapFromServer[0][0];
-        //printMap(p);
-        printGraphicMapFromSever(p);
-        if (strcmp(server_reply, "[!] full server") == 0) {
-            printf("[-] disconnected\n");
-            break;
-        }
+
     }
 
     close(mysocket);

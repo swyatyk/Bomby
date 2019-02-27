@@ -80,21 +80,20 @@ void initListeners(Client *connected_clients,fd_set *file_discriptor , struct ti
 int read_client(int client)
 {
     int  n;
-    char buff[128];
+    char buff[1];
 
     if (client == -1)
         return 1;
     n = 0;
-    memset(buff, '\0', 128);
-    while ( (n = recv(client, buff, 128, 0)) >= 0) {
-        if (n == 0)
-            return -1;
-        printf("received %s", buff);
-        if (buff[n - 1] == '\n') {
-            memset(buff, '\0', 128);
-            break;
-        }
+    memset(buff, '\n', sizeof(buff));
+    if(recv(client, buff, sizeof(buff), 0)<=0)
+    {
+        printf("client disconected\n");
+        return -1;
     }
+
+    printf("received %c \n", buff[0]);
+    memset(buff, '\n', sizeof(buff));
     return 0;
 }
 
@@ -119,7 +118,7 @@ void checkMessages(Client *connected_clients,fd_set *file_discriptor, int *conne
     }
 }
 
-int startServer(int argc, char* argv[]){
+int startServer(){
     initServerConfigs();
     int server_socket, ret;
     struct sockaddr_in serverAddr;
@@ -168,6 +167,7 @@ int startServer(int argc, char* argv[]){
             if(itsNewClient(connected_clients,connected_client) && acceptNewClient(connected_clients,connected_client, newAddr , &connected_clients_cnt)) {
                 printf("New connection %s:%d\n", inet_ntoa(newAddr.sin_addr), ntohs(newAddr.sin_port));
                 printf("%d Client connected\n", connected_clients_cnt);
+                write(connected_client,testMap, sizeof(testMap));
                 if(connected_clients_cnt < serverConfig.allowedClientsCount) {
                     printf("%d Slot still available\n", serverConfig.allowedClientsCount-connected_clients_cnt);
                 }
