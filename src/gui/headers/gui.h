@@ -24,13 +24,12 @@ typedef struct {
 
 }Game;
 
-void printGraphicMapFromSever(char *map);
+void printGraphicMap(char *map);
 SDL_Rect getRectByCharValue(char value);
 SDL_Texture * getTextureByCharValue(char value);
-void printGraphicMap();
 Game * gameInit();
 void gameDestroy();
-int keyreader(Object *player);
+
 char getPressedKey();
 
 

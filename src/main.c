@@ -57,11 +57,6 @@ int mainLocalCLient()
     }
     while (c!='p')*/;
 
-    int running = 1;
-    while(running != 0){
-        running = keyreader(player1);
-        SDL_Delay(20);
-    }
 
 
    // int response = showMenu(); //return 1 if wanna to make server or return 2 if wanna to join the server else return 0 if somthing wrong

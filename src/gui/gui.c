@@ -18,8 +18,6 @@
 
 void gameDestroy();
 
-SDL_Rect getRectByTextureId(int typeId);
-
 Game * getGame()
 {
     static Game *game = NULL;
@@ -63,46 +61,7 @@ Game * gameInit()
     game->gameTileset = SDL_CreateTextureFromSurface(game->renderer,gameImg);
 }
 
-void printGraphicMap()
-{
-
-    Game *game = getGame();
-    SDL_RenderClear(game->renderer);
-
-    int lengthX = 10;
-    int lengthY = 10;
-    int cell_tile_height = 48;
-    int cell_tile_width = 64;
-
-    SDL_Rect r_dest,r_src;
-    // int (*map)[10][10] = getMapInstance();
-    for(int x=0;x<lengthX;x++)
-    {
-        for(int y=0;y<lengthY;y++)
-        {
-            r_src = getRectByTextureId(getCell(y,x)->last->textureId);
-            r_dest.x = x*cell_tile_width;
-            r_dest.y = y*cell_tile_height;
-            r_dest.w = cell_tile_width;
-            r_dest.h = cell_tile_height;
-            if(getCell(y,x)->last->textureId>10 && getCell(y,x)->last->textureId<15)
-            {
-                SDL_RenderCopy(game->renderer, game->playerTileset, &r_src, &r_dest);
-            }
-            else
-            {
-                SDL_RenderCopy(game->renderer, game->gameTileset, &r_src, &r_dest);
-            }
-
-        }
-
-    }
-    SDL_RenderPresent(game->renderer);
-  /* SDL_Delay(1000);
-    SDL_DestroyTexture(game->playerTileset);*/
-}
-
-void printGraphicMapFromSever(char *map)
+void printGraphicMap(char *map)
 {
 
     Game *game = getGame();
@@ -125,13 +84,10 @@ void printGraphicMapFromSever(char *map)
             r_dest.w = cell_tile_width;
             r_dest.h = cell_tile_height;
             SDL_RenderCopy(game->renderer, getTextureByCharValue(value), &r_src, &r_dest);
-
         }
 
     }
     SDL_RenderPresent(game->renderer);
-  /* SDL_Delay(1000);
-    SDL_DestroyTexture(game->playerTileset);*/
 }
 
 SDL_Texture * getTextureByCharValue(char value) {
@@ -140,22 +96,18 @@ SDL_Texture * getTextureByCharValue(char value) {
     SDL_Texture *texture = NULL;
     switch (value)
     {
-        case '0'://CELL
-        case '1'://BLOCK
-        case '2'://WALL
-        case '3': //BOOMB
-        case '20':
-        case '21':
-        case '22':
-        case '23':
-        case '24':
+        case '.'://CELL
+        case 'X'://BLOCK
+        case '#'://WALL
+        case '@'://BOOMB
+        case '*'://EXPLOSION
             texture = game->gameTileset;
         break;
 
-        case '11':
-        case '12':
-        case '13':
-        case '14': //PLAYER
+        case 'A':
+        case 'B':
+        case 'C':
+        case 'D': //PLAYER
             texture = game->playerTileset;
         break;
 
@@ -169,107 +121,41 @@ SDL_Texture * getTextureByCharValue(char value) {
 }
 SDL_Rect getRectByCharValue(char value) {
     SDL_Rect result;
-    Game *game = getGame();
     switch (value)
     {
-        case '0'://CELL
+        case '.'://CELL
             result.x = 3 * CELL_TILE_SIZE;
             result.y = 0 * CELL_TILE_SIZE;
 
             break;
 
-        case '1'://BLOCK
+        case 'X'://BLOCK
             result.x = 1 * CELL_TILE_SIZE;
             result.y = 0 * CELL_TILE_SIZE;
             break;
 
-        case '2'://WALL
+        case '#'://WALL
 
             result.x = 2 * CELL_TILE_SIZE;
             result.y = 0 * CELL_TILE_SIZE;
             break;
 
-        case '3': //BOOMB
+        case '@'://BOOMB
 
             result.x = 7 * CELL_TILE_SIZE;
             result.y = 6 * CELL_TILE_SIZE;
             break;
 
-        case '11':
-        case '12':
-        case '13':
-        case '14': //PLAYER
+        case 'A':
+        case 'B':
+        case 'C':
+        case 'D': //PLAYER
             result.x = 0 * CELL_TILE_SIZE;
             result.y = 0 * CELL_TILE_SIZE;
             break;
 
 
-        case '20':
-        case '21':
-        case '22':
-        case '23':
-        case '24':
-            //EXPLOSION
-            result.x = 4 * CELL_TILE_SIZE;
-            result.y = 3 * CELL_TILE_SIZE;
-            break;
-
-        default://OBJECT
-            result.x = 8 * CELL_TILE_SIZE;
-            result.y = 8 * CELL_TILE_SIZE;
-            break;
-    }
-
-    result.w = CELL_TILE_SIZE;
-    result.h = CELL_TILE_SIZE;
-
-    return result;
-}
-
-
-SDL_Rect getRectByTextureId(int typeId) {
-    SDL_Rect result;
-
-    switch (typeId)
-    {
-        case 0://CELL
-            result.x = 3 * CELL_TILE_SIZE;
-            result.y = 0 * CELL_TILE_SIZE;
-
-            break;
-
-        case 99://BLOCK
-            result.x = 1 * CELL_TILE_SIZE;
-            result.y = 0 * CELL_TILE_SIZE;
-            break;
-
-        case 2://WALL
-
-            result.x = 2 * CELL_TILE_SIZE;
-            result.y = 0 * CELL_TILE_SIZE;
-            break;
-
-        case 3: //BOOMB
-
-            result.x = 7 * CELL_TILE_SIZE;
-            result.y = 6 * CELL_TILE_SIZE;
-            break;
-
-        case 11:
-        case 12:
-        case 13:
-        case 14: //PLAYER
-            result.x = 0 * CELL_TILE_SIZE;
-            result.y = 0 * CELL_TILE_SIZE;
-            break;
-
-
-        case 20:
-        case 21:
-        case 22:
-        case 23:
-        case 24:
-            //EXPLOSION
+        case '*'://EXPLOSION
             result.x = 4 * CELL_TILE_SIZE;
             result.y = 3 * CELL_TILE_SIZE;
             break;
@@ -330,40 +216,4 @@ char getPressedKey(){
         printf("key %c \n",key);
 
     return key;
-}
-int keyreader(Object *player)
-{
-    SDL_Event e;
-    if (SDL_PollEvent(&e) && e.type == SDL_KEYDOWN)
-    {
-
-       // printf("SLD KEY =%d \n", e.key.keysym.sym);
-
-        switch (e.key.keysym.sym)
-        {
-            case 27 :
-                return EXIT_SUCCESS;
-                break;
-
-            case SDLK_w:
-                playerInterfaceController(player, 'w');
-                break;
-            case SDLK_s:
-                playerInterfaceController(player, 's');
-                break;
-            case SDLK_a:
-                playerInterfaceController(player, 'a');
-                break;
-            case SDLK_d:
-                playerInterfaceController(player, 'd');
-                break;
-            case SDLK_b:
-                playerInterfaceController(player, 'b');
-                break;
-            default:
-                fprintf(stderr, "Unkown key %d\n", e.key.keysym.sym);
-                break;
-        }
-    }
-    return 1;
 }

@@ -39,7 +39,7 @@ int readServerPacket(int mysocket)
     }
     printf("server reply \n");
     char *p = &mapFromServer[0][0];
-    printGraphicMapFromSever(p);
+    printGraphicMap(p);
     return 0;
 }
 

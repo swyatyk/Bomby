@@ -14,6 +14,7 @@
 #include <fcntl.h>
 #include "headers/server.h"
 #include "../instances/headers/map.h"
+#include "../instances/headers/cell.h"
 
 char testMap[10][10] = {
         {'1', '1', '1', '1', '1', '1', '1', '1', '1', '1'},
@@ -30,13 +31,12 @@ char testMap[10][10] = {
 
 void remapMap()
 {
-    char **map =  getCharMap();
-    for(int x=0;x<10;x++){
-        for(int y=0;y<10;y++){
-            testMap[x][y] = map[x][y];
+    for(int y = 0 ; y < getMapInstance()->mapSizeY;y++) {
+        for (int x = 0; x < getMapInstance()->mapSizeX; x++)
+        {
+            testMap[x][y] = getCharFromInt(getCell(y, x)->last->textureId);
         }
     }
-    printf("map %c \n",testMap[0][0]);
 }
 
 void initServerConfigs()
