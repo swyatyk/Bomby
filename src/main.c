@@ -2,10 +2,10 @@
 #include "network/headers/server.h"
 #include "network/headers/client.h"
 #include "config.h"
-#include "controllers/headers/gameController.h"
 #include "instances/headers/map.h"
-#include "controllers/visualController.h"
+#include "gui/headers/gui.h"
 #include "instances/headers/player.h"
+#include "instances/headers/cell.h"
 
 
 int main(int argc, char *argv[]){

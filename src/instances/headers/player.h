@@ -5,7 +5,11 @@
 #ifndef BOMBERMAN_PLAYER_H
 #define BOMBERMAN_PLAYER_H
 
-#include "../../controllers/headers/gameController.h"
+
+#include <stdbool.h>
+#include <pthread.h>
+#include <stdio.h>
+#include "object.h"
 
 bool canPlayerMoveToCell(Object *player, int y, int x);
 void movePlayerToCell(Object *player,int y, int x);

@@ -2,9 +2,11 @@
 // Created by Sviatoslav Prylutsky on 2/5/19.
 //
 
-#include "visualController.h"
+#include "headers/gui.h"
 #include "../instances/headers/player.h"
 #include "../instances/headers/map.h"
+#include "../instances/headers/cell.h"
+
 #define SCREEN_WIDTH 640
 #define SCREEN_HEIGHT 480
 

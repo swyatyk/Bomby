@@ -2,10 +2,11 @@
 // Created by Sviatoslav Prylutsky on 2/5/19.
 //
 
-#include <pthread.h>
+
 #include "headers/player.h"
 #include "headers/map.h"
 #include "headers/bomb.h"
+#include "headers/cell.h"
 
 void playerInterfaceController(Object *player , char key)
 {

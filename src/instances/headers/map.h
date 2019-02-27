@@ -6,7 +6,6 @@
 #define BOMBERMAN_MAP_H
 
 #include "../../instances/headers/object.h"
-#include "../../controllers/headers/gameController.h"
 
 
 typedef struct  {

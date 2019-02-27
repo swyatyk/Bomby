@@ -10,7 +10,7 @@
 #include <fcntl.h>
 #include "headers/server.h"
 
-char configMap[10][10] = {
+char testMap[10][10] = {
         {'1', '1', '1', '1', '1', '1', '1', '1', '1', '1'},
         {'1', '0', '0', '0', '0', '0', '0', '0', '0', '1'},
         {'1', '0', '1', '0', '0', '1', '0', '1', '0', '1'},
@@ -24,7 +24,7 @@ char configMap[10][10] = {
 
 
 
-void initConfigs()
+void initServerConfigs()
 {
     serverConfig.allowedClientsCount = 4;
 }
@@ -113,14 +113,14 @@ void checkMessages(Client *connected_clients,fd_set *file_discriptor, int *conne
                     connected_clients[i].socket = -1;
                 } else
                     //write(connected_clients[i].socket, "ok\n", 2);
-                    write(connected_clients[i].socket,configMap, sizeof(configMap));
+                    write(connected_clients[i].socket,testMap, sizeof(testMap));
             }
         }
     }
 }
 
-int main(int argc, char* argv[]){
-    initConfigs();
+int startServer(int argc, char* argv[]){
+    initServerConfigs();
     int server_socket, ret;
     struct sockaddr_in serverAddr;
     struct timeval waiting_time;

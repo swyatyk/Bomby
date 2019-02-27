@@ -5,7 +5,8 @@
 
 
 #include "headers/map.h"
-#include "../controllers/visualController.h"
+#include "../gui/headers/gui.h"
+#include "headers/cell.h"
 
 void newCell(int mapParam,  int pY ,int pX);
 
