@@ -23,6 +23,7 @@ Game * getGame()
     static Game *game = NULL;
     if(game==NULL){
         game = malloc(sizeof(Game));
+        gameInit();
     }
     return game;
 }
@@ -98,6 +99,131 @@ void printGraphicMap()
   /* SDL_Delay(1000);
     SDL_DestroyTexture(game->playerTileset);*/
 }
+
+void printGraphicMapFromSever(char *map)
+{
+
+    Game *game = getGame();
+    SDL_RenderClear(game->renderer);
+
+    int lengthX = 10;
+    int lengthY = 10;
+    int cell_tile_height = 48;
+    int cell_tile_width = 64;
+
+    SDL_Rect r_dest,r_src;
+    for(int y=0;y<lengthY;y++)
+    {
+        for(int x=0;x<lengthY;x++)
+        {
+            char value = map[y + 10 * x];
+            r_src = getRectByCharValue(value);
+            r_dest.x = x*cell_tile_width;
+            r_dest.y = y*cell_tile_height;
+            r_dest.w = cell_tile_width;
+            r_dest.h = cell_tile_height;
+            SDL_RenderCopy(game->renderer, getTextureByCharValue(value), &r_src, &r_dest);
+
+        }
+
+    }
+    SDL_RenderPresent(game->renderer);
+  /* SDL_Delay(1000);
+    SDL_DestroyTexture(game->playerTileset);*/
+}
+
+SDL_Texture * getTextureByCharValue(char value) {
+
+    Game *game = getGame();
+    SDL_Texture *texture = NULL;
+    switch (value)
+    {
+        case '0'://CELL
+        case '1'://BLOCK
+        case '2'://WALL
+        case '3': //BOOMB
+        case '20':
+        case '21':
+        case '22':
+        case '23':
+        case '24':
+            texture = game->gameTileset;
+        break;
+
+        case '11':
+        case '12':
+        case '13':
+        case '14': //PLAYER
+            texture = game->playerTileset;
+        break;
+
+        default://OBJECT
+            texture = game->gameTileset;
+         break;
+    }
+
+
+    return texture;
+}
+SDL_Rect getRectByCharValue(char value) {
+    SDL_Rect result;
+    Game *game = getGame();
+    switch (value)
+    {
+        case '0'://CELL
+            result.x = 3 * CELL_TILE_SIZE;
+            result.y = 0 * CELL_TILE_SIZE;
+
+            break;
+
+        case '1'://BLOCK
+            result.x = 1 * CELL_TILE_SIZE;
+            result.y = 0 * CELL_TILE_SIZE;
+            break;
+
+        case '2'://WALL
+
+            result.x = 2 * CELL_TILE_SIZE;
+            result.y = 0 * CELL_TILE_SIZE;
+            break;
+
+        case '3': //BOOMB
+
+            result.x = 7 * CELL_TILE_SIZE;
+            result.y = 6 * CELL_TILE_SIZE;
+            break;
+
+        case '11':
+        case '12':
+        case '13':
+        case '14': //PLAYER
+            result.x = 0 * CELL_TILE_SIZE;
+            result.y = 0 * CELL_TILE_SIZE;
+            break;
+
+
+        case '20':
+        case '21':
+        case '22':
+        case '23':
+        case '24':
+            //EXPLOSION
+            result.x = 4 * CELL_TILE_SIZE;
+            result.y = 3 * CELL_TILE_SIZE;
+            break;
+
+        default://OBJECT
+            result.x = 8 * CELL_TILE_SIZE;
+            result.y = 8 * CELL_TILE_SIZE;
+            break;
+    }
+
+    result.w = CELL_TILE_SIZE;
+    result.h = CELL_TILE_SIZE;
+
+    return result;
+}
+
 
 SDL_Rect getRectByTextureId(int typeId) {
     SDL_Rect result;

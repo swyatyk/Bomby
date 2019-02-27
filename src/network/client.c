@@ -13,6 +13,7 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
+#include "../controllers/visualController.h"
 
 /**
  * \fn main CLIENT
@@ -20,23 +21,44 @@
  *
  * \return int
  */
+void printMap(char *map){
+    system("clear");
 
-int startClien(int argc, char* argv[])
+    for(int y = 0 ; y < 10;y++)
+    {
+        for (int x = 0; x < 10; x++)
+        {
+            printf("%c",map[y+10*x]);
+
+        }
+        printf("\n");
+    }
+}
+int main3(int argc, char* argv[])
+{
+    /*  char *p = &configMap[0][0];
+      printMap(p); */
+
+}
+
+int startClient()
 {
     char *ip = NULL;
     int port = 0;
     int mysocket;
     struct sockaddr_in server;
     char message[128] ;
-    char server_reply[128];
+    char server_reply[128] ;
+    char mapFromServer[10][10];
+    // char server_reply[10][10];
     int firstMessage = 0;
 
-    if (argc != 3) {
+  /*  if (argc != 3) {
         printf("usage : %s IP PORT\n", argv[0]);
         return -1;
-    }
-    ip = argv[1];
-    port = atoi(argv[2]);
+    }*/
+    //ip = argv[1];
+    port = atoi("1234");
 
     mysocket = socket(AF_INET, SOCK_STREAM, 0);
     if (mysocket < 0) {
@@ -45,7 +67,7 @@ int startClien(int argc, char* argv[])
     }
 
 
-    server.sin_addr.s_addr = inet_addr(ip);
+    server.sin_addr.s_addr = inet_addr("127.0.0.1");
     server.sin_port = htons(port);
     server.sin_family = AF_INET;
 
@@ -70,11 +92,18 @@ int startClien(int argc, char* argv[])
             printf("[-] disconnected\n");
             exit(1);
         }
-        if (recv(mysocket, server_reply, 2000, 0) <= 0 )  {
+        if (recv(mysocket, mapFromServer, sizeof(mapFromServer), 0) <= 0 )  {
             puts("server down...\n");
             break;
         }
-        printf("server reply : %s \n", server_reply);
+        /*if (recv(mysocket, server_reply, sizeof(server_reply), 0) <= 0 )  {
+             puts("server down...\n");
+             break;
+         }
+         printf("server reply : %s \n", server_reply);*/
+        char *p = &mapFromServer[0][0];
+        //printMap(p);
+        printGraphicMapFromSever(p);
         if (strcmp(server_reply, "[!] full server") == 0) {
             printf("[-] disconnected\n");
             break;

@@ -1,9 +1,30 @@
-//
-// Created by Sviatoslav Prylutsky on 2/5/19.
-//
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <sys/socket.h>
+#include <sys/select.h>
+#include <sys/types.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <fcntl.h>
 #include "headers/server.h"
 
-void initServerConfigs()
+char configMap[10][10] = {
+        {'1', '1', '1', '1', '1', '1', '1', '1', '1', '1'},
+        {'1', '0', '0', '0', '0', '0', '0', '0', '0', '1'},
+        {'1', '0', '1', '0', '0', '1', '0', '1', '0', '1'},
+        {'1', '0', '0', '0', '1', '0', '0', '0', '0', '1'},
+        {'1', '0', '1', '0', '0', '0', '0', '1', '0', '1'},
+        {'1', '0', '0', '0', '0', '1', '0', '0', '0', '1'},
+        {'1', '0', '0', '1', '0', '0', '0', '1', '0', '1'},
+        {'1', '0', '1', '0', '0', '1', '1', '0', '0', '1'},
+        {'1', '0', '0', '0', '0', '0', '0', '0', '0', '1'},
+        {'1', '1', '1', '1', '1', '1', '1', '1', '1', '1'}};
+
+
+
+void initConfigs()
 {
     serverConfig.allowedClientsCount = 4;
 }
@@ -91,14 +112,15 @@ void checkMessages(Client *connected_clients,fd_set *file_discriptor, int *conne
                     close(connected_clients[i].socket);
                     connected_clients[i].socket = -1;
                 } else
-                    write(connected_clients[i].socket, "ok\n", 2);
+                    //write(connected_clients[i].socket, "ok\n", 2);
+                    write(connected_clients[i].socket,configMap, sizeof(configMap));
             }
         }
     }
 }
 
-int startServer(int argc, char* argv[]){
-    initServerConfigs();
+int main(int argc, char* argv[]){
+    initConfigs();
     int server_socket, ret;
     struct sockaddr_in serverAddr;
     struct timeval waiting_time;
@@ -110,10 +132,12 @@ int startServer(int argc, char* argv[]){
     Client connected_clients[serverConfig.allowedClientsCount];
     int connected_clients_cnt = 0;
 
-    if (argc != 2) {
+
+
+/*    if (argc != 2) {
         printf("usage : %s PORT\n", argv[0]);
         return -1;
-    }
+    }*/
 
     server_socket = socket(AF_INET, SOCK_STREAM, 0);
     fcntl(server_socket, F_SETFL, O_NONBLOCK);
@@ -124,7 +148,7 @@ int startServer(int argc, char* argv[]){
     memset(&serverAddr, '\0', sizeof(serverAddr));
     serverAddr.sin_addr.s_addr = INADDR_ANY;
     serverAddr.sin_family = AF_INET;
-    serverAddr.sin_port = htons(atoi(argv[1]));
+    serverAddr.sin_port = htons(atoi("1234"));
     initClients(connected_clients);
     if(bind(server_socket, (struct sockaddr*)&serverAddr, sizeof(serverAddr)) < 0){
         perror("bind()");

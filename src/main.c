@@ -1,5 +1,6 @@
 
 #include "network/headers/server.h"
+#include "network/headers/client.h"
 #include "config.h"
 #include "controllers/headers/gameController.h"
 #include "instances/headers/map.h"
@@ -7,21 +8,13 @@
 #include "instances/headers/player.h"
 
 
-int main3( int argc,  char *argv[] )
-{
+int main(int argc, char *argv[]){
 
-    initMap();
-    initMutex();
-    Game * game = gameInit();
-    printGraphicMap();
-    //SDL_Delay(5000);
-    gameDestroy();
-
-    return EXIT_SUCCESS;
+    startClient();
 }
 
 //int main(int argc, char *argv[])
-int main()
+int mainLocalCLient()
 {
 
     initMap();
