@@ -1,9 +1,6 @@
-/*
-** ETNA PROJECT, 31/01/2019 groupe de prylut_s
-** BombermanRun2
-** File description:
-**      etape 2 ,
-*/
+//
+// Created by Sviatoslav Prylutsky on 2/5/19.
+//
 
 #include <string.h>
 #include <stdlib.h>
@@ -16,15 +13,40 @@
 #include "../gui/headers/gui.h"
 
 
+int sendPacketToServer(int mysocket)
+{
+    char action[1];
+    memset(action, '\n', sizeof(action));
+    action[0] = getPressedKey();
+    if(action[0]!=10) {
+        if (send(mysocket, action, sizeof(action), 0) < 0) {
+            puts("[-] send failed\n");
+            close(mysocket);
+            return -1;
+        }
+        printf("sended %c\n", action[0]);
+        return 1;
+    }
+    return 0;
+}
+
+int readServerPacket(int mysocket)
+{
+    char mapFromServer[10][10];
+    if (recv(mysocket, mapFromServer, sizeof(mapFromServer), 0) <= 0 )  {
+        puts("server down...\n");
+        return -1;
+    }
+    printf("server reply \n");
+    char *p = &mapFromServer[0][0];
+    printGraphicMapFromSever(p);
+    return 0;
+}
+
 int startClient(char* port,char *ip)
 {
-
     int mysocket;
     struct sockaddr_in server;
-    char message[128] ;
-    char action[1] ;
-    char server_reply[128] ;
-    char mapFromServer[10][10];
 
 
     mysocket = socket(AF_INET, SOCK_STREAM, 0);
@@ -32,7 +54,6 @@ int startClient(char* port,char *ip)
         perror("socket()");
         return -1;
     }
-
 
     server.sin_addr.s_addr = inet_addr(ip);
     server.sin_port = htons(atoi(port));
@@ -43,29 +64,17 @@ int startClient(char* port,char *ip)
         return 1;
     }
     printf("[+] connected to server  \n");
+    readServerPacket(mysocket);
 
-
-    while (1) {
-        memset(action, '\n', sizeof(action));
-        action[0] = getPressedKey();
-        //fgets(action, 1,action);
-        if(action[0]!=10 && action[0]>0)
+    while (1)
+    {
+        if(sendPacketToServer(mysocket)==1)
         {
-            if (send(mysocket, action, sizeof(action), 0) < 0) {
-                puts("[-] send failed\n");
-                close(mysocket);
-                return 1;
-            }
-            printf("sended %c\n", action[0]);
-            if (recv(mysocket, mapFromServer, sizeof(mapFromServer), 0) <= 0 )  {
-                puts("server down...\n");
+            if(readServerPacket(mysocket) < 0){
+                printf("connection lost \n");
                 break;
             }
-            printf("server reply : %s \n", server_reply);
-            char *p = &mapFromServer[0][0];
-            printGraphicMapFromSever(p);
         }
-
     }
 
     close(mysocket);
