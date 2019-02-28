@@ -22,6 +22,15 @@ char serverMap[10][10];
 
 Client connected_clients[4];
 
+void initServMap(){
+    for(int y = 0; y < 10; y++) {
+        for (int x = 0; x < 10; x++)
+        {
+            serverMap[y][x]='0';
+        }
+    }
+}
+
 void  notificateAllClients()
 {
 
@@ -30,16 +39,6 @@ void  notificateAllClients()
         {
             write(connected_clients[i].socket,serverMap, sizeof(serverMap));
         }
-    }
-
-    for(int y = 0 ; y < 10;y++)
-    {
-        for (int x = 0; x<10; x++)
-        {
-            printf("%c",serverMap[x][y]);
-
-        }
-        printf("\n");
     }
 }
 
@@ -68,7 +67,6 @@ void  notificateOtherClients(int sock)
 void setCellInServerMap(int y , int x, char ch) {
 
     serverMap[x][y] = ch;
-    //notificateAllClients();
 }
 
 
@@ -167,6 +165,7 @@ int read_client(int client)
 
     printf("received %c \n", buff[0]);;
     playerInterfaceController(getPlayerBySocket(client),buff[0]);
+    notificateAllClients();
    // remapMap();
     memset(buff, '\n', sizeof(buff));
     return 0;
@@ -199,6 +198,7 @@ void checkMessages(Client *connected_clients,fd_set *file_discriptor, int *conne
 }
 
 int startServer(){
+
     initServerConfigs();
     int server_socket, ret;
     struct sockaddr_in serverAddr;
@@ -209,8 +209,8 @@ int startServer(){
     fd_set file_discriptor;
     char buffer[128];
     int connected_clients_cnt = 0;
-
-
+    initMapByObjects();
+    initClients(connected_clients);
 
 /*    if (argc != 2) {
         printf("usage : %s PORT\n", argv[0]);
@@ -227,7 +227,7 @@ int startServer(){
     serverAddr.sin_addr.s_addr = INADDR_ANY;
     serverAddr.sin_family = AF_INET;
     serverAddr.sin_port = htons(atoi("1234"));
-    initClients(connected_clients);
+
     if(bind(server_socket, (struct sockaddr*)&serverAddr, sizeof(serverAddr)) < 0){
         perror("bind()");
         exit(1);
@@ -246,8 +246,9 @@ int startServer(){
             if(itsNewClient(connected_clients,connected_client) && acceptNewClient(connected_clients,connected_client, newAddr , &connected_clients_cnt)) {
                 printf("New connection %s:%d\n", inet_ntoa(newAddr.sin_addr), ntohs(newAddr.sin_port));
                 printf("%d Client connected\n", connected_clients_cnt);
-               // remapMap();
-                write(connected_client,serverMap, sizeof(serverMap));
+
+                send(connected_client,serverMap, sizeof(serverMap),0);
+
                 if(connected_clients_cnt < serverConfig.allowedClientsCount) {
                     printf("%d Slot still available\n", serverConfig.allowedClientsCount-connected_clients_cnt);
                 }

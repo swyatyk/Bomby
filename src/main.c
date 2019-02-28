@@ -20,10 +20,10 @@ int main(int argc, char *argv[]){
  // -------------------------TO REALISE END-----------------------
 
     // -------------------------SERVER SIDE START-----------------------
-    /* initMap();
+
     initMutex();
     startServer();
-     destroyMutex();*/
+    destroyMutex();
     // -------------------------SERVER SIDE END----------------------
     // -------------------------CLIENT SIDE START---------------------
     /*gameInit();
