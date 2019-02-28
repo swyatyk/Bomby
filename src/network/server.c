@@ -19,10 +19,13 @@
 
 char serverMap[10][10];
 Object *player1;
+Object *player2;
+Object *player3;
+Object *player4;
 
 Client connected_clients[4];
 
-void notificateAllClients()
+void  notificateAllClients()
 {
 
     for (int i = 0; i < serverConfig.allowedClientsCount; i++) {
@@ -32,14 +35,33 @@ void notificateAllClients()
         }
     }
 }
+void  notificateOtherClients(int sock)
+{
+
+    for (int i = 0; i < serverConfig.allowedClientsCount; i++) {
+        if (connected_clients[i].connected == CONNECTED && sock != connected_clients[i].socket)
+        {
+            write(connected_clients[i].socket,serverMap, sizeof(serverMap));
+        }
+    }
+}
+
+
+void setCellInServerMap(int y , int x, char ch) {
+
+    serverMap[x][y] = ch;
+    //notificateAllClients();
+}
 
 void remapMap()
 {
     for(int y = 0 ; y < getMapInstance()->mapSizeY;y++) {
         for (int x = 0; x < getMapInstance()->mapSizeX; x++)
         {
-            serverMap[x][y] = getCharFromInt(getCell(y, x)->last->textureId);
+           // serverMap[x][y] = getCharFromInt(getCell(y, x)->last->textureId);
+            printf("%c",serverMap[y][x]);
         }
+        printf("\n");
     }
 }
 
@@ -99,8 +121,14 @@ void initListeners(Client *connected_clients,fd_set *file_discriptor , struct ti
 void testPlayer()
 {
 
-    player1 = generateNewObject(11,5,5);
+    player1 = generateNewObject(11,1,1);
+    player2 = generateNewObject(12,8,8);
+    player3 = generateNewObject(13,1,8);
+    player4 = generateNewObject(14,8,1);
     addObjToCell(player1,1,1);
+    addObjToCell(player2,8,8);
+    addObjToCell(player3,1,8);
+    addObjToCell(player4,8,1);
 }
 int read_client(int client)
 {
@@ -119,7 +147,7 @@ int read_client(int client)
 
     printf("received %c \n", buff[0]);;
     playerInterfaceController(player1,buff[0]);
-    remapMap();
+   // remapMap();
     memset(buff, '\n', sizeof(buff));
     return 0;
 }
@@ -141,8 +169,8 @@ void checkMessages(Client *connected_clients,fd_set *file_discriptor, int *conne
                     connected_clients[i].socket = -1;
                 } //else{
                 //write(connected_clients[i].socket, "ok\n", 2);
-                //write(connected_clients[i].socket,serverMap, sizeof(serverMap));
-                //notificateAllClients();
+                write(connected_clients[i].socket,serverMap, sizeof(serverMap));
+                notificateOtherClients(connected_clients[i].socket);
              //}
             }
         }
@@ -189,7 +217,6 @@ int startServer(){
     else
         perror("listen()");
     while(1) {
-        remapMap();
         waiting_time.tv_sec = 1;
         waiting_time.tv_usec = 0;
         connected_client = accept(server_socket, (struct sockaddr *) &newAddr, &addr_size);
@@ -199,7 +226,7 @@ int startServer(){
             if(itsNewClient(connected_clients,connected_client) && acceptNewClient(connected_clients,connected_client, newAddr , &connected_clients_cnt)) {
                 printf("New connection %s:%d\n", inet_ntoa(newAddr.sin_addr), ntohs(newAddr.sin_port));
                 printf("%d Client connected\n", connected_clients_cnt);
-                remapMap();
+               // remapMap();
                 write(connected_client,serverMap, sizeof(serverMap));
                 if(connected_clients_cnt < serverConfig.allowedClientsCount) {
                     printf("%d Slot still available\n", serverConfig.allowedClientsCount-connected_clients_cnt);

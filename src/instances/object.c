@@ -8,6 +8,7 @@
 #include "headers/object.h"
 #include "headers/cell.h"
 #include "headers/map.h"
+#include "../network/headers/server.h"
 
 pthread_mutex_t addObjMutex;
 pthread_mutex_t rmvObjMutex;
@@ -55,8 +56,20 @@ Object *generateNewObject(int typeId, int y, int x){
             break;
 
         case 11:
+            obj->type = PLAYER;
+            obj->bombsCnt = 0;
+            obj->id = 1;
+            break;
         case 12:
+            obj->type = PLAYER;
+            obj->bombsCnt = 0;
+            obj->id = 2;
+            break;
         case 13:
+            obj->type = PLAYER;
+            obj->bombsCnt = 0;
+            obj->id = 3;
+            break;
         case 14:
             obj->type = PLAYER;
             obj->bombsCnt = 0;
@@ -131,6 +144,7 @@ Object * getProritaryAppairanceByObject(Object *cell){
         Object *tmp = current->next;
         current = tmp;
     }
+    setCellInServerMap( highter->posY, highter->posX , getCharFromInt(highter->textureId));
     return highter;
 }
 

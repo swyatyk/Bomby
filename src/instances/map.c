@@ -25,6 +25,29 @@ int configMap[10][10] = {
         {1, 1, 1, 1, 1, 1, 1, 1, 1, 1}};
 
 
+/*
+char **getCharMap(){
+    static char **map =NULL;
+    if(map==NULL)
+    {
+        map = (char**)calloc(10, sizeof(char**));
+        for(int y = 0; y < 10; y++) {
+            map[y] = calloc(10, sizeof(char*));
+            for (int x = 0; x < 10; x++)
+            {
+                map[y][x]='0';
+            }
+        }
+    }
+    return map;
+}
+
+void setCellInCharMap(int y , int x, char ch){
+    char **arr = getCharMap();
+    arr[y][x] = ch;
+}
+*/
+
 Map *getMapInstance(){
     static Map *gameMap = NULL;
     if(gameMap == NULL){
@@ -61,8 +84,8 @@ void initMapByObjects(){
 void printMaps()
 {
    // printConsoleMap();
-    remapMap();
-    notificateAllClients();
+   // remapMap();
+   // notificateAllClients();
 }
 
 void printConsoleMap(){
@@ -164,6 +187,8 @@ char getCharFromInt(int intValue){
 
         case 14:
             charValue = 'D';
+            break;
+
         case 20:
         case 21:
         case 22:

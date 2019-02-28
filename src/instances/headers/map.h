@@ -14,7 +14,8 @@ typedef struct  {
     Object **cells;
 }Map;
 char getCharFromInt(int intValue);
-
+char **getCharMap();
+void setCellInCharMap(int y , int x, char ch);
 void printMaps();
 void initMapByObjects();
 void printConsoleMap();

@@ -9,6 +9,7 @@
 #include "headers/object.h"
 #include "headers/cell.h"
 #include "headers/map.h"
+#include "../network/headers/server.h"
 
 
 pthread_mutex_t exploseBombMutex;
@@ -40,6 +41,7 @@ void * playerPlaintTheBomb(void *args){
         }
     }
     printMaps();
+    //notificateAllClients();
     sleep(1);
     for(int i=0;i<5;i++)
     {
@@ -50,6 +52,7 @@ void * playerPlaintTheBomb(void *args){
         }
     }
     free(bombs);
+    //notificateAllClients();
     printMaps();
     player->bombsCnt-=1;
     return 0;

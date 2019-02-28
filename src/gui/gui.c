@@ -147,11 +147,20 @@ SDL_Rect getRectByCharValue(char value) {
             break;
 
         case 'A':
-        case 'B':
-        case 'C':
-        case 'D': //PLAYER
             result.x = 0 * CELL_TILE_SIZE;
             result.y = 0 * CELL_TILE_SIZE;
+            break;
+        case 'B':
+            result.x = 0 * CELL_TILE_SIZE;
+            result.y = 1 * CELL_TILE_SIZE;
+            break;
+        case 'C':
+            result.x = 0 * CELL_TILE_SIZE;
+            result.y = 2 * CELL_TILE_SIZE;
+            break;
+        case 'D': //PLAYER
+            result.x = 0 * CELL_TILE_SIZE;
+            result.y = 3 * CELL_TILE_SIZE;
             break;
 
 

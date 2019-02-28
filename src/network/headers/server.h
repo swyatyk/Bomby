@@ -33,4 +33,5 @@ typedef struct client_s {
 int startServer();
 void remapMap();
 void notificateAllClients();
+void setCellInServerMap(int y , int x, char ch);
 #endif //BOMBERMAN_NETWORK_H
