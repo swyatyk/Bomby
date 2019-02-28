@@ -9,24 +9,29 @@
 
 
 int main(int argc, char *argv[]){
-
+// -------------------------TO REALISE START-----------------------
    // Co_params param =  getMenuResponse();
-   /*if(params.choise==HEBERGER)
-       startServer();*/
-/*    gameInit();
-    while(1)
-    {
-        getPressedKey();
-    }*/
-    //gameInit();
+   /* if(params.choise==HEBERGER) {
+        initMap();
+        initMutex();
+        startServer();
+   }
+    startClient(params.ip,params.port);*/
+ // -------------------------TO REALISE END-----------------------
 
-    initMapByObjects();
-   // getCharMap();
-    //printConsoleMap();
+    // -------------------------SERVER SIDE START-----------------------
+    /* initMap();
+    initMutex();
     startServer();
+     destroyMutex();*/
+    // -------------------------SERVER SIDE END----------------------
+    // -------------------------CLIENT SIDE START---------------------
+    /*gameInit();
+    startClient("1234","127.0.0.1");*/ //For client start
+    // -------------------------CLIENT SIDE END----------------------
 
-   //startClient("1234","127.0.0.1");
-   //startClient(params.ip,params.port);
+
+
 }
 
 
