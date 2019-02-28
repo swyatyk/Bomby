@@ -7,6 +7,7 @@
 #include "headers/map.h"
 #include "headers/bomb.h"
 #include "headers/cell.h"
+#include "../network/headers/server.h"
 
 void playerInterfaceController(Object *player , char key)
 {
@@ -42,7 +43,7 @@ void movePlayerToCell(Object *player,int y, int x){
     {
         removeObjFromCell(player,player->posY,player->posX);
         addObjToCell(player,y,x);
-        //printMaps();
+        notificateAllClients();
     }
 
 }

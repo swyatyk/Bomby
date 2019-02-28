@@ -18,10 +18,7 @@
 #include "../instances/headers/player.h"
 
 char serverMap[10][10];
-Object *player1;
-Object *player2;
-Object *player3;
-Object *player4;
+
 
 Client connected_clients[4];
 
@@ -34,6 +31,27 @@ void  notificateAllClients()
             write(connected_clients[i].socket,serverMap, sizeof(serverMap));
         }
     }
+
+    for(int y = 0 ; y < 10;y++)
+    {
+        for (int x = 0; x<10; x++)
+        {
+            printf("%c",serverMap[x][y]);
+
+        }
+        printf("\n");
+    }
+}
+
+Object * getPlayerBySocket(int sock)
+{
+    for (int i = 0; i < serverConfig.allowedClientsCount; i++) {
+        if (connected_clients[i].connected == CONNECTED && connected_clients[i].socket == sock)
+        {
+            return connected_clients[i].player;
+        }
+    }
+    printf("error Player not found \n");
 }
 void  notificateOtherClients(int sock)
 {
@@ -53,17 +71,6 @@ void setCellInServerMap(int y , int x, char ch) {
     //notificateAllClients();
 }
 
-void remapMap()
-{
-    for(int y = 0 ; y < getMapInstance()->mapSizeY;y++) {
-        for (int x = 0; x < getMapInstance()->mapSizeX; x++)
-        {
-           // serverMap[x][y] = getCharFromInt(getCell(y, x)->last->textureId);
-            printf("%c",serverMap[y][x]);
-        }
-        printf("\n");
-    }
-}
 
 void initServerConfigs()
 {
@@ -74,8 +81,33 @@ void initClients(Client *connected_clients)
 {
     for(int i = 0; i < serverConfig.allowedClientsCount;i++) {
         connected_clients[i].id = i+1;
+
         connected_clients[i].socket = -1;
         connected_clients[i].connected = DISCONNECTED;
+
+        switch(i)
+        {
+            case 0:
+                connected_clients[i].player = generateNewObject(11,1,1);
+                addObjToCell(connected_clients[i].player,1,1);
+                break;
+            case 1:
+                connected_clients[i].player = generateNewObject(12,8,8);
+                addObjToCell(connected_clients[i].player,8,8);
+                break;
+            case 2:
+                connected_clients[i].player = generateNewObject(13,1,8);
+                addObjToCell(connected_clients[i].player,1,8);
+                break;
+            case 3:
+                connected_clients[i].player = generateNewObject(14,8,1);
+                addObjToCell(connected_clients[i].player,8,1);
+                break;
+
+            default:
+                break;
+
+        }
     }
 }
 
@@ -118,18 +150,6 @@ void initListeners(Client *connected_clients,fd_set *file_discriptor , struct ti
     select(sockSum + 1, file_discriptor, NULL, NULL, &waiting_time);
 }
 
-void testPlayer()
-{
-
-    player1 = generateNewObject(11,1,1);
-    player2 = generateNewObject(12,8,8);
-    player3 = generateNewObject(13,1,8);
-    player4 = generateNewObject(14,8,1);
-    addObjToCell(player1,1,1);
-    addObjToCell(player2,8,8);
-    addObjToCell(player3,1,8);
-    addObjToCell(player4,8,1);
-}
 int read_client(int client)
 {
     int  n;
@@ -146,7 +166,7 @@ int read_client(int client)
     }
 
     printf("received %c \n", buff[0]);;
-    playerInterfaceController(player1,buff[0]);
+    playerInterfaceController(getPlayerBySocket(client),buff[0]);
    // remapMap();
     memset(buff, '\n', sizeof(buff));
     return 0;
@@ -169,8 +189,9 @@ void checkMessages(Client *connected_clients,fd_set *file_discriptor, int *conne
                     connected_clients[i].socket = -1;
                 } //else{
                 //write(connected_clients[i].socket, "ok\n", 2);
-                write(connected_clients[i].socket,serverMap, sizeof(serverMap));
-                notificateOtherClients(connected_clients[i].socket);
+               // addObjToCell(connected_clients[i].player,connected_clients[i].player->posX , connected_clients[i].player->posY);
+               // write(connected_clients[i].socket,serverMap, sizeof(serverMap));
+               // notificateOtherClients(connected_clients[i].socket);
              //}
             }
         }
@@ -179,7 +200,6 @@ void checkMessages(Client *connected_clients,fd_set *file_discriptor, int *conne
 
 int startServer(){
     initServerConfigs();
-    testPlayer();
     int server_socket, ret;
     struct sockaddr_in serverAddr;
     struct timeval waiting_time;

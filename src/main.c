@@ -23,7 +23,6 @@ int main(int argc, char *argv[]){
     initMapByObjects();
    // getCharMap();
     //printConsoleMap();
-    remapMap();
     startServer();
 
    //startClient("1234","127.0.0.1");
