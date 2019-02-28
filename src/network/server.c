@@ -19,6 +19,20 @@
 
 char serverMap[10][10];
 Object *player1;
+
+Client connected_clients[4];
+
+void notificateAllClients()
+{
+
+    for (int i = 0; i < serverConfig.allowedClientsCount; i++) {
+        if (connected_clients[i].connected == CONNECTED)
+        {
+            write(connected_clients[i].socket,serverMap, sizeof(serverMap));
+        }
+    }
+}
+
 void remapMap()
 {
     for(int y = 0 ; y < getMapInstance()->mapSizeY;y++) {
@@ -117,15 +131,19 @@ void checkMessages(Client *connected_clients,fd_set *file_discriptor, int *conne
         if (connected_clients[i].connected == CONNECTED) {
             if(FD_ISSET(connected_clients[i].socket, file_discriptor)) {
                 if (read_client(connected_clients[i].socket) == -1) {
-                    if(*connected_clients_cnt!=0)
-                        *connected_clients_cnt-=1;
-                    printf("Player:(%d)%s:%d disconnected\n", connected_clients[i].id, inet_ntoa(connected_clients[i].client_address.sin_addr), ntohs(connected_clients[i].client_address.sin_port));
+                    if (*connected_clients_cnt != 0)
+                        *connected_clients_cnt -= 1;
+                    printf("Player:(%d)%s:%d disconnected\n", connected_clients[i].id,
+                           inet_ntoa(connected_clients[i].client_address.sin_addr),
+                           ntohs(connected_clients[i].client_address.sin_port));
                     connected_clients[i].connected = DISCONNECTED;
                     close(connected_clients[i].socket);
                     connected_clients[i].socket = -1;
-                } else
-                    //write(connected_clients[i].socket, "ok\n", 2);
-                    write(connected_clients[i].socket,serverMap, sizeof(serverMap));
+                } //else{
+                //write(connected_clients[i].socket, "ok\n", 2);
+                //write(connected_clients[i].socket,serverMap, sizeof(serverMap));
+                //notificateAllClients();
+             //}
             }
         }
     }
@@ -142,7 +160,6 @@ int startServer(){
     socklen_t addr_size;
     fd_set file_discriptor;
     char buffer[128];
-    Client connected_clients[serverConfig.allowedClientsCount];
     int connected_clients_cnt = 0;
 
 

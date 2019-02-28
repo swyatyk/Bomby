@@ -21,7 +21,7 @@ int main(int argc, char *argv[]){
     //gameInit();
     //getCharMap();
     initMapByObjects();
-    printConsoleMap();
+    //printConsoleMap();
     startServer();
    //startClient("1234","127.0.0.1");
    //startClient(params.ip,params.port);

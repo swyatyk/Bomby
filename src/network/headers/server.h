@@ -31,5 +31,6 @@ typedef struct client_s {
     struct sockaddr_in client_address;
 }Client;
 int startServer();
-
+void remapMap();
+void notificateAllClients();
 #endif //BOMBERMAN_NETWORK_H

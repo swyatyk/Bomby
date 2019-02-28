@@ -7,6 +7,7 @@
 #include "headers/map.h"
 #include "../gui/headers/gui.h"
 #include "headers/cell.h"
+#include "../network/headers/server.h"
 
 void newCell(int mapParam,  int pY ,int pX);
 
@@ -59,7 +60,9 @@ void initMapByObjects(){
 
 void printMaps()
 {
-    printConsoleMap();
+   // printConsoleMap();
+    remapMap();
+    notificateAllClients();
 }
 
 void printConsoleMap(){
@@ -140,11 +143,11 @@ char getCharFromInt(int intValue){
             break;
 
         case 3:
-            charValue = 'z';
+            charValue = '@';
             break;
 
         case 4:
-            charValue = '@';
+            charValue = 'z';
             break;
 
         case 11:
@@ -166,6 +169,7 @@ char getCharFromInt(int intValue){
         case 22:
         case 23:
         case 24:
+            charValue = '*';
             break;
 
         case 99:
