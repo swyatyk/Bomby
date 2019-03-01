@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="Bomberman"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;CMake Files\..\;CMake Files\..\..\;CMake Files\..\..\..\;CMake Files\..\..\..\..\;CMake Files\..\..\..\..\..\;CMake Files\..\..\..\..\..\usr\;CMake Files\..\..\..\..\..\usr\lib\;CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\;CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\;CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\SDL2\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/home/dy/etna/Bomberman/Bomby/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/dy/etna/Bomberman/Bomby/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/dy/etna/Bomberman/Bomby/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/dy/etna/Bomberman/Bomby/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/dy/etna/Bomberman/Bomby/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/home/dy/etna/Bomberman/Bomby/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/dy/etna/Bomberman/Bomby/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/dy/etna/Bomberman/Bomby/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/dy/etna/Bomberman/Bomby/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/dy/etna/Bomberman/Bomby/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="Bomberman">
+				<Option output="/home/dy/etna/Bomberman/Bomby/cmake-build-debug/Bomberman" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/dy/etna/Bomberman/Bomby/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/dy/etna/Bomberman/Bomby/Bomberman"/>
+					<Add directory="/usr/include/SDL2"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/dy/etna/Bomberman/Bomby/cmake-build-debug/Makefile&quot;  VERBOSE=1 Bomberman"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/dy/etna/Bomberman/Bomby/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/dy/etna/Bomberman/Bomby/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/dy/etna/Bomberman/Bomby/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="Bomberman/fast">
+				<Option output="/home/dy/etna/Bomberman/Bomby/cmake-build-debug/Bomberman" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/dy/etna/Bomberman/Bomby/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/dy/etna/Bomberman/Bomby/Bomberman"/>
+					<Add directory="/usr/include/SDL2"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/dy/etna/Bomberman/Bomby/cmake-build-debug/Makefile&quot;  VERBOSE=1 Bomberman/fast"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/dy/etna/Bomberman/Bomby/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/dy/etna/Bomberman/Bomby/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/dy/etna/Bomberman/Bomby/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/home/dy/etna/Bomberman/Bomby/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/dy/etna/Bomberman/Bomby/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/dy/etna/Bomberman/Bomby/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/dy/etna/Bomberman/Bomby/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/dy/etna/Bomberman/Bomby/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/home/dy/etna/Bomberman/Bomby">
+			<Option target="Bomberman"/>
+		</Unit>
+		<Unit filename="/home/dy/etna/Bomberman/Bomby/animationPlayer.c">
+			<Option target="Bomberman"/>
+		</Unit>
+		<Unit filename="/home/dy/etna/Bomberman/Bomby/bomber.c">
+			<Option target="Bomberman"/>
+		</Unit>
+		<Unit filename="/home/dy/etna/Bomberman/Bomby/error.c">
+			<Option target="Bomberman"/>
+		</Unit>
+		<Unit filename="/home/dy/etna/Bomberman/Bomby/main.c">
+			<Option target="Bomberman"/>
+		</Unit>
+		<Unit filename="/home/dy/etna/Bomberman/Bomby/main_menu.c">
+			<Option target="Bomberman"/>
+		</Unit>
+		<Unit filename="/home/dy/etna/Bomberman/Bomby/map.c">
+			<Option target="Bomberman"/>
+		</Unit>
+		<Unit filename="/home/dy/etna/Bomberman/Bomby/menuHostGame.c">
+			<Option target="Bomberman"/>
+		</Unit>
+		<Unit filename="/home/dy/etna/Bomberman/Bomby/menuJoinGame.c">
+			<Option target="Bomberman"/>
+		</Unit>
+		<Unit filename="/home/dy/etna/Bomberman/Bomby/playerMove.c">
+			<Option target="Bomberman"/>
+		</Unit>
+		<Unit filename="/home/dy/etna/Bomberman/Bomby/recv.c">
+			<Option target="Bomberman"/>
+		</Unit>
+		<Unit filename="/home/dy/etna/Bomberman/Bomby/send.c">
+			<Option target="Bomberman"/>
+		</Unit>
+		<Unit filename="/home/dy/etna/Bomberman/Bomby/userWrite.c">
+			<Option target="Bomberman"/>
+		</Unit>
+		<Unit filename="/home/dy/etna/Bomberman/Bomby/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+		<Unit filename="/home/dy/etna/Bomberman/Bomby/../../../../../usr/lib/x86_64-linux-gnu/cmake/SDL2/sdl2-config.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\SDL2\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

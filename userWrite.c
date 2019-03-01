@@ -74,7 +74,7 @@ void draw_text(char *text, bomber* game)
     int textureHeigthP;
     SDL_Color normalColor = {255, 0, 0, 1};
 
-    TTF_Font* police = TTF_OpenFont("./assets/arial.ttf", font_size);
+    TTF_Font* police = TTF_OpenFont("../assets/arial.ttf", font_size);
 
     SDL_Surface* surface = TTF_RenderText_Solid(police, text, normalColor);
     if (!surface){

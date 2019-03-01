@@ -51,10 +51,10 @@ void Create_menu_render(bomber* game)
     game->Menu.w = 500;
     game->Menu.h = 500;
     
-    TTF_Font* police = TTF_OpenFont("./assets/arial.ttf", font_size);
+    TTF_Font* police = TTF_OpenFont("../assets/arial.ttf", font_size);
     
     //Ecriture des surfaces surfaces
-    surface_background = SDL_LoadBMP("assets/img/main_menu.bmp");
+    surface_background = IMG_Load("../assets/img/main_menu.bmp");
     if ( !surface_background ){
         fprintf(stdout,"Échec de chargement du background (%s)\n",SDL_GetError());
         game_destroy(game);
@@ -77,7 +77,7 @@ void Create_menu_render(bomber* game)
         fprintf(stdout,"Échec de chargement du texte surface_host(%s)\n",SDL_GetError());
         game_destroy(game);
     }
-    cursorGame = IMG_Load("assets/img/bombe.png");
+    cursorGame = IMG_Load("../assets/img/bombe.png");
         if (!cursorGame) {
             fprintf(stderr, "Impossible de charger l'image bombe.png : %s\n", IMG_GetError());
             game_destroy(game);
