@@ -87,19 +87,19 @@ void initClients(Client *connected_clients)
         {
             case 0:
                 connected_clients[i].player = generateNewObject(11,1,1);
-                addObjToCell(connected_clients[i].player,1,1);
+                addObjToCell(connected_clients[i].player,1,1); //white
                 break;
             case 1:
                 connected_clients[i].player = generateNewObject(12,8,8);
-                addObjToCell(connected_clients[i].player,8,8);
+                addObjToCell(connected_clients[i].player,8,8); //black
                 break;
             case 2:
                 connected_clients[i].player = generateNewObject(13,1,8);
-                addObjToCell(connected_clients[i].player,1,8);
+                addObjToCell(connected_clients[i].player,1,8); //red
                 break;
             case 3:
                 connected_clients[i].player = generateNewObject(14,8,1);
-                addObjToCell(connected_clients[i].player,8,1);
+                addObjToCell(connected_clients[i].player,8,1); //blue
                 break;
 
             default:
@@ -163,7 +163,7 @@ int read_client(int client)
         return -1;
     }
 
-    printf("received %c \n", buff[0]);;
+    printf("received %c from socket %d \n", buff[0],client);
     playerInterfaceController(getPlayerBySocket(client),buff[0]);
     notificateAllClients();
    // remapMap();

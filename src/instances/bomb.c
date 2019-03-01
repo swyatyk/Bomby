@@ -41,7 +41,7 @@ void * playerPlaintTheBomb(void *args){
         }
     }
     printMaps();
-    //notificateAllClients();
+    notificateAllClients();
     sleep(1);
     for(int i=0;i<5;i++)
     {
@@ -52,7 +52,7 @@ void * playerPlaintTheBomb(void *args){
         }
     }
     free(bombs);
-    //notificateAllClients();
+    notificateAllClients();
     printMaps();
     player->bombsCnt-=1;
     return 0;

@@ -10,22 +10,24 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
+#include <pthread.h>
 #include "../gui/headers/gui.h"
+int mysocket;
 
-
-int sendPacketToServer(int mysocket)
+void * sendPacketToServer()
 {
-    char action[1];
-    memset(action, '\n', sizeof(action));
-    action[0] = getPressedKey();
-    if(action[0]!=10) {
-        if (send(mysocket, action, sizeof(action), 0) < 0) {
-            puts("[-] send failed\n");
-            close(mysocket);
-            return -1;
+    while(1) {
+        char action[1];
+        memset(action, '\n', sizeof(action));
+        action[0] = getPressedKey();
+        if (action[0] != 10) {
+            if (send(mysocket, action, sizeof(action), 0) < 0) {
+                puts("[-] send failed\n");
+                close(mysocket);
+                break;
+            }
+            printf("sended %c\n", action[0]);
         }
-        printf("sended %c\n", action[0]);
-        return 1;
     }
     return 0;
 }
@@ -43,9 +45,9 @@ int readServerPacket(int mysocket)
     return 0;
 }
 
+
 int startClient(char* port,char *ip)
 {
-    int mysocket;
     struct sockaddr_in server;
 
 
@@ -66,14 +68,16 @@ int startClient(char* port,char *ip)
     printf("[+] connected to server  \n");
     readServerPacket(mysocket);
 
+    pthread_t thread;
+    if (pthread_create(&thread, NULL, sendPacketToServer, NULL) != 0) {
+        printf("main error: can't create thread \n");
+    }
+
     while (1)
     {
-        if(sendPacketToServer(mysocket)==1)
-        {
-            if(readServerPacket(mysocket) < 0){
-                printf("connection lost \n");
-                break;
-            }
+        if(readServerPacket(mysocket) < 0){
+            printf("connection lost \n");
+            break;
         }
     }
 
