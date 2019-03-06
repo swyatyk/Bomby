@@ -27,8 +27,8 @@ int main()
     initMap();
     initMutex();
     Game * game = gameInit();
-    Object *player1 = generateNewObject(11,5,5);
-    addObjToCell(player1,1,1);
+    Object *player1 = generateNewObject(11,1,1);
+    addObjToCell(player1,player1->posY,player1->posX);
     printf("\n");
     printMaps();
 
