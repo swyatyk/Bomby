@@ -6,32 +6,29 @@
 #include "gui/headers/gui.h"
 #include "instances/headers/player.h"
 #include "instances/headers/cell.h"
+#include "gui/headers/menu_gui.h"
 
 
 int main(int argc, char *argv[]){
-// -------------------------TO REALISE START-----------------------
-   // Co_params param =  getMenuResponse();
-   /* if(params.choise==HEBERGER) {
-        initMap();
+
+    Menu *mainMenu = main_menu();
+    ConnectionProps* param = (ConnectionProps*)malloc(sizeof(ConnectionProps));
+    param = choiceMode(mainMenu);
+    if(mainMenu->choice == 1)
+    {
+        SDL_HideWindow(mainMenu->Window);
+        gameInit();
+        startClient(param->port, param->ip);
+    }
+    else if (mainMenu->choice == 2)
+    {
+        SDL_HideWindow(mainMenu->Window);
         initMutex();
         startServer();
-   }
-    startClient(params.ip,params.port);*/
- // -------------------------TO REALISE END-----------------------
+        destroyMutex();
+    }
 
-    // -------------------------SERVER SIDE START-----------------------
-
-    initMutex();
-    startServer();
-    destroyMutex();
-    // -------------------------SERVER SIDE END----------------------
-    // -------------------------CLIENT SIDE START---------------------
-    /*gameInit();
-    startClient("1234","127.0.0.1");*/ //For client start
-    // -------------------------CLIENT SIDE END----------------------
-
-
-
+    gameDestroy();
 }
 
 

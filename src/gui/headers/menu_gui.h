@@ -1,0 +1,41 @@
+//
+// Created by dy on 04/03/19.
+//
+
+#include "gui.h"
+#include "../../instances/headers/player.h"
+#include "../../instances/headers/map.h"
+#include "../../instances/headers/cell.h"
+#include "../../instances/headers/object.h"
+#include "../../instances/headers/menu.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+
+typedef struct {
+
+    int error;
+    int choice;
+    int ifIP;
+    SDL_Window *Window;
+    SDL_Renderer *Renderer;
+
+    SDL_Texture *menuTilset;
+    SDL_Texture *cursorBomb;
+    SDL_Texture *Title;
+
+    SDL_Rect MenuSize;
+    SDL_Rect cursor;
+
+} Menu;
+
+void showText(SDL_Texture* txt, SDL_Renderer* Renderer, char* mess, int x, int y);
+ConnectionProps* choiceMode(Menu* menu);
+Menu* main_menu();
+void showMenu(Menu* menu);
+char* userWrite(Menu* menu);
+
+#ifndef BOMBERMAN_MENU_GUI_H
+#define BOMBERMAN_MENU_GUI_H
+
+#endif //BOMBERMAN_MENU_GUI_H
