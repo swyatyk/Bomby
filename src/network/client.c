@@ -16,7 +16,7 @@ int mysocket;
 
 void * sendPacketToServer()
 {
-    while(1) {
+   while(1) {
         char action[1];
         memset(action, '\n', sizeof(action));
         action[0] = getPressedKey();

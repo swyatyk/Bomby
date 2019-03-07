@@ -75,7 +75,7 @@ void printGraphicMap(char *map)
     SDL_Rect r_dest,r_src;
     for(int y=0;y<lengthY;y++)
     {
-        for(int x=0;x<lengthY;x++)
+        for(int x=0;x<lengthX;x++)
         {
             char value = map[y + 10 * x];
             r_src = getRectByCharValue(value);
@@ -184,9 +184,14 @@ SDL_Rect getRectByCharValue(char value) {
 
 void gameDestroy() {
 
-    SDL_DestroyTexture(getGame()->playerTileset);
-    SDL_DestroyRenderer(getGame()->renderer);
-    SDL_DestroyWindow(getGame()->window);
+    if(getGame()->gameTileset)
+        SDL_DestroyTexture(getGame()->gameTileset);
+    if(getGame()->playerTileset)
+        SDL_DestroyTexture(getGame()->playerTileset);
+    if(getGame()->renderer)
+        SDL_DestroyRenderer(getGame()->renderer);
+    if(getGame()->window)
+        SDL_DestroyWindow(getGame()->window);
     SDL_Quit();
 }
 

@@ -17,18 +17,21 @@ int main(int argc, char *argv[]){
     if(mainMenu->choice == 1)
     {
         SDL_HideWindow(mainMenu->Window);
+        destroyMenu(mainMenu);
         gameInit();
         startClient(param->port, param->ip);
     }
     else if (mainMenu->choice == 2)
     {
         SDL_HideWindow(mainMenu->Window);
+        destroyMenu(mainMenu);
         initMutex();
         startServer();
         destroyMutex();
     }
-
+    destroyMenu(mainMenu);
     gameDestroy();
+
 }
 
 

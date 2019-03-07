@@ -15,6 +15,9 @@ Menu* main_menu()
     menu->choice = 0;
     menu->ifIP = 0;
     menu->error = 0;
+
+    SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
+
     menu->Window = SDL_CreateWindow("Menu",SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED,SCREEN_WIDTH,SCREEN_HEIGHT,SDL_WINDOW_SHOWN);
     if(menu->Window)
     {
@@ -22,14 +25,16 @@ Menu* main_menu()
         if(!menu->Renderer)
         {
             fprintf(stderr, "Impossible de créer le renderer SDL : %s\n", SDL_GetError());
-            gameDestroy();
+            destroyMenu(menu);
             exit(1);
         }
     } else {
         fprintf(stderr, "Impossible de créer le fenetre SDL : %s\n", SDL_GetError());
-        gameDestroy();
+        destroyMenu(menu);
         exit(1);
     }
+    Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
+    menu->musique = Mix_LoadMUS("../images/BGSound.mp3");
     menu->MenuSize.x = 0;
     menu->MenuSize.y = 0;
     menu->MenuSize.w = SCREEN_WIDTH;
@@ -45,7 +50,7 @@ Menu* main_menu()
     if(!mainImg || !surface_cursor)
     {
         fprintf(stderr, "Fail of load *tillset.bmp : %s\n", SDL_GetError());
-        gameDestroy();
+        destroyMenu(menu);
     }
 
     menu->menuTilset = SDL_CreateTextureFromSurface(menu->Renderer,mainImg);
@@ -134,6 +139,7 @@ ConnectionProps* choiceMode(Menu* menu)
     int result = 0;
     SDL_Event e;
     showMenu(menu);
+    Mix_PlayMusic(menu->musique, -1);
     while(result != 1)
     {
         SDL_WaitEvent(&e);

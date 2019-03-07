@@ -73,3 +73,21 @@ char* userWrite(Menu* menu)
     SDL_StopTextInput();
     return str;
 }
+
+void destroyMenu(Menu* menu)
+{
+    if(menu->menuTilset)
+        SDL_DestroyTexture(menu->menuTilset);
+    if(menu->cursorBomb)
+        SDL_DestroyTexture(menu->cursorBomb);
+    if(menu->Renderer)
+        SDL_DestroyRenderer(menu->Renderer);
+    if(menu->Window)
+        SDL_DestroyWindow(menu->Window);
+    if(menu->musique)
+        Mix_FreeMusic(menu->musique);
+
+    Mix_CloseAudio();
+    SDL_Quit();
+    free(menu);
+}
