@@ -129,6 +129,7 @@ void printConsoleMap(){
 
                 case 14:
                 printf(" %c",'D');
+                    break;
                 case 20:
                 case 21:
                 case 22:

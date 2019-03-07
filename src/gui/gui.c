@@ -199,6 +199,11 @@ void gameDestroy() {
 char getPressedKey(){
     SDL_Event e;
     char key = 10;
+    if ( SDL_PollEvent(&e) )
+    {
+
+
+
     if (e.type == SDL_QUIT)
         exit(1);
     if (SDL_PollEvent(&e) && e.type == SDL_KEYDOWN)
@@ -229,8 +234,9 @@ char getPressedKey(){
                 break;
         }
     }
+
+    }
     if(key!=10)
         printf("key %c \n",key);
-
     return key;
 }
