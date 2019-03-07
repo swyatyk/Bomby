@@ -20,6 +20,7 @@ int main(int argc, char *argv[]){
         destroyMenu(mainMenu);
         gameInit();
         startClient(param->port, param->ip);
+        gameDestroy();
     }
     else if (mainMenu->choice == 2)
     {
@@ -30,7 +31,7 @@ int main(int argc, char *argv[]){
         destroyMutex();
     }
     destroyMenu(mainMenu);
-    gameDestroy();
+
 
 }
 
