@@ -30,12 +30,14 @@ char* userWrite(Menu* menu)
                          exit(0);
                          break;
                     case SDLK_RETURN: //enter
-                        if (str_size > 0) {
+                        if (str_size > 0)
+                        {
                             boucle = FALSE;
-                                                   }
+                        }
                         break;
                     case SDLK_BACKSPACE: //supp un char
-                        if (str_size) {
+                        if (str_size)
+                        {
                             str[str_size - 1] = '\0';
                             str_size--;
                             SDL_RenderClear(menu->Renderer);
@@ -61,9 +63,8 @@ char* userWrite(Menu* menu)
                 break;
         }
 
-        if(str_size && menu->ifIP == 0) {
+        if(str_size && menu->ifIP == 0)
             showText(txt, menu->Renderer, str, 200, 100);
-        }
         else if(str_size && menu->ifIP == 1)
             showText(txt,menu->Renderer,str, 200, 170);
 
@@ -86,8 +87,11 @@ void destroyMenu(Menu* menu)
         SDL_DestroyWindow(menu->Window);
     if(menu->musique)
         Mix_FreeMusic(menu->musique);
+    if(menu->laser)
+        Mix_FreeChunk(menu->laser);
 
     Mix_CloseAudio();
+    TTF_Quit();
     SDL_Quit();
     free(menu);
 }

@@ -35,6 +35,7 @@ Menu* main_menu()
     }
     Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
     menu->musique = Mix_LoadMUS("../images/BGSound.mp3");
+    menu->laser = Mix_LoadWAV("../images/LaserEffect.wav");
     menu->MenuSize.x = 0;
     menu->MenuSize.y = 0;
     menu->MenuSize.w = SCREEN_WIDTH;
@@ -146,17 +147,22 @@ ConnectionProps* choiceMode(Menu* menu)
         if(e.type == SDL_QUIT)
         {
             result = 1;
-        } else if (e.type == SDL_KEYDOWN) {
-            switch (e.key.keysym.sym) {
+        } else if (e.type == SDL_KEYDOWN)
+        {
+            switch (e.key.keysym.sym)
+            {
                 case SDLK_ESCAPE :
                     result = 1;
                     break;
                 case SDLK_RETURN :
-                    if (menu->cursor.y == 100) {
+                    Mix_PlayChannel(-1, menu->laser, 0);
+                    if (menu->cursor.y == 100)
+                    {
                         menu->choice = 1;
                         menu->ifIP = 0;
                     }
-                    else if (menu->cursor.y == 170) {
+                    else if (menu->cursor.y == 170)
+                    {
                         menu->choice = 2;
                         menu->ifIP = 1;
                     }

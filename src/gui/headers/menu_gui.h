@@ -27,6 +27,7 @@ typedef struct {
     SDL_Rect cursor;
 
     Mix_Music *musique;
+    Mix_Chunk *laser;
 
 } Menu;
 
