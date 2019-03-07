@@ -5,7 +5,7 @@
 
 char* userWrite(Menu* menu)
 {
-    SDL_Texture* txt;
+    SDL_Texture* txt = NULL;
     char* str;
     if ((str = malloc(32 * sizeof(char))) == NULL)
         exit(0);

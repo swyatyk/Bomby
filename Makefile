@@ -13,8 +13,8 @@ SRC =	./src/main.c \
 		./src/instances/menu.c \
 		./src/instances/object.c \
 		./src/instances/player.c \
-		./src/gui/gui.c
-		./src/gui/menu_gui.c
+		./src/gui/gui.c \
+		./src/gui/menu_gui.c \
 		./src/gui/menu_user_write.c
 
 

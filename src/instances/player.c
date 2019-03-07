@@ -49,6 +49,9 @@ void movePlayerToCell(Object *player,int y, int x){
 
 
 bool canPlayerMoveToCell(Object *player, int y, int x) {
+
+    if(!player)
+        return false;
     Object *currentCell = getCell(y,x);
     Object *currentObject = currentCell;
     while(currentObject->next){

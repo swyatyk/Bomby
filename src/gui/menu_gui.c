@@ -34,8 +34,8 @@ Menu* main_menu()
         exit(1);
     }
     Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
-    menu->musique = Mix_LoadMUS("../images/BGSound.mp3");
-    menu->laser = Mix_LoadWAV("../images/LaserEffect.wav");
+    menu->musique = Mix_LoadMUS("./images/BGSound.mp3");
+    menu->laser = Mix_LoadWAV("./images/LaserEffect.wav");
     menu->MenuSize.x = 0;
     menu->MenuSize.y = 0;
     menu->MenuSize.w = SCREEN_WIDTH;
@@ -46,8 +46,8 @@ Menu* main_menu()
     menu->cursor.w = 45;
     menu->cursor.h = 45;
 
-    SDL_Surface *mainImg = IMG_Load("../images/main_menu.bmp");
-    SDL_Surface* surface_cursor = IMG_Load("../images/bombe.png");
+    SDL_Surface *mainImg = IMG_Load("./images/main_menu.bmp");
+    SDL_Surface* surface_cursor = IMG_Load("./images/bombe.png");
     if(!mainImg || !surface_cursor)
     {
         fprintf(stderr, "Fail of load *tillset.bmp : %s\n", SDL_GetError());
@@ -61,11 +61,11 @@ Menu* main_menu()
 
 void showMenu(Menu* menu)
 {
-    SDL_Texture* title;
-    SDL_Texture* sousTitre1;
-    SDL_Texture* sousTitre2;
-    SDL_Texture* ip;
-    SDL_Texture* error;
+    SDL_Texture* title = NULL;
+    SDL_Texture* sousTitre1 = NULL;
+    SDL_Texture* sousTitre2 = NULL;
+    SDL_Texture* ip = NULL;
+    SDL_Texture* error = NULL;
 
     SDL_RenderClear(menu->Renderer);
     SDL_RenderCopy(menu->Renderer, menu->menuTilset, NULL, &menu->MenuSize);
@@ -102,7 +102,7 @@ void showText(SDL_Texture* txt, SDL_Renderer* Renderer, char* mess, int x, int y
     SDL_Surface* surface_text;
     SDL_Rect position;
 
-    TTF_Font* police = TTF_OpenFont("../images/OpenSans-Regular.ttf", font_size);
+    TTF_Font* police = TTF_OpenFont("./images/OpenSans-Regular.ttf", font_size);
 
     surface_text = TTF_RenderText_Solid(police, mess, normalColor);
     if(!surface_text)

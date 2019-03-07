@@ -48,8 +48,8 @@ Game * gameInit()
         gameDestroy();
     }
 
-    SDL_Surface *playerImg = IMG_Load("../images/playerTileset.bmp");
-    SDL_Surface *gameImg = IMG_Load("../images/gameTileset.bmp");
+    SDL_Surface *playerImg = IMG_Load("./images/playerTileset.bmp");
+    SDL_Surface *gameImg = IMG_Load("./images/gameTileset.bmp");
 
     if(!playerImg || !gameImg)
     {
@@ -59,6 +59,7 @@ Game * gameInit()
 
     game->playerTileset = SDL_CreateTextureFromSurface(game->renderer,playerImg);
     game->gameTileset = SDL_CreateTextureFromSurface(game->renderer,gameImg);
+    return game;
 }
 
 void printGraphicMap(char *map)
@@ -198,6 +199,8 @@ void gameDestroy() {
 char getPressedKey(){
     SDL_Event e;
     char key = 10;
+    if (e.type == SDL_QUIT)
+        exit(1);
     if (SDL_PollEvent(&e) && e.type == SDL_KEYDOWN)
     {
         switch (e.key.keysym.sym)

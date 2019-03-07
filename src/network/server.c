@@ -51,6 +51,7 @@ Object * getPlayerBySocket(int sock)
         }
     }
     printf("error Player not found \n");
+    return NULL;
 }
 void  notificateOtherClients(int sock)
 {
@@ -150,12 +151,12 @@ void initListeners(Client *connected_clients,fd_set *file_discriptor , struct ti
 
 int read_client(int client)
 {
-    int  n;
+    // int  n;
     char buff[1];
 
     if (client == -1)
         return 1;
-    n = 0;
+    // n = 0;
     memset(buff, '\n', sizeof(buff));
     if(recv(client, buff, sizeof(buff), 0)<=0)
     {
@@ -168,7 +169,7 @@ int read_client(int client)
     notificateAllClients();
    // remapMap();
     memset(buff, '\n', sizeof(buff));
-    return 0;
+    return (0);
 }
 
 void checkMessages(Client *connected_clients,fd_set *file_discriptor, int *connected_clients_cnt)
@@ -200,14 +201,14 @@ void checkMessages(Client *connected_clients,fd_set *file_discriptor, int *conne
 int startServer(){
 
     initServerConfigs();
-    int server_socket, ret;
+    int server_socket;// ret;
     struct sockaddr_in serverAddr;
     struct timeval waiting_time;
     int connected_client;
     struct sockaddr_in newAddr;
     socklen_t addr_size;
     fd_set file_discriptor;
-    char buffer[128];
+    // char buffer[128];
     int connected_clients_cnt = 0;
     initMapByObjects();
     initClients(connected_clients);

@@ -9,7 +9,7 @@
 #include "gui/headers/menu_gui.h"
 
 
-int main(int argc, char *argv[]){
+int main(){
 
     Menu *mainMenu = main_menu();
     ConnectionProps* param = (ConnectionProps*)malloc(sizeof(ConnectionProps));
