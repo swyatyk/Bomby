@@ -22,15 +22,17 @@ typedef struct {
 
     SDL_Texture *menuTilset;
     SDL_Texture *cursorBomb;
-    SDL_Texture *Title;
 
     SDL_Rect MenuSize;
     SDL_Rect cursor;
+
+    Mix_Music *musique;
 
 } Menu;
 
 void showText(SDL_Texture* txt, SDL_Renderer* Renderer, char* mess, int x, int y);
 ConnectionProps* choiceMode(Menu* menu);
+void destroyMenu(Menu* menu);
 Menu* main_menu();
 void showMenu(Menu* menu);
 char* userWrite(Menu* menu);
