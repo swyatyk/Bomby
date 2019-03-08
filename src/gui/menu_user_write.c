@@ -95,3 +95,46 @@ void destroyMenu(Menu* menu)
     SDL_Quit();
     free(menu);
 }
+
+int initParam(Menu* menu, ConnectionProps* param)
+{
+    int result = 0;
+    if(menu->choice == 0)
+        return 0;
+    //choice 1 = rejoindre une game, choice 2 = héberger
+    if(menu->choice == 1 && param->ip != NULL)
+    {
+        param->ip = userWrite(menu);
+        if(menu->choice == 1 && strcmp(param->ip, "127.0.0.1") == 0)
+        {
+            menu->error = 0;
+            menu->ifIP = 1;
+            param->port = userWrite(menu);
+            if(strcmp(param->port, "1234") == 0)
+                result = 1;
+            else if (menu->choice == 1)
+            {
+                menu->error = 2;
+                menu->ifIP = 0;//remet l'ip à 0, oblige l'utilisateur à re taper l'ip.
+            }
+        } else if (menu->choice == 1)
+        {
+            menu->error = 1;
+        }
+    }
+    else if(menu->choice == 2)
+    {
+        param->ip = "127.0.0.1";
+        menu->ifIP = 1; // l'ip existe et est validé
+        param->port = userWrite(menu);
+        if(strcmp(param->port, "1234") == 0)
+            result = 1;
+        else if (menu->choice == 2)
+        {
+            menu->error = 2;
+        }
+
+    }
+    showMenu(menu);
+    return result;
+}

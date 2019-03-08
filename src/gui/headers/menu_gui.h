@@ -33,6 +33,7 @@ typedef struct {
 
 void showText(SDL_Texture* txt, SDL_Renderer* Renderer, char* mess, int x, int y);
 ConnectionProps* choiceMode(Menu* menu);
+int initParam(Menu* menu, ConnectionProps* param);
 void destroyMenu(Menu* menu);
 Menu* main_menu();
 void showMenu(Menu* menu);

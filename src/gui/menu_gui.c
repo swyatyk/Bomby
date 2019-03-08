@@ -141,28 +141,21 @@ ConnectionProps* choiceMode(Menu* menu)
     SDL_Event e;
     showMenu(menu);
     Mix_PlayMusic(menu->musique, -1);
-    while(result != 1)
-    {
+    while(result != 1) {
         SDL_WaitEvent(&e);
-        if(e.type == SDL_QUIT)
-        {
+        if (e.type == SDL_QUIT) {
             result = 1;
-        } else if (e.type == SDL_KEYDOWN)
-        {
-            switch (e.key.keysym.sym)
-            {
+        } else if (e.type == SDL_KEYDOWN) {
+            switch (e.key.keysym.sym) {
                 case SDLK_ESCAPE :
                     result = 1;
                     break;
                 case SDLK_RETURN :
                     Mix_PlayChannel(-1, menu->laser, 0);
-                    if (menu->cursor.y == 100)
-                    {
+                    if (menu->cursor.y == 100) {
                         menu->choice = 1;
                         menu->ifIP = 0;
-                    }
-                    else if (menu->cursor.y == 170)
-                    {
+                    } else if (menu->cursor.y == 170) {
                         menu->choice = 2;
                         menu->ifIP = 1;
                     }
@@ -178,41 +171,8 @@ ConnectionProps* choiceMode(Menu* menu)
         }
         SDL_Delay(20);
         showMenu(menu);
-        //choice 1 = rejoindre une game, choice 2 = héberger
-        if(menu->choice == 1 && param->ip != NULL)
-        {
-            param->ip = userWrite(menu);
-            if(menu->choice == 1 && strcmp(param->ip, "127.0.0.1") == 0)
-            {
-                menu->error = 0;
-                menu->ifIP = 1;
-                param->port = userWrite(menu);
-                if(strcmp(param->port, "1234") == 0)
-                    result = 1;
-                else if (menu->choice == 1)
-                {
-                    menu->error = 2;
-                    menu->ifIP = 0;//remet l'ip à 0, oblige l'utilisateur à re taper l'ip.
-                }
-            } else if (menu->choice == 1)
-            {
-                menu->error = 1;
-            }
-        }
-        else if(menu->choice == 2)
-        {
-            param->ip = "127.0.0.1";
-            menu->ifIP = 1; // l'ip existe et est validé
-            param->port = userWrite(menu);
-            if(strcmp(param->port, "1234") == 0)
-                result = 1;
-            else if (menu->choice == 2)
-            {
-                menu->error = 2;
-            }
-
-        }
-        showMenu(menu);
+        if(menu->choice != 0)
+            result = initParam(menu, param);
     }
     return param;
 }
