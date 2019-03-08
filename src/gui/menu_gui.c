@@ -143,9 +143,9 @@ ConnectionProps* choiceMode(Menu* menu)
     Mix_PlayMusic(menu->musique, -1);
     while(result != 1) {
         SDL_WaitEvent(&e);
-        if (e.type == SDL_QUIT) {
+        if (e.type == SDL_QUIT)
             result = 1;
-        } else if (e.type == SDL_KEYDOWN) {
+        else if (e.type == SDL_KEYDOWN) {
             switch (e.key.keysym.sym) {
                 case SDLK_ESCAPE :
                     result = 1;
@@ -166,7 +166,6 @@ ConnectionProps* choiceMode(Menu* menu)
                 case SDLK_DOWN :
                     menu->cursor.y = 170;
                     break;
-
             }
         }
         SDL_Delay(20);
