@@ -142,30 +142,32 @@ ConnectionProps* choiceMode(Menu* menu)
     showMenu(menu);
     Mix_PlayMusic(menu->musique, -1);
     while(result != 1) {
-        SDL_WaitEvent(&e);
-        if (e.type == SDL_QUIT)
-            result = 1;
-        else if (e.type == SDL_KEYDOWN) {
-            switch (e.key.keysym.sym) {
-                case SDLK_ESCAPE :
-                    result = 1;
-                    break;
-                case SDLK_RETURN :
-                    Mix_PlayChannel(-1, menu->laser, 0);
-                    if (menu->cursor.y == 100) {
-                        menu->choice = 1;
-                        menu->ifIP = 0;
-                    } else if (menu->cursor.y == 170) {
-                        menu->choice = 2;
-                        menu->ifIP = 1;
-                    }
-                    break;
-                case SDLK_UP :
-                    menu->cursor.y = 100;
-                    break;
-                case SDLK_DOWN :
-                    menu->cursor.y = 170;
-                    break;
+        if(SDL_PollEvent(&e))
+        {
+            if (e.type == SDL_QUIT)
+                result = 1;
+            else if (e.type == SDL_KEYDOWN) {
+                switch (e.key.keysym.sym) {
+                    case SDLK_ESCAPE :
+                        result = 1;
+                        break;
+                    case SDLK_RETURN :
+                        Mix_PlayChannel(-1, menu->laser, 0);
+                        if (menu->cursor.y == 100) {
+                            menu->choice = 1;
+                            menu->ifIP = 0;
+                        } else if (menu->cursor.y == 170) {
+                            menu->choice = 2;
+                            menu->ifIP = 1;
+                        }
+                        break;
+                    case SDLK_UP :
+                        menu->cursor.y = 100;
+                        break;
+                    case SDLK_DOWN :
+                        menu->cursor.y = 170;
+                        break;
+                }
             }
         }
         SDL_Delay(20);
