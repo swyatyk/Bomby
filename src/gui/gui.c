@@ -201,40 +201,36 @@ char getPressedKey(){
     char key = 10;
     if ( SDL_PollEvent(&e) )
     {
-
-
-
-    if (e.type == SDL_QUIT)
-        exit(1);
-    if (SDL_PollEvent(&e) && e.type == SDL_KEYDOWN)
-    {
-        switch (e.key.keysym.sym)
+        if (e.type == SDL_QUIT)
+            exit(1);
+        if (/*SDL_PollEvent(&e) &&*/ e.type == SDL_KEYDOWN)
         {
-            case 27 :
-                key = 'p';
-                break;
+            switch (e.key.keysym.sym)
+            {
+                case 27 :
+                    key = 'p';
+                    break;
 
-            case SDLK_w:
-                key = 'w';
-                break;
-            case SDLK_s:
-                key =  's';
-                break;
-            case SDLK_a:
-                key =  'a';
-                break;
-            case SDLK_d:
-                key = 'd';
-                break;
-            case SDLK_b:
-                key = 'b';
-                break;
-            default:
-                fprintf(stderr, "Unkown key %d\n", e.key.keysym.sym);
-                break;
+                case SDLK_w:
+                    key = 'w';
+                    break;
+                case SDLK_s:
+                    key =  's';
+                    break;
+                case SDLK_a:
+                    key =  'a';
+                    break;
+                case SDLK_d:
+                    key = 'd';
+                    break;
+                case SDLK_b:
+                    key = 'b';
+                    break;
+                default:
+                    fprintf(stderr, "Unkown key %d\n", e.key.keysym.sym);
+                    break;
+            }
         }
-    }
-
     }
     if(key!=10)
         printf("key %c \n",key);
