@@ -47,6 +47,7 @@ void * readServerPacket()
         printGraphicMap(p);
         memset(mapFromServer, '\n', sizeof(mapFromServer));
     }
+    return 0;
 }
 
 

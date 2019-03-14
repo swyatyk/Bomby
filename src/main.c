@@ -10,10 +10,11 @@
 
 
 void * runServer(void *args){
-    ConnectionProps *param = (Object*) args;
+    ConnectionProps *param = (ConnectionProps*) args;
     initMutex();
     startServer(param->port);
     destroyMutex();
+    return 0;
 }
 
 void runClient(ConnectionProps* param) {
