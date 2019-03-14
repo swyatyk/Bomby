@@ -33,7 +33,8 @@ typedef struct client_s {
     int socket;
     struct sockaddr_in client_address;
 }Client;
-int startServer(char* port);
+int startServer();
+void remapMap();
 void notificateAllClients();
 void setCellInServerMap(int y , int x, char ch);
 #endif //BOMBERMAN_NETWORK_H

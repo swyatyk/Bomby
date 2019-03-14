@@ -2,7 +2,6 @@
 // Created by Sviatoslav Prylutsky on 2/5/19.
 //
 
-#include <zconf.h>
 #include "headers/gui.h"
 #include "../instances/headers/player.h"
 #include "../instances/headers/map.h"
@@ -198,32 +197,30 @@ void gameDestroy() {
 }
 
 char getPressedKey(){
-   SDL_Event e;
+    SDL_Event e;
     char key = 10;
     if ( SDL_PollEvent(&e) )
     {
-
         if (e.type == SDL_QUIT)
             exit(1);
-        if (e.type == SDL_KEYDOWN)
+        if (/*SDL_PollEvent(&e) &&*/ e.type == SDL_KEYDOWN)
         {
             switch (e.key.keysym.sym)
             {
                 case 27 :
                     key = 'p';
-                    exit(1);
                     break;
 
-                case 1073741906:
+                case SDLK_w:
                     key = 'w';
                     break;
-                case 1073741905:
+                case SDLK_s:
                     key =  's';
                     break;
-                case 1073741904:
+                case SDLK_a:
                     key =  'a';
                     break;
-                case 1073741903:
+                case SDLK_d:
                     key = 'd';
                     break;
                 case SDLK_b:
@@ -235,6 +232,7 @@ char getPressedKey(){
             }
         }
     }
-
+    if(key!=10)
+        printf("key %c \n",key);
     return key;
 }
