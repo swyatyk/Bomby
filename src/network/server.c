@@ -20,16 +20,7 @@
 char serverMap[10][10];
 
 
-Client connected_clients[4];
-
-void initServMap(){
-    for(int y = 0; y < 10; y++) {
-        for (int x = 0; x < 10; x++)
-        {
-            serverMap[y][x]='0';
-        }
-    }
-}
+static Client connected_clients[4];
 
 void  notificateAllClients()
 {
@@ -164,7 +155,6 @@ int read_client(int client)
         return -1;
     }
 
-    printf("received %c from socket %d \n", buff[0],client);
     playerInterfaceController(getPlayerBySocket(client),buff[0]);
     notificateAllClients();
    // remapMap();
@@ -187,18 +177,13 @@ void checkMessages(Client *connected_clients,fd_set *file_discriptor, int *conne
                     connected_clients[i].connected = DISCONNECTED;
                     close(connected_clients[i].socket);
                     connected_clients[i].socket = -1;
-                } //else{
-                //write(connected_clients[i].socket, "ok\n", 2);
-               // addObjToCell(connected_clients[i].player,connected_clients[i].player->posX , connected_clients[i].player->posY);
-               // write(connected_clients[i].socket,serverMap, sizeof(serverMap));
-               // notificateOtherClients(connected_clients[i].socket);
-             //}
+                }
             }
         }
     }
 }
 
-int startServer(){
+int startServer(char* port){
 
     initServerConfigs();
     int server_socket;// ret;
@@ -227,7 +212,7 @@ int startServer(){
     memset(&serverAddr, '\0', sizeof(serverAddr));
     serverAddr.sin_addr.s_addr = INADDR_ANY;
     serverAddr.sin_family = AF_INET;
-    serverAddr.sin_port = htons(atoi("1234"));
+    serverAddr.sin_port = htons(atoi(port));
 
     if(bind(server_socket, (struct sockaddr*)&serverAddr, sizeof(serverAddr)) < 0){
         perror("bind()");
