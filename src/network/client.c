@@ -12,13 +12,15 @@
 #include <arpa/inet.h>
 #include <pthread.h>
 #include "../gui/headers/gui.h"
-int mysocket;
+static int mysocket = -1;
 
 void * sendPacketToServer()
 {
    while(1) {
+
+
         char action[1];
-        memset(action, '\n', sizeof(action));
+       memset(action, '\n', sizeof(action));
         action[0] = getPressedKey();
         if (action[0] != 10) {
             if (send(mysocket, action, sizeof(action), 0) < 0) {
@@ -26,23 +28,25 @@ void * sendPacketToServer()
                 close(mysocket);
                 break;
             }
-            printf("sended %c\n", action[0]);
         }
     }
     return 0;
 }
 
-int readServerPacket(int mysocket)
+void * readServerPacket()
 {
     char mapFromServer[10][10];
-    if (recv(mysocket, mapFromServer, sizeof(mapFromServer), 0) <= 0 )  {
-        puts("server down...\n");
-        return -1;
+    while (1)
+    {
+
+        if (recv(mysocket, mapFromServer, sizeof(mapFromServer), MSG_WAITALL) <= 0) {
+            puts("readServerPacket server down...\n");
+            break;
+        }
+        char *p = &mapFromServer[0][0];
+        printGraphicMap(p);
+        memset(mapFromServer, '\n', sizeof(mapFromServer));
     }
-    printf("server reply \n");
-    char *p = &mapFromServer[0][0];
-    printGraphicMap(p);
-    return 0;
 }
 
 
@@ -65,22 +69,23 @@ int startClient(char* port,char *ip)
         perror("connect()");
         return 1;
     }
+
     printf("[+] connected to server  \n");
-    readServerPacket(mysocket);
+    //readServerPacket(mysocket);
 
-    pthread_t thread;
-    if (pthread_create(&thread, NULL, sendPacketToServer, NULL) != 0) {
-        printf("main error: can't create thread \n");
+    pthread_t threadReceiver;
+    if (pthread_create(&threadReceiver, NULL, readServerPacket, NULL) != 0) {
+        printf("main error: can't create receiver thread \n");
     }
 
-    while (1)
-    {
-        if(readServerPacket(mysocket) < 0){
-            printf("connection lost \n");
-            break;
-        }
+    pthread_t threadSender;
+    if (pthread_create(&threadSender, NULL, sendPacketToServer, NULL) != 0) {
+        printf("main error: can't create sender thread \n");
     }
 
-    close(mysocket);
+   pthread_join(threadReceiver,NULL);
+   pthread_join(threadSender,NULL);
+
+   close(mysocket);
     return 0;
 }
