@@ -10,7 +10,7 @@ char* userWrite(Menu* menu)
     if ((str = malloc(32 * sizeof(char))) == NULL)
         exit(0);
     int boucle = 0;
-    bool check = TRUE;
+    int check = 1;
     int str_size = 0;
     SDL_Event e;
     strcpy(str, "");
@@ -46,7 +46,7 @@ char* userWrite(Menu* menu)
                             menu->choice = 0;
                             menu->error = 0;
                             boucle = 1;
-                            check = FALSE;
+                            check = 0;
                             break;
                     }
                     break;
@@ -69,7 +69,7 @@ char* userWrite(Menu* menu)
 
     }
     SDL_StopTextInput();
-    if (check == FALSE)
+    if (check == 0)
         str = "";
     return str;
 }
