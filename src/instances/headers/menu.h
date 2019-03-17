@@ -6,7 +6,6 @@
 #define BOMBERMAN_MENU_H
 
 #include <stdio.h>
-#include <jmorecfg.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 

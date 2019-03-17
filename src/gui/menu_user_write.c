@@ -10,7 +10,7 @@ char* userWrite(Menu* menu)
     if ((str = malloc(32 * sizeof(char))) == NULL)
         exit(0);
     int boucle = 0;
-    bool check = TRUE;
+    int check = 1;
     int str_size = 0;
     SDL_Event e;
     strcpy(str, "");
@@ -46,7 +46,7 @@ char* userWrite(Menu* menu)
                             menu->choice = 0;
                             menu->error = 0;
                             boucle = 1;
-                            check = FALSE;
+                            check = 0;
                             break;
                     }
                     break;
@@ -69,7 +69,7 @@ char* userWrite(Menu* menu)
 
     }
     SDL_StopTextInput();
-    if (check == FALSE)
+    if (check == 0)
         str = "";
     return str;
 }
@@ -104,12 +104,12 @@ int initParam(Menu* menu, ConnectionProps* param)
     if(menu->choice == 1 && param->ip != NULL)
     {
         param->ip = userWrite(menu);
-        if(menu->choice == 1 && strcmp(param->ip, "127.0.0.1") == 0)
+        if(menu->choice == 1 )//&& strcmp(param->ip, "127.0.0.1") == 0)
         {
             menu->error = 0;
             menu->ifIP = 1;
             param->port = userWrite(menu);
-            if(strcmp(param->port, "1234") == 0)
+            if(strlen(param->port) == 4)
                 result = 1;
             else if (menu->choice == 1)
             {
@@ -126,7 +126,7 @@ int initParam(Menu* menu, ConnectionProps* param)
         param->ip = "127.0.0.1";
         menu->ifIP = 1; // l'ip existe et est validé
         param->port = userWrite(menu);
-        if(strcmp(param->port, "1234") == 0)
+        if(strlen(param->port) == 4)
             result = 1;
         else if (menu->choice == 2)
         {
