@@ -90,6 +90,7 @@ void * readServerPacket()
     {
 
         if (recv(mysocket, mapFromServer, sizeof(mapFromServer), MSG_WAITALL) <= 0) {
+            puts("loose connection, try to reconnect...\n");
             if(connectToServer()!=0)
             {
                 perror("connect()");
