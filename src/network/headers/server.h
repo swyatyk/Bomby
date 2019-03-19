@@ -33,6 +33,14 @@ typedef struct client_s {
     int socket;
     struct sockaddr_in client_address;
 }Client;
+
+typedef struct game_info_s {
+    char score[40];
+    char map[10][10];
+    char notifaction[30];
+
+} game_info_t;
+
 int startServer(char* port);
 void notificateAllClients();
 void setCellInServerMap(int y , int x, char ch);

@@ -34,8 +34,8 @@ Menu* main_menu()
         exit(1);
     }
     Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
-    menu->musique = Mix_LoadMUS("./images/BGSound.mp3");
-    menu->laser = Mix_LoadWAV("./images/LaserEffect.wav");
+    menu->musique = Mix_LoadMUS("../images/BGSound.mp3");
+    menu->laser = Mix_LoadWAV("../images/LaserEffect.wav");
     menu->MenuSize.x = 0;
     menu->MenuSize.y = 0;
     menu->MenuSize.w = SCREEN_WIDTH;
@@ -46,8 +46,8 @@ Menu* main_menu()
     menu->cursor.w = 45;
     menu->cursor.h = 45;
 
-    SDL_Surface *mainImg = IMG_Load("./images/main_menu.bmp");
-    SDL_Surface* surface_cursor = IMG_Load("./images/bombe.png");
+    SDL_Surface *mainImg = IMG_Load("../images/main_menu.bmp");
+    SDL_Surface* surface_cursor = IMG_Load("../images/bombe.png");
     if(!mainImg || !surface_cursor)
     {
         fprintf(stderr, "Fail of load *tillset.bmp : %s\n", SDL_GetError());
@@ -61,36 +61,31 @@ Menu* main_menu()
 
 void showMenu(Menu* menu)
 {
-    SDL_Texture* title = NULL;
-    SDL_Texture* sousTitre1 = NULL;
-    SDL_Texture* sousTitre2 = NULL;
-    SDL_Texture* ip = NULL;
-    SDL_Texture* error = NULL;
+    SDL_Texture* txt= NULL;
 
     SDL_RenderClear(menu->Renderer);
     SDL_RenderCopy(menu->Renderer, menu->menuTilset, NULL, &menu->MenuSize);
-    showText(title, menu->Renderer, "Welcome to the Bomberman", 200, 30);
-    showText(title, menu->Renderer, "Press m to return to the main menu", 200, 300);
-    showText(title, menu->Renderer, "escape to quit", 10, 0);
+    showText(txt, menu->Renderer, "Welcome to the Bomberman", 200, 30);
+    showText(txt, menu->Renderer, "Press m to return to the main menu", 200, 300);
+    showText(txt, menu->Renderer, "escape to quit", 10, 0);
     if (menu->choice == 0) // le menu principal
     {
-        showText(sousTitre1, menu->Renderer, "Join a game", 40, 100);
-        showText(sousTitre2, menu->Renderer, "Host a game", 40, 170);
+        showText(txt, menu->Renderer, "Join a game", 40, 100);
+        showText(txt, menu->Renderer, "Host a game", 40, 170);
         SDL_RenderCopy(menu->Renderer, menu->cursorBomb, NULL, &menu->cursor);
     } else if(menu->choice == 1)// rejoindre une game
     {
-        showText(sousTitre1, menu->Renderer, "IP address : ", 40, 100);
-        showText(sousTitre2, menu->Renderer, "Port : ", 40, 170);
+        showText(txt, menu->Renderer, "IP address : ", 40, 100);
+        showText(txt, menu->Renderer, "Port : ", 40, 170);
         if(menu->ifIP == 1) // correctif d'un affichage bug de l'ip
-            showText(ip, menu->Renderer, "127.0.0.1", 200, 100);
+            showText(txt, menu->Renderer, "127.0.0.1", 200, 100);
     } else
-    {
-        showText(sousTitre2, menu->Renderer, "Port : ", 40, 170);
-    }
+        showText(txt, menu->Renderer, "Port : ", 40, 170);
+    //gestion erreur
     if (menu->error == 1)
-        showText(error, menu->Renderer, "Mauvais IP",0 , 350);
+        showText(txt, menu->Renderer, "Mauvais IP",0 , 350);
     else if (menu->error == 2)
-        showText(error, menu->Renderer, "Mauvais Port",0 , 350);
+        showText(txt, menu->Renderer, "Mauvais Port",0 , 350);
     SDL_RenderPresent(menu->Renderer);
 }
 
@@ -102,7 +97,7 @@ void showText(SDL_Texture* txt, SDL_Renderer* Renderer, char* mess, int x, int y
     SDL_Surface* surface_text;
     SDL_Rect position;
 
-    TTF_Font* police = TTF_OpenFont("./images/OpenSans-Regular.ttf", font_size);
+    TTF_Font* police = TTF_OpenFont("../images/OpenSans-Regular.ttf", font_size);
 
     surface_text = TTF_RenderText_Solid(police, mess, normalColor);
     if(!surface_text)

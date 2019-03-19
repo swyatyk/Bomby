@@ -9,7 +9,7 @@
 #include "../instances/headers/cell.h"
 
 #define SCREEN_WIDTH 640
-#define SCREEN_HEIGHT 480
+#define SCREEN_HEIGHT 580
 
 #define WIDHT_TILE 100
 #define HEIGHT_TILE 100
@@ -34,7 +34,6 @@ Game * gameInit()
 {
 
     Game *game = getGame();
-
     if(SDL_Init(SDL_INIT_VIDEO>0)){printf("SDL Start failed;");gameDestroy();}
 
     game->window = SDL_CreateWindow("Bomberman",SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED,SCREEN_WIDTH,SCREEN_HEIGHT,SDL_WINDOW_SHOWN);
@@ -49,8 +48,8 @@ Game * gameInit()
         gameDestroy();
     }
 
-    SDL_Surface *playerImg = IMG_Load("./images/playerTileset.bmp");
-    SDL_Surface *gameImg = IMG_Load("./images/gameTileset.bmp");
+    SDL_Surface *playerImg = IMG_Load("../images/playerTileset.bmp");
+    SDL_Surface *gameImg = IMG_Load("../images/gameTileset.bmp");
 
     if(!playerImg || !gameImg)
     {
@@ -89,6 +88,7 @@ void printGraphicMap(char *map)
         }
 
     }
+   // showScore(game->renderer, game->player->score, 50, 520); faut récupérer le score
     SDL_RenderPresent(game->renderer);
 }
 
@@ -237,4 +237,47 @@ char getPressedKey(){
     }
 
     return key;
+}
+
+void showScore( SDL_Renderer* Renderer, int score, int x, int y)
+{
+    TTF_Init();
+    char mess[40] ;
+    snprintf(mess, 40,"Score : %d", score);
+    SDL_Texture* txt = NULL;
+    SDL_Color normalColor = {255, 255, 255, 255};
+    int font_size = 24;
+    SDL_Surface* surface_text;
+    SDL_Rect position;
+
+    TTF_Font* police = TTF_OpenFont("../images/OpenSans-Regular.ttf", font_size);
+
+    surface_text = TTF_RenderText_Solid(police, mess, normalColor);
+    if(!surface_text)
+    {
+        fprintf(stdout,"Échec de chargement du texte (%s)\n",SDL_GetError());
+        gameDestroy();
+    }
+
+    TTF_CloseFont(police);
+
+    txt = SDL_CreateTextureFromSurface(Renderer, surface_text);
+    if(!txt)
+    {
+        fprintf(stdout,"Échec de création de la texture texte - %s\n",SDL_GetError());
+        gameDestroy();
+    }
+
+    int txtWidth, txtHeigth;
+
+    // Récupère la longueur et hauteur de la texture
+    SDL_QueryTexture(txt, NULL, NULL, &txtWidth, &txtHeigth);
+
+    position.x = x;
+    position.y = y;
+    position.w = txtWidth;
+    position.h = txtHeigth;
+
+    SDL_FreeSurface(surface_text);
+    SDL_RenderCopy(Renderer, txt, NULL, &position);
 }

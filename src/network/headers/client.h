@@ -4,5 +4,10 @@
 
 #ifndef BOMBERMAN_CLIENT_H
 #define BOMBERMAN_CLIENT_H
+
+#include "../../instances/headers/object.h"
+#include "../../network/headers/server.h"
+
 int startClient(char* port,char *ip);
+
 #endif //BOMBERMAN_CLIENT_H

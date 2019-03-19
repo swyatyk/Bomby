@@ -10,6 +10,7 @@
 #include "headers/cell.h"
 #include "headers/map.h"
 #include "../network/headers/server.h"
+#include "../gui/headers/gui.h"
 
 
 pthread_mutex_t exploseBombMutex;
@@ -46,7 +47,7 @@ void * playerPlaintTheBomb(void *args){
     for(int i=0;i<5;i++)
     {
         if(bombs[i]!=NULL) {
-            explose(bombs[i]);
+            explose(bombs[i], player);
             removeObjFromCell(bombs[i], bombs[i]->posY, bombs[i]->posX);
             free(bombs[i]);
         }
@@ -58,7 +59,7 @@ void * playerPlaintTheBomb(void *args){
     return 0;
 }
 
-void explose(Object *explosion)
+void explose(Object *explosion, Object *player)
 {
     Object *targetCell = getCell(explosion->posY,explosion->posX);
 
@@ -72,6 +73,8 @@ void explose(Object *explosion)
             {
                 removeObjFromCell(current,current->posY,current->posX);
             }
+            if(current->type == PLAYER)
+                player->score++;
             current = tmp;
         }
 

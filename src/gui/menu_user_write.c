@@ -109,7 +109,7 @@ int initParam(Menu* menu, ConnectionProps* param)
             menu->error = 0;
             menu->ifIP = 1;
             param->port = userWrite(menu);
-            if(strcmp(param->port, "1234") == 0)
+           if(strlen(param->port) == 4)
                 result = 1;
             else if (menu->choice == 1)
             {
@@ -126,7 +126,7 @@ int initParam(Menu* menu, ConnectionProps* param)
         param->ip = "127.0.0.1";
         menu->ifIP = 1; // l'ip existe et est validé
         param->port = userWrite(menu);
-        if(strcmp(param->port, "1234") == 0)
+        if(strlen(param->port) == 4)
             result = 1;
         else if (menu->choice == 2)
         {
