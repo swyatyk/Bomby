@@ -75,6 +75,8 @@ void printGraphicMap(game_info_t g)
     int lengthY = 10;
     int cell_tile_height = 48;
     int cell_tile_width = 64;
+    char mess[40] ;
+    snprintf(mess, 40,"Score : %d", g.score);
 
     SDL_Rect r_dest,r_src;
     for(int y=0;y<lengthY;y++)
@@ -91,7 +93,7 @@ void printGraphicMap(game_info_t g)
         }
 
     }
-    char *mess = convertScore(g.score);
+    //char *mess = convertScore(g.score);
     showText(txt, game->renderer, mess, 50, 520);
     SDL_RenderPresent(game->renderer);
 }
