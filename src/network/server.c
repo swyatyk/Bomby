@@ -59,6 +59,10 @@ void setCellInServerMap(int y , int x, char ch)
     g.map[x][y] = ch;
 }
 
+void initPlayerScore(Object* player)
+{
+    g.score = player->score;
+}
 
 void initServerConfigs()
 {
@@ -152,7 +156,7 @@ int read_client(int client)
         printf("client disconected\n");
         return -1;
     }
-
+    initPlayerScore(getPlayerBySocket(client));
     playerInterfaceController(getPlayerBySocket(client),buff[0]);
     notificateAllClients();
    // remapMap();

@@ -46,8 +46,7 @@ void * readServerPacket()
             puts("readServerPacket server down...\n");
             break;
         }
-        char *p = &g.map[0][0];
-        printGraphicMap(p);
+        printGraphicMap(g);
         memset(&g, '\n', sizeof(g));
     }
 
