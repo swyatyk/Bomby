@@ -37,21 +37,20 @@ void * sendPacketToServer()
 
 void * readServerPacket()
 {
-    game_info_t *g = malloc(sizeof(game_info_t));
-
     //char mapFromServer[10][10];
     while (1)
     {
+        game_info_t g;
 
-        if (recv(mysocket, (struct game_info_t*)&g, sizeof(g), MSG_WAITALL) <= 0) {
+        if (recv(mysocket, &g, sizeof(g), MSG_WAITALL) <= 0) {
             puts("readServerPacket server down...\n");
             break;
         }
-        printf("Dans client.c test notification : %s\n", &g->notifaction[0]);
-        char *p = &g->map[0][0];
+        char *p = &g.map[0][0];
         printGraphicMap(p);
-        memset(g, '\n', sizeof(g));
+        memset(&g, '\n', sizeof(g));
     }
+
     return 0;
 }
 

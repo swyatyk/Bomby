@@ -17,27 +17,17 @@
 #include "../instances/headers/cell.h"
 #include "../instances/headers/player.h"
 
-char serverMap[10][10];
-
+//char serverMap[10][10];
 
 static Client connected_clients[4];
-
-game_info_t *getInfoGame()
-{
-    static game_info_t *g = NULL;
-    if(g == NULL)
-        g = malloc(sizeof(game_info_t));
-    g->notifaction[0] = "o";
-    return g;
-}
+static game_info_t g;
 
 void  notificateAllClients()
 {
-    game_info_t *g = getInfoGame();
     for (int i = 0; i < serverConfig.allowedClientsCount; i++) {
         if (connected_clients[i].connected == CONNECTED)
         {
-            write(connected_clients[i].socket,(struct game_info_t*)&g, sizeof(g));
+            write(connected_clients[i].socket,&g, sizeof(g));
         }
     }
 }
@@ -55,20 +45,18 @@ Object * getPlayerBySocket(int sock)
 }
 void  notificateOtherClients(int sock)
 {
-    game_info_t *g = getInfoGame();
     for (int i = 0; i < serverConfig.allowedClientsCount; i++) {
         if (connected_clients[i].connected == CONNECTED && sock != connected_clients[i].socket)
         {
-            write(connected_clients[i].socket,(struct game_info_t*)&g, sizeof(g));
+            write(connected_clients[i].socket,&g, sizeof(g));
         }
     }
 }
 
 
-void setCellInServerMap(int y , int x, char ch) {
-
-    game_info_t *g = getInfoGame();
-    g->map[x][y] = ch;
+void setCellInServerMap(int y , int x, char ch)
+{
+    g.map[x][y] = ch;
 }
 
 
@@ -196,7 +184,6 @@ void checkMessages(Client *connected_clients,fd_set *file_discriptor, int *conne
 int startServer(char* port){
 
     initServerConfigs();
-    game_info_t *g = getInfoGame();
     int server_socket;// ret;
     struct sockaddr_in serverAddr;
     struct timeval waiting_time;
@@ -239,8 +226,7 @@ int startServer(char* port){
                 printf("New connection %s:%d\n", inet_ntoa(newAddr.sin_addr), ntohs(newAddr.sin_port));
                 printf("%d Client connected\n", connected_clients_cnt);
 
-                send(connected_client,(struct game_info_t*)&g, sizeof(g),0);
-
+                send(connected_client,&g, sizeof(g),0);
                 if(connected_clients_cnt < serverConfig.allowedClientsCount) {
                     printf("%d Slot still available\n", serverConfig.allowedClientsCount-connected_clients_cnt);
                 }
