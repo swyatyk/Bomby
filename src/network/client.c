@@ -34,13 +34,13 @@ void * sendPacketToServer()
     }
     return 0;
 }
-
+game_info_t g;
 void * readServerPacket()
 {
     //char mapFromServer[10][10];
     while (1)
     {
-        game_info_t g;
+
 
         if (recv(mysocket, &g, sizeof(g), MSG_WAITALL) <= 0) {
             puts("readServerPacket server down...\n");

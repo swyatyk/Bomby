@@ -21,7 +21,8 @@
 
 char notif[5][30] = {
                         " \0 ",
-                        "Waiting for Players ..."
+                        "Waiting for Players ...",
+                        "FIGHT!!!"
                     };
 
 void gameDestroy();
