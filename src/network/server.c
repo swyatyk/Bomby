@@ -233,7 +233,7 @@ int startServer(char* port){
                 printf("New connection %s:%d\n", inet_ntoa(newAddr.sin_addr), ntohs(newAddr.sin_port));
                 printf("%d Client connected\n", connected_clients_cnt);
                 if (connected_clients_cnt < 2)
-                    g.notifaction = -1;
+                    g.notifaction = 1;
                 else
                     g.notifaction = 0;
                     
