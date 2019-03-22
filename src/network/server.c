@@ -162,7 +162,6 @@ int read_client(int client, int *connected_clients_cnt)
         g.notifaction = 0;
     }    
     notificateAllClients();
-   // remapMap();
     memset(buff, '\n', sizeof(buff));
     return (0);
 }
@@ -233,12 +232,22 @@ int startServer(char* port){
                 printf("New connection %s:%d\n", inet_ntoa(newAddr.sin_addr), ntohs(newAddr.sin_port));
                 printf("%d Client connected\n", connected_clients_cnt);
                 if (connected_clients_cnt < 2)
+                {
                     g.notifaction = 1;
+                }
+                else if(connected_clients_cnt == 2)
+                {
+                    g.notifaction = 2;
+
+                }
                 else
+                {
                     g.notifaction = 0;
+                }
                     
 
-                send(connected_client,&g, sizeof(g),0);
+                //send(connected_client,&g, sizeof(g),0);
+                notificateAllClients();
                 if(connected_clients_cnt < serverConfig.allowedClientsCount) {
                     printf("%d Slot still available\n", serverConfig.allowedClientsCount-connected_clients_cnt);
                 }
