@@ -12,6 +12,8 @@
 #include <arpa/inet.h>
 #include <pthread.h>
 #include "../gui/headers/gui.h"
+#include "../network/headers/client.h"
+
 static int mysocket = -1;
 
 void * sendPacketToServer()
@@ -35,18 +37,19 @@ void * sendPacketToServer()
 
 void * readServerPacket()
 {
-    char mapFromServer[10][10];
+    //char mapFromServer[10][10];
     while (1)
     {
+        game_info_t g;
 
-        if (recv(mysocket, mapFromServer, sizeof(mapFromServer), MSG_WAITALL) <= 0) {
+        if (recv(mysocket, &g, sizeof(g), MSG_WAITALL) <= 0) {
             puts("readServerPacket server down...\n");
             break;
         }
-        char *p = &mapFromServer[0][0];
-        printGraphicMap(p);
-        memset(mapFromServer, '\n', sizeof(mapFromServer));
+        printGraphicMap(g);
+        memset(&g, '\n', sizeof(g));
     }
+
     return 0;
 }
 

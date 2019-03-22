@@ -7,6 +7,6 @@
 
 #include "object.h"
 
-void explose(Object *explosion);
+void explose(Object *explosion, Object *player);
 void * playerPlaintTheBomb(void *args);
 #endif //BOMBERMAN_BOMB_H
