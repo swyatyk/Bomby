@@ -76,9 +76,10 @@ void printGraphicMap(game_info_t g)
     int cell_tile_height = 48;
     int cell_tile_width = 64;
     char mess[40] ;
+    char* notif;
     snprintf(mess, 40,"Score : %d", g.score);
 
-    SDL_Rect r_dest,r_src;
+    SDL_Rect r_dest, r_src;
     for(int y=0;y<lengthY;y++)
     {
         for(int x=0;x<lengthX;x++)
@@ -94,6 +95,14 @@ void printGraphicMap(game_info_t g)
 
     }
     //char *mess = convertScore(g.score);
+    if (g.notifaction == -1) {
+        notif = "Waiting for players ...";
+    } else {
+        notif = " \0 ";
+        /* code */
+    }
+    
+    showText(txt, game->renderer, notif, 200, 200);
     showText(txt, game->renderer, mess, 50, 520);
     SDL_RenderPresent(game->renderer);
 }

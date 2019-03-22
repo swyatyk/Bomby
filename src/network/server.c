@@ -142,7 +142,7 @@ void initListeners(Client *connected_clients,fd_set *file_discriptor , struct ti
     select(sockSum + 1, file_discriptor, NULL, NULL, &waiting_time);
 }
 
-int read_client(int client)
+int read_client(int client, int *connected_clients_cnt)
 {
     // int  n;
     char buff[1];
@@ -157,7 +157,10 @@ int read_client(int client)
         return -1;
     }
     initPlayerScore(getPlayerBySocket(client));
-    playerInterfaceController(getPlayerBySocket(client),buff[0]);
+    if (*connected_clients_cnt > 1) {
+        playerInterfaceController(getPlayerBySocket(client), buff[0]);
+        g.notifaction = 0;
+    }    
     notificateAllClients();
    // remapMap();
     memset(buff, '\n', sizeof(buff));
@@ -170,7 +173,7 @@ void checkMessages(Client *connected_clients,fd_set *file_discriptor, int *conne
     for (int i = 0; i < serverConfig.allowedClientsCount; i++) {
         if (connected_clients[i].connected == CONNECTED) {
             if(FD_ISSET(connected_clients[i].socket, file_discriptor)) {
-                if (read_client(connected_clients[i].socket) == -1) {
+                if (read_client(connected_clients[i].socket, connected_clients_cnt) == -1) {
                     if (*connected_clients_cnt != 0)
                         *connected_clients_cnt -= 1;
                     printf("Player:(%d)%s:%d disconnected\n", connected_clients[i].id,
@@ -229,6 +232,11 @@ int startServer(char* port){
             if(itsNewClient(connected_clients,connected_client) && acceptNewClient(connected_clients,connected_client, newAddr , &connected_clients_cnt)) {
                 printf("New connection %s:%d\n", inet_ntoa(newAddr.sin_addr), ntohs(newAddr.sin_port));
                 printf("%d Client connected\n", connected_clients_cnt);
+                if (connected_clients_cnt < 2)
+                    g.notifaction = -1;
+                else
+                    g.notifaction = 0;
+                    
 
                 send(connected_client,&g, sizeof(g),0);
                 if(connected_clients_cnt < serverConfig.allowedClientsCount) {

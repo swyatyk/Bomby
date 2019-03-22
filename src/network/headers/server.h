@@ -39,7 +39,7 @@ typedef struct client_s {
 typedef struct game_info_s {
     int score;
     char map[10][10];
-    char notifaction[30];
+    int notifaction;
 
 } game_info_t;
 

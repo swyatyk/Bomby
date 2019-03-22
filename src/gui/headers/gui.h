@@ -27,6 +27,11 @@ typedef struct {
 
 }Game;
 
+typedef struct notif_s{
+    int id;
+    int list[];
+} notif_t;
+
 void printGraphicMap(game_info_t g);
 SDL_Rect getRectByCharValue(char value);
 SDL_Texture * getTextureByCharValue(char value);
