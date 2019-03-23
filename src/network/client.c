@@ -15,16 +15,23 @@
 #include "../network/headers/client.h"
 
 static int mysocket = -1;
-
+int runGame = 1;
 void * sendPacketToServer()
 {
-   while(1) {
+   while(runGame) {
 
 
         char action[1];
        memset(action, '\n', sizeof(action));
         action[0] = getPressedKey();
         if (action[0] != 10) {
+
+            if (action[0] == 'p')
+            {
+                gameDestroy();
+                runGame=0;
+                pthread_exit(0);
+            }
             if (send(mysocket, action, sizeof(action), 0) < 0) {
                 puts("[-] send failed\n");
                 close(mysocket);
@@ -38,7 +45,7 @@ game_info_t g;
 void * readServerPacket()
 {
     //char mapFromServer[10][10];
-    while (1)
+    while (runGame)
     {
 
 
@@ -91,5 +98,6 @@ int startClient(char* port,char *ip)
    pthread_join(threadSender,NULL);
 
    close(mysocket);
+    printf("exit \n");
     return 0;
 }

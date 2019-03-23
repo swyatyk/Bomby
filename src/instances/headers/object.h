@@ -35,6 +35,7 @@ typedef struct str_obj {
     int bombsCnt;
     //score du joueur
     int score;
+    int alive;
 }Object;
 
 

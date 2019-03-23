@@ -22,7 +22,9 @@
 char notif[5][30] = {
                         " \0 ",
                         "Waiting for Players ...",
-                        "FIGHT!!!"
+                        "FIGHT!!!",
+                        "YOU ARE DEAD! (ESC FOR EXIT)",
+                        "GAME OVER! YOU ARE WINNER!!!"
                     };
 
 void gameDestroy();
@@ -224,7 +226,6 @@ char getPressedKey(){
             {
                 case 27 :
                     key = 'p';
-                    exit(1);
                     break;
 
                 case 1073741906:

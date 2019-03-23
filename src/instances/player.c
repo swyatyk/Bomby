@@ -11,6 +11,11 @@
 
 void playerInterfaceController(Object *player , char key)
 {
+    if(player->alive==0)
+    {
+        return;
+    }
+
     pthread_t thread;
     switch(key)
     {

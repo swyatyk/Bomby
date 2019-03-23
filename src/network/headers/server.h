@@ -47,5 +47,6 @@ int startServer(char* port);
 void notificateAllClients();
 void setCellInServerMap(int y , int x, char ch);
 void initPlayerScore(Object* player);
+void checkGameOver();
 
 #endif //BOMBERMAN_NETWORK_H

@@ -17,20 +17,11 @@
 #include "../instances/headers/cell.h"
 #include "../instances/headers/player.h"
 
-//char serverMap[10][10];
 
 static Client connected_clients[4];
 static game_info_t g;
-
-void  notificateAllClients()
-{
-    for (int i = 0; i < serverConfig.allowedClientsCount; i++) {
-        if (connected_clients[i].connected == CONNECTED)
-        {
-            write(connected_clients[i].socket,&g, sizeof(g));
-        }
-    }
-}
+int gameOver = 0;
+int minClientsToStart = 3;
 
 Object * getPlayerBySocket(int sock)
 {
@@ -43,13 +34,44 @@ Object * getPlayerBySocket(int sock)
     printf("error Player not found \n");
     return NULL;
 }
-void  notificateOtherClients(int sock)
+void  notificateAllClients()
 {
     for (int i = 0; i < serverConfig.allowedClientsCount; i++) {
-        if (connected_clients[i].connected == CONNECTED && sock != connected_clients[i].socket)
+        if (connected_clients[i].connected == CONNECTED)
         {
-            write(connected_clients[i].socket,&g, sizeof(g));
+            int tmpNotifaction = g.notifaction;
+            if(getPlayerBySocket(connected_clients[i].socket)->alive==0)
+            {
+                g.notifaction = 3;
+                write(connected_clients[i].socket,&g, sizeof(g));
+                g.notifaction = tmpNotifaction;
+            } else{
+                if(gameOver == 1)
+                {
+                 g.notifaction = 4;
+                }
+                initPlayerScore(getPlayerBySocket(connected_clients[i].socket));
+                write(connected_clients[i].socket,&g, sizeof(g));
+                g.score = 0;
+            }
+
         }
+    }
+}
+
+void checkGameOver()
+{
+    int aliveCnt = 0;
+    for (int i = 0; i < serverConfig.allowedClientsCount; i++) {
+        if (connected_clients[i].connected == CONNECTED && getPlayerBySocket(connected_clients[i].socket)->alive==1)
+        {
+            aliveCnt +=1;
+
+        }
+    }
+    if(aliveCnt == 1)
+    {
+        gameOver = 1;
     }
 }
 
@@ -81,19 +103,15 @@ void initClients(Client *connected_clients)
         {
             case 0:
                 connected_clients[i].player = generateNewObject(11,1,1);
-                addObjToCell(connected_clients[i].player,1,1); //white
                 break;
             case 1:
                 connected_clients[i].player = generateNewObject(12,8,8);
-                addObjToCell(connected_clients[i].player,8,8); //black
                 break;
             case 2:
                 connected_clients[i].player = generateNewObject(13,1,8);
-                addObjToCell(connected_clients[i].player,1,8); //red
                 break;
             case 3:
                 connected_clients[i].player = generateNewObject(14,8,1);
-                addObjToCell(connected_clients[i].player,8,1); //blue
                 break;
 
             default:
@@ -156,8 +174,8 @@ int read_client(int client, int *connected_clients_cnt)
         printf("client disconected\n");
         return -1;
     }
-    initPlayerScore(getPlayerBySocket(client));
-    if (*connected_clients_cnt > 1) {
+
+    if (*connected_clients_cnt >= minClientsToStart && gameOver == 0) {
         playerInterfaceController(getPlayerBySocket(client), buff[0]);
         g.notifaction = 0;
     }    
@@ -231,11 +249,12 @@ int startServer(char* port){
             if(itsNewClient(connected_clients,connected_client) && acceptNewClient(connected_clients,connected_client, newAddr , &connected_clients_cnt)) {
                 printf("New connection %s:%d\n", inet_ntoa(newAddr.sin_addr), ntohs(newAddr.sin_port));
                 printf("%d Client connected\n", connected_clients_cnt);
-                if (connected_clients_cnt < 2)
+                addObjToCell(getPlayerBySocket(connected_client), getPlayerBySocket(connected_client)->posY, getPlayerBySocket(connected_client)->posX);
+                if (connected_clients_cnt < minClientsToStart)
                 {
                     g.notifaction = 1;
                 }
-                else if(connected_clients_cnt == 2)
+                else if(connected_clients_cnt == minClientsToStart)
                 {
                     g.notifaction = 2;
 
